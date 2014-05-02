@@ -17,7 +17,7 @@ sub_help(){
     echo "Usage: $PROGNAME <subcommand> [options]\n"
     echo "Subcommands:"
     echo "    status  Display the status of your attache"
-    echo "    baz     Run baz"
+    echo "    import  Import a file into your attache"
     echo ""
     echo "For help with each subcommand run:"
     echo "$PROGNAME <subcommand> -h|--help"
@@ -43,10 +43,8 @@ sub_status(){
     popd
 }
 
-sub_baz(){
-    echo "Running 'baz' command."
-    echo "First arg is '$1'."
-    echo "Second arg is '$2'."
+sub_import() {
+    echo "Do stuff"
 }
 
 # Keep this snippet for use with subcommands
