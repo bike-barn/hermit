@@ -33,7 +33,9 @@ sub_status() {
 
     while true; do
         case "$1" in
-            -h | --help ) echo "There is no help!"; shift; exit ;;
+            -h | --help ) echo "Usage: $PROGNAME $subcommand\n";
+                          echo "Display the git status of your attache";
+                          shift; exit ;;
             -- ) shift; break ;;
         esac
     done
