@@ -67,6 +67,8 @@ Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." && exi
     pushd $DEFAULT_ATTACHE_DIR
     git init
     echo "*$SECRETS_SUFFIX" > .gitignore
+    git add .gitignore
+    git commit -m "Initial commit"
     popd
 
     echo "Congratulations! You now have a brand new attache located at
