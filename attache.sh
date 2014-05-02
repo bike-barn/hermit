@@ -12,7 +12,7 @@
 PROGNAME=$(basename $0)
 VERSION="0.1.0"
 
-DEFAULT_ATTACHE_DIR=${DEFAULT_ATTACHE_DIR:-~/.home}
+DEFAULT_ATTACHE_DIR=${DEFAULT_ATTACHE_DIR:-~/.attache}
 SECRETS_SUFFIX=.secrets
 
 attache_add_file() {
@@ -25,14 +25,19 @@ attache_add_file() {
 
 sub_help() {
     echo -e "\nAttaché $VERSION\n"
-    echo -e "Usage: $PROGNAME <subcommand> [options]\n"
-    echo    "Subcommands:"
-    echo    "    init    Start a new attache"
-    echo    "    status  Display the status of your attache"
-    echo    "    add     Add a file to your attache"
+    echo    "Usage:"
+    echo    "    help    Show help for Attaché or a specific subcommand"
+    echo    "    init    Create a new attaché"
+    echo    "    add     Add a file to your attaché"
+    echo    "    status  Display the status of your attaché"
+    echo    "    git     Run arbitrary git commands in your attaché"
+    echo    "    open    Go to your attaché directory"
+    echo    "    link    Symlink the contents of your attaché to \$HOME"
+    echo    "    fetch   Create a local attaché from an existing remote attaché"
+    echo    "    redact  Remove sensitive information from a file"
     echo    ""
-    echo    "For help with each subcommand run:"
-    echo    "$PROGNAME <subcommand> -h|--help"
+    echo    "See \`$PROGNAME help <command>' for information on a specific subcommand."
+    echo    "For full documentation, see: https://github.com/RadicalZephyr/attache"
     echo    ""
 }
 
