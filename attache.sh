@@ -13,7 +13,7 @@ PROGNAME=$(basename $0)
 
 DEFAULT_ATTACHE_DIR=~/.home
 
-sub_help(){
+sub_help() {
     echo "Usage: $PROGNAME <subcommand> [options]\n"
     echo "Subcommands:"
     echo "    status  Display the status of your attache"
@@ -24,7 +24,7 @@ sub_help(){
     echo ""
 }
 
-sub_status(){
+sub_status() {
     TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
 
     if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
