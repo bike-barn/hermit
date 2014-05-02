@@ -11,7 +11,7 @@
 
 PROGNAME=$(basename $0)
 
-DEFAULT_ATTACHE_DIR=~/.home
+DEFAULT_ATTACHE_DIR=${DEFAULT_ATTACHE_DIR:-~/.home}
 SECRETS_SUFFIX=.secrets
 
 attache_add_file() {
