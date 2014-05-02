@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Currently, this really doesn't do a whole lot. Eventually it will
+# help you manage your dotfiles with a git repository.
+
+# The main feature of attache is that it facilitates the good-idea of
+# not keeping your dotfiles git repo directly in your home dir.
+# Instead, it stores it in the DEFAULT_ATTACHE_DIR, and then symlinks
+# all of the files and directories from there into your home
+# directory.
+
 PROGNAME=$(basename $0)
 
 DEFAULT_ATTACHE_DIR=~/.home
