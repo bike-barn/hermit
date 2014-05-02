@@ -60,7 +60,7 @@ sub_init() {
     mkdir -p $DEFAULT_ATTACHE_DIR
     pushd $DEFAULT_ATTACHE_DIR
     git init
-    echo "*.$SECRETS_SUFFIX" > .gitignore
+    echo "*$SECRETS_SUFFIX" > .gitignore
     popd
 
     echo "Congratulations! You now have a brand new attache located at
