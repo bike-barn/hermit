@@ -12,6 +12,7 @@
 PROGNAME=$(basename $0)
 
 DEFAULT_ATTACHE_DIR=~/.home
+SECRETS_SUFFIX=.secrets
 
 attache_add_file() {
     TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
@@ -35,6 +36,7 @@ attache_add_file() {
 sub_help() {
     echo "Usage: $PROGNAME <subcommand> [options]\n"
     echo "Subcommands:"
+    echo "    init    Start a new attache"
     echo "    status  Display the status of your attache"
     echo "    add     Add a file to your attache"
     echo ""
@@ -63,6 +65,18 @@ sub_status() {
     git status
     popd
 }
+
+sub_init() {
+
+    mkdir -p $DEFAULT_ATTACHE_DIR
+    pushd $DEFAULT_ATTACHE_DIR
+    git init
+    echo "*.$SECRETS_SUFFIX" > .gitignore
+    popd
+
+    echo "Congratulations! You now have a brand new attache located at
+$DEFAULT_ATTACHE_DIR"
+ }
 
 sub_add() {
     OLDFILE=$1
