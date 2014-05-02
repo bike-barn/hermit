@@ -15,17 +15,6 @@ DEFAULT_ATTACHE_DIR=~/.home
 SECRETS_SUFFIX=.secrets
 
 attache_add_file() {
-    TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
-
-    if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-    eval set -- "$TEMP"
-
-    while true; do
-        case "$1" in
-            -- ) shift; break ;;
-        esac
-    done
 
     ATTACHE_FILE=${1#$DEFAULT_ATTACHE_DIR}
     [ -f $ATTACHE_FILE ] || echo "File $1 does not exist in $DEFAULT_ATTACHE_DIR" ; exit 1
