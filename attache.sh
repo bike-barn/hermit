@@ -10,6 +10,7 @@
 # directory.
 
 PROGNAME=$(basename $0)
+VERSION="0.1.0"
 
 DEFAULT_ATTACHE_DIR=${DEFAULT_ATTACHE_DIR:-~/.home}
 SECRETS_SUFFIX=.secrets
@@ -23,15 +24,16 @@ attache_add_file() {
 }
 
 sub_help() {
-    echo "Usage: $PROGNAME <subcommand> [options]\n"
-    echo "Subcommands:"
-    echo "    init    Start a new attache"
-    echo "    status  Display the status of your attache"
-    echo "    add     Add a file to your attache"
-    echo ""
-    echo "For help with each subcommand run:"
-    echo "$PROGNAME <subcommand> -h|--help"
-    echo ""
+    echo -e "\nAttaché $VERSION\n"
+    echo -e "Usage: $PROGNAME <subcommand> [options]\n"
+    echo    "Subcommands:"
+    echo    "    init    Start a new attache"
+    echo    "    status  Display the status of your attache"
+    echo    "    add     Add a file to your attache"
+    echo    ""
+    echo    "For help with each subcommand run:"
+    echo    "$PROGNAME <subcommand> -h|--help"
+    echo    ""
 }
 
 sub_status() {
