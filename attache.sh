@@ -29,6 +29,9 @@ sub_status(){
         esac
     done
 
+    pushd $DEFAULT_ATTACHE_DIR
+    git status
+    popd
 }
 
 sub_baz(){
