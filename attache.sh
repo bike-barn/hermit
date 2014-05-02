@@ -61,7 +61,7 @@ sub_init() {
 
     [ -d $DEFAULT_ATTACHE_DIR ] && echo "The folder \
 $DEFAULT_ATTACHE_DIR already \ exists!
-Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." ; exit 1
+Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." && exit 1
 
     mkdir -p $DEFAULT_ATTACHE_DIR
     pushd $DEFAULT_ATTACHE_DIR
