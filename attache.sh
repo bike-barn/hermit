@@ -65,8 +65,9 @@ sub_status() {
 }
 
 sub_import() {
-    if [ -f $1 ]; then
-        OLDFILE=$1
+    FILE=$1
+    if [ -f $FILE ]; then
+        OLDFILE=$FILE
         NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
 
         [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
@@ -76,7 +77,7 @@ sub_import() {
         ln -vs $NEWFILE $OLDFILE
         attache_add_file $NEWFILE
 
-    elif [ -d $0 ]; then
+    elif [ -d $FILE ]; then
         echo "Nothing yet"
     fi
 }
