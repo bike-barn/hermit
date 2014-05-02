@@ -46,7 +46,19 @@ sub_status() {
 }
 
 sub_import() {
-    echo "Do stuff"
+    if [ -f $1 ]; then
+        OLDFILE=$1
+        NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
+
+        [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
+
+        mkdir -vp $(basename $NEWFILE)
+        mv -vn $OLDFILE $NEWFILE
+        ln -vs $NEWFILE $OLDFILE
+
+    elif [ -d $0 ]; then
+        echo "Nothing yet"
+    fi
 }
 
 # Keep this snippet for use with subcommands
