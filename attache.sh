@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Currently, this really doesn't do a whole lot. Eventually it will
 # help you manage your dotfiles with a git repository.
@@ -36,7 +36,7 @@ sub_help() {
     echo "Usage: $PROGNAME <subcommand> [options]\n"
     echo "Subcommands:"
     echo "    status  Display the status of your attache"
-    echo "    import  Import a file into your attache"
+    echo "    add     Add a file to your attache"
     echo ""
     echo "For help with each subcommand run:"
     echo "$PROGNAME <subcommand> -h|--help"
@@ -64,22 +64,16 @@ sub_status() {
     popd
 }
 
-sub_import() {
-    FILE=$1
-    if [ -f $FILE ]; then
-        OLDFILE=$FILE
-        NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
+sub_add() {
+    OLDFILE=$1
+    NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
 
-        [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
+    [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
 
-        mkdir -vp $(basename $NEWFILE)
-        mv -vn $OLDFILE $NEWFILE
-        ln -vs $NEWFILE $OLDFILE
-        attache_add_file $NEWFILE
-
-    elif [ -d $FILE ]; then
-        echo "Nothing yet"
-    fi
+    mkdir -vp $(basename $NEWFILE)
+    mv -vn $OLDFILE $NEWFILE
+    ln -vs $NEWFILE $OLDFILE
+    attache_add_file $NEWFILE
 }
 
 # Keep this snippet for use with subcommands
