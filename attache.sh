@@ -52,9 +52,9 @@ sub_status() {
         esac
     done
 
-    pushd $DEFAULT_ATTACHE_DIR
+    pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
     git status
-    popd
+    popd >/dev/null 2>/dev/null
 }
 
 sub_init() {
@@ -64,12 +64,12 @@ $DEFAULT_ATTACHE_DIR already exists!
 Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." && exit 1
 
     mkdir -p $DEFAULT_ATTACHE_DIR
-    pushd $DEFAULT_ATTACHE_DIR
+    pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
     git init
     echo "*$SECRETS_SUFFIX" > .gitignore
     git add .gitignore
     git commit -m "Initial commit"
-    popd
+    popd >/dev/null 2>/dev/null
 
     echo "Congratulations! You now have a brand new attache located at
 $DEFAULT_ATTACHE_DIR"
@@ -108,10 +108,10 @@ case $subcommand in
         ;;
     "git" )
         shift
-        pushd $DEFAULT_ATTACHE_DIR
+        pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
         echo git $@
         RET=$?
-        popd
+        popd >/dev/null 2>/dev/null
         exit $RET ;;
     * )
         shift
