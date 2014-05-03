@@ -28,11 +28,11 @@ sub_help() {
     echo    "Usage:"
     echo    "    help    Show help for Attaché or a specific subcommand"
     echo    "    init    Create a new attaché"
-    echo    "    add     Add a file to your attaché"
+    echo    "    fetch   Create a local attaché from an existing remote attaché"
     echo    "    status  Display the status of your attaché"
     echo    "    open    Go to your attaché directory"
+    echo    "    add     Add a file to your attaché"
     echo    "    link    Symlink the contents of your attaché to \$HOME"
-    echo    "    fetch   Create a local attaché from an existing remote attaché"
     echo    "    redact  Remove sensitive information from a file"
     echo    ""
     echo    "See \`$PROGNAME help <command>' for information on a specific subcommand."
@@ -56,18 +56,10 @@ Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." && exi
 
     echo "Congratulations! You now have a brand new attache located at
 $DEFAULT_ATTACHE_DIR"
- }
+}
 
-sub_add() {
-    OLDFILE=$1
-    NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
-
-    [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
-
-    mkdir -vp $(basename $NEWFILE)
-    mv -vn $OLDFILE $NEWFILE
-    ln -vs $NEWFILE $OLDFILE
-    attache_add_file $NEWFILE
+sub_fetch() {
+    echo $UNIMPLEMENTED
 }
 
 sub_status() {
@@ -93,11 +85,19 @@ sub_status() {
 
 UNIMPLEMENTED="Unimplemented! You should probably contribute it if you really want it done!"
 
-sub_link() {
-    echo $UNIMPLEMENTED
+sub_add() {
+    OLDFILE=$1
+    NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
+
+    [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
+
+    mkdir -vp $(basename $NEWFILE)
+    mv -vn $OLDFILE $NEWFILE
+    ln -vs $NEWFILE $OLDFILE
+    attache_add_file $NEWFILE
 }
 
-sub_fetch() {
+sub_link() {
     echo $UNIMPLEMENTED
 }
 
