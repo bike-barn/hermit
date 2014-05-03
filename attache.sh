@@ -5,20 +5,20 @@
 
 # The main feature of attache is that it facilitates the good-idea of
 # not keeping your dotfiles git repo directly in your home dir.
-# Instead, it stores it in the DEFAULT_ATTACHE_DIR, and then symlinks
+# Instead, it stores it in the ATTACHE_DIR, and then symlinks
 # all of the files and directories from there into your home
 # directory.
 
 PROGNAME=$(basename $0)
 VERSION="0.1.0"
 
-DEFAULT_ATTACHE_DIR=${DEFAULT_ATTACHE_DIR:-~/.attache}
+ATTACHE_DIR=${ATTACHE_DIR:-~/.attache}
 SECRETS_SUFFIX=.secrets
 
 attache_add_file() {
 
-    ATTACHE_FILE=${1#$DEFAULT_ATTACHE_DIR}
-    [ -f $ATTACHE_FILE ] || echo "File $1 does not exist in $DEFAULT_ATTACHE_DIR" ; exit 1
+    ATTACHE_FILE=${1#$ATTACHE_DIR}
+    [ -f $ATTACHE_FILE ] || echo "File $1 does not exist in $ATTACHE_DIR" ; exit 1
 
     git add -vf $ATTACHE_FILE
 }
@@ -42,12 +42,12 @@ sub_help() {
 
 sub_init() {
 
-    [ -d $DEFAULT_ATTACHE_DIR ] && echo "The folder \
-$DEFAULT_ATTACHE_DIR already exists!
-Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." && exit 1
+    [ -d $ATTACHE_DIR ] && echo "The folder \
+$ATTACHE_DIR already exists!
+Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
 
-    mkdir -p $DEFAULT_ATTACHE_DIR
-    pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
+    mkdir -p $ATTACHE_DIR
+    pushd $ATTACHE_DIR >/dev/null 2>/dev/null
     git init
     echo "*$SECRETS_SUFFIX" > .gitignore
     git add .gitignore
@@ -55,8 +55,8 @@ Maybe you should change your DEFAULT_ATTACHE_DIR environment variable..." && exi
     popd >/dev/null 2>/dev/null
 
     echo "Congratulations! You now have a brand new attache located at
-$DEFAULT_ATTACHE_DIR"
-}
+$ATTACHE_DIR"
+ }
 
 sub_fetch() {
     echo $UNIMPLEMENTED
