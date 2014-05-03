@@ -17,7 +17,8 @@ Feature Checklist/Roadmap
   stuff to make it safe(r)
 - [ ] status - Currently, just does `git status` in the attache dir,
   should give info about other stuff like what files haven't been linked
-- [ ] git    - Run arbitrary git commands in the attache dir
+- [ ] ~~git    - Run arbitrary git commands in the attache dir~~ (this
+  seemed like a bad idea, see [6cfa1d5](https://github.com/RadicalZephyr/attache/commit/6cfa1d5b27e7fab24fa8e8a24a9d759ff6ec81ce)
 - [ ] open   - (?) Move user into the attache dir for down and dirty work
 - [ ] link   - Generate symlinks for all files in your attache dir
   into home
