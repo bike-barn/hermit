@@ -40,27 +40,6 @@ sub_help() {
     echo    ""
 }
 
-sub_status() {
-    TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
-
-    if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-    eval set -- "$TEMP"
-
-    while true; do
-        case "$1" in
-            -h | --help ) echo "Usage: $PROGNAME $subcommand\n";
-                          echo "Display the git status of your attache";
-                          shift; exit ;;
-            -- ) shift; break ;;
-        esac
-    done
-
-    pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
-    git status
-    popd >/dev/null 2>/dev/null
-}
-
 sub_init() {
 
     [ -d $DEFAULT_ATTACHE_DIR ] && echo "The folder \
@@ -89,6 +68,27 @@ sub_add() {
     mv -vn $OLDFILE $NEWFILE
     ln -vs $NEWFILE $OLDFILE
     attache_add_file $NEWFILE
+}
+
+sub_status() {
+    TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
+
+    if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+
+    eval set -- "$TEMP"
+
+    while true; do
+        case "$1" in
+            -h | --help ) echo "Usage: $PROGNAME $subcommand\n";
+                          echo "Display the git status of your attache";
+                          shift; exit ;;
+            -- ) shift; break ;;
+        esac
+    done
+
+    pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
+    git status
+    popd >/dev/null 2>/dev/null
 }
 
 # Keep this snippet for use with subcommands
