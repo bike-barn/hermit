@@ -16,6 +16,8 @@ VERSION="0.1.0"
 ATTACHE_DIR=${ATTACHE_DIR:-~/.attache}
 SECRETS_SUFFIX=.secrets
 
+UNIMPLEMENTED="Unimplemented! You should probably contribute it if you really want it done!"
+
 attache_add_file() {
 
     ATTACHE_FILE=${1#$ATTACHE_DIR}
@@ -30,11 +32,11 @@ sub_help() {
     echo    "    help    Show help for Attaché or a specific subcommand"
     echo    "    init    Create a new attaché"
     echo    "    fetch   Create a local attaché from an existing remote attaché"
+    echo    "    add     Add a file to your attaché"
+    echo    "    redact  Add a file, but remove sensitive information from it first"
+    echo    "    link    Symlink the contents of your attaché to \$HOME"
     echo    "    status  Display the status of your attaché"
     echo    "    open    Go to your attaché directory"
-    echo    "    add     Add a file to your attaché"
-    echo    "    link    Symlink the contents of your attaché to \$HOME"
-    echo    "    redact  Remove sensitive information from a file"
     echo    ""
     echo    "See \`$PROGNAME help <command>' for information on a specific subcommand."
     echo    "For full documentation, see: https://github.com/RadicalZephyr/attache"
@@ -63,6 +65,26 @@ sub_fetch() {
     echo $UNIMPLEMENTED
 }
 
+sub_add() {
+    OLDFILE=$1
+    NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
+
+    [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
+
+    mkdir -vp $(basename $NEWFILE)
+    mv -vn $OLDFILE $NEWFILE
+    ln -vs $NEWFILE $OLDFILE
+    attache_add_file $NEWFILE
+}
+
+sub_redact() {
+    echo $UNIMPLEMENTED
+}
+
+sub_link() {
+    echo $UNIMPLEMENTED
+}
+
 sub_status() {
     TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
 
@@ -82,28 +104,6 @@ sub_status() {
     pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
     git status
     popd >/dev/null 2>/dev/null
-}
-
-UNIMPLEMENTED="Unimplemented! You should probably contribute it if you really want it done!"
-
-sub_add() {
-    OLDFILE=$1
-    NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
-
-    [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
-
-    mkdir -vp $(basename $NEWFILE)
-    mv -vn $OLDFILE $NEWFILE
-    ln -vs $NEWFILE $OLDFILE
-    attache_add_file $NEWFILE
-}
-
-sub_link() {
-    echo $UNIMPLEMENTED
-}
-
-sub_redact() {
-    echo $UNIMPLEMENTED
 }
 
 # Keep this snippet for use with subcommands
