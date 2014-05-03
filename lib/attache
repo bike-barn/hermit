@@ -37,9 +37,11 @@ sub_help() {
     echo    "    help    Show help for Attaché or a specific subcommand"
     echo    "    init    Create a new attaché"
     echo    "    fetch   Create a local attaché from an existing remote attaché"
+    echo    "    use     Use a specified attaché profile"
     echo    "    add     Add a file to your attaché"
     echo    "    redact  Add a file, but remove sensitive information from it first"
     echo    "    link    Symlink the contents of your attaché to \$HOME"
+    echo    "    unlink  Remove symlinks to attaché"
     echo    "    status  Display the status of your attaché"
     echo    "    open    Go to your attaché directory"
     echo    ""
@@ -70,6 +72,10 @@ sub_fetch() {
 
     [ $# -lt 1 ] || echo "Not enough arguments!" && exit 1
     git clone $1 $ATTACHE_DIR
+}
+
+sub_use() {
+    echo $UNIMPLEMENTED
 }
 
 sub_add() {
@@ -103,6 +109,10 @@ sub_redact() {
 }
 
 sub_link() {
+    echo $UNIMPLEMENTED
+}
+
+sub_unlink() {
     echo $UNIMPLEMENTED
 }
 
