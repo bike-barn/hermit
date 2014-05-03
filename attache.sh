@@ -30,7 +30,6 @@ sub_help() {
     echo    "    init    Create a new attaché"
     echo    "    add     Add a file to your attaché"
     echo    "    status  Display the status of your attaché"
-    echo    "    git     Run arbitrary git commands in your attaché"
     echo    "    open    Go to your attaché directory"
     echo    "    link    Symlink the contents of your attaché to \$HOME"
     echo    "    fetch   Create a local attaché from an existing remote attaché"
@@ -111,13 +110,8 @@ case $subcommand in
     "" | "-h" | "--help" )
         sub_help
         ;;
-    "git" )
-        shift
-        pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
-        git $@
-        RET=$?
-        popd >/dev/null 2>/dev/null
-        exit $RET ;;
+    "open" | "go" )
+        cd $DEFAULT_ATTACHE_DIR ;;
     * )
         shift
         sub_${subcommand} $@
