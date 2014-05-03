@@ -91,6 +91,20 @@ sub_status() {
     popd >/dev/null 2>/dev/null
 }
 
+UNIMPLEMENTED="Unimplemented! You should probably contribute it if you really want it done!"
+
+sub_link() {
+    echo $UNIMPLEMENTED
+}
+
+sub_fetch() {
+    echo $UNIMPLEMENTED
+}
+
+sub_redact() {
+    echo $UNIMPLEMENTED
+}
+
 # Keep this snippet for use with subcommands
 
 # TEMP=$(getopt -o '' -n $(basename $0) -- "$@")
