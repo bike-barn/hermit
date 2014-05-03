@@ -103,10 +103,17 @@ sub_add() {
 
 subcommand=$1
 case $subcommand in
-    "" | "-h" | "--help")
+    "" | "-h" | "--help" )
         sub_help
         ;;
-    *)
+    "git" )
+        shift
+        pushd $DEFAULT_ATTACHE_DIR
+        echo git $@
+        RET=$?
+        popd
+        exit $RET ;;
+    * )
         shift
         sub_${subcommand} $@
         if [ $? = 127 ]; then
