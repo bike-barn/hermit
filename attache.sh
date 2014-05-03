@@ -114,7 +114,7 @@ case $subcommand in
     "git" )
         shift
         pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
-        echo git $@
+        git $@
         RET=$?
         popd >/dev/null 2>/dev/null
         exit $RET ;;
