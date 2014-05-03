@@ -73,15 +73,29 @@ sub_fetch() {
 }
 
 sub_add() {
-    OLDFILE=$1
-    NEWFILE=$ATTACHE_DIR/${OLDFILE#~/}
+    TEMP=$(getopt -o '' -n $(basename $0) -- "$@")
 
-    [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
+    if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 
-    mkdir -vp $(basename $NEWFILE)
-    mv -vn $OLDFILE $NEWFILE
-    ln -vs $NEWFILE $OLDFILE
-    attache_add_file $NEWFILE
+    eval set -- "$TEMP"
+
+    while true; do
+        case "$1" in
+            -- ) shift; break ;;
+        esac
+    done
+
+    for FILE in $@; do
+        ORIGFILE=$FILE
+        NEWFILE=$ATTACHE_DIR/${ORIGFILE#~/}
+
+        [ -f $NEWFILE ] && echo "${ORIGFILE#~/} is already in your attache!" && exit 1
+
+        mkdir -vp $(basename $NEWFILE)
+        mv -vn $ORIGFILE $NEWFILE
+        ln -vs $NEWFILE $ORIGFILE
+        attache_add_file $NEWFILE
+    done
 }
 
 sub_redact() {
