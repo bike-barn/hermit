@@ -9,6 +9,7 @@
 # all of the files and directories from there into your home
 # directory.
 
+set -e
 PROGNAME=$(basename $0)
 VERSION="0.1.0"
 
