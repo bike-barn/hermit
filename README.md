@@ -1,12 +1,14 @@
 attache
 =======
 
-An assistant for managing your *NIX dotfiles with source-control.
+A home directory configuration management tool. Inspired originally by
+[Briefcase](https://github.com/jim/briefcase) but also heavily borrows
+from awesome tools like [rbenv], and [nvm]. It's (going to be) like
+having profiles for your shell environments. Or, it just helps manage
+your home directory being under version control.
 
-The goal is basically a bash re-implementation of 
-[Briefcase](https://github.com/jim/briefcase) but probably with some
-extended features.  We'll see how it goes.
-
+[rbenv]: https://github.com/sstephenson/rbenv
+[nvm]: https://github.com/creationix/nvm
 
 Feature Checklist/Roadmap
 -------------------------
