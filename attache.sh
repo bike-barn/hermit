@@ -26,6 +26,11 @@ attache_add_file() {
     git add -vf $ATTACHE_FILE
 }
 
+check_attache_dir() {
+    [ -d $ATTACHE_DIR ] && echo "The folder $ATTACHE_DIR already exists!
+Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+}
+
 sub_help() {
     echo -e "\nAttaché $VERSION\n"
     echo    "Usage:"
@@ -45,9 +50,7 @@ sub_help() {
 
 sub_init() {
 
-    [ -d $ATTACHE_DIR ] && echo "The folder \
-$ATTACHE_DIR already exists!
-Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+    check_attache_dir
 
     mkdir -p $ATTACHE_DIR
     pushd $ATTACHE_DIR >/dev/null 2>/dev/null
@@ -62,7 +65,8 @@ $ATTACHE_DIR"
  }
 
 sub_fetch() {
-    echo $UNIMPLEMENTED
+    check_attache_dir
+
 }
 
 sub_add() {
