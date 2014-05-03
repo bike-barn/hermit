@@ -65,8 +65,11 @@ $ATTACHE_DIR"
  }
 
 sub_fetch() {
+
     check_attache_dir
 
+    [ $# -lt 1 ] || echo "Not enough arguments!" && exit 1
+    git clone $1 $ATTACHE_DIR
 }
 
 sub_add() {
