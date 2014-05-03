@@ -8,6 +8,21 @@ The goal is basically a bash re-implementation of
 extended features.  We'll see how it goes.
 
 
+Feature Checklist/Roadmap
+-------------------------
+
+- [x] init   - Create a new attache
+- [x] add    - Add a file/folder to the attache
+- [ ] redact - Add a file with sensitive information, do complicated
+  stuff to make it safe(r)
+- [ ] status - Currently, just does `git status` in the attache dir,
+  should give info about other stuff like what files haven't been linked
+- [ ] git    - Run arbitrary git commands in the attache dir
+- [ ] open   - (?) Move user into the attache dir for down and dirty work
+- [ ] link   - Generate symlinks for all files in your attache dir
+  into home
+- [ ] fetch - Get a remote git repository and set it up as the
+  contents of your attache dir
 
 Thoughts n' stuff:
 
