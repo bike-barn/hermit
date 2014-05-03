@@ -67,7 +67,7 @@ sub_fetch() {
 
 sub_add() {
     OLDFILE=$1
-    NEWFILE=$DEFAULT_ATTACHE_DIR/${OLDFILE#~/}
+    NEWFILE=$ATTACHE_DIR/${OLDFILE#~/}
 
     [ -f $NEWFILE ] && echo "$OLDFILE is already in your attache!"; exit 1
 
@@ -101,7 +101,7 @@ sub_status() {
         esac
     done
 
-    pushd $DEFAULT_ATTACHE_DIR >/dev/null 2>/dev/null
+    pushd $ATTACHE_DIR >/dev/null 2>/dev/null
     git status
     popd >/dev/null 2>/dev/null
 }
@@ -126,7 +126,7 @@ case $subcommand in
         sub_help
         ;;
     "open" | "go" )
-        cd $DEFAULT_ATTACHE_DIR ;;
+        cd $ATTACHE_DIR ;;
     * )
         shift
         sub_${subcommand} $@
