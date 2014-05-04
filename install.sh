@@ -37,14 +37,14 @@ else
 fi
 
 # Detect profile file if not specified as environment variable (eg: PROFILE=~/.myprofile).
+PROFILES=".bash_profile .zshrc .profile"
 if [ -z "$PROFILE" ]; then
-  if [ -f "$HOME/.bash_profile" ]; then
-    PROFILE="$HOME/.bash_profile"
-  elif [ -f "$HOME/.zshrc" ]; then
-    PROFILE="$HOME/.zshrc"
-  elif [ -f "$HOME/.profile" ]; then
-    PROFILE="$HOME/.profile"
-  fi
+    for i in $PROFILES; do
+        if [ -f "$HOME/$i" ]; then
+            PROFILE="$HOME/$i"
+            break
+        fi
+    done 
 fi
 
 #UNBREAK: This still doesn't load Attaché. The SOURCE_STR is based on rbenv
@@ -74,4 +74,5 @@ else
   fi
 fi
 
-echo "=> Close and reopen your terminal to start using Attaché"
+source $PROFILE
+echo "=> Sourced $PROFILE. Enjoy using Attaché\!"
