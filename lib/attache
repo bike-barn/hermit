@@ -16,7 +16,7 @@ VERSION="0.1.0"
 ATTACHE_DIR=${ATTACHE_DIR:-~/.attache}
 SECRETS_SUFFIX=.secrets
 
-UNIMPLEMENTED="Unimplemented! You should probably contribute it if you really want it done!"
+UNIMPLEMENTED=hasn\''t been implemented yet.\nYou should probably contribute it if you really want it done!'
 
 attache_add_file() {
 
@@ -75,7 +75,7 @@ sub_fetch() {
 }
 
 sub_use() {
-    echo $UNIMPLEMENTED
+    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
 }
 
 sub_add() {
@@ -105,15 +105,15 @@ sub_add() {
 }
 
 sub_redact() {
-    echo $UNIMPLEMENTED
+    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
 }
 
 sub_link() {
-    echo $UNIMPLEMENTED
+    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
 }
 
 sub_unlink() {
-    echo $UNIMPLEMENTED
+    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
 }
 
 sub_status() {
