@@ -44,7 +44,7 @@ if [ -z "$PROFILE" ]; then
             PROFILE="$HOME/$i"
             break
         fi
-    done 
+    done
 fi
 
 #UNBREAK: This still doesn't load Attaché. The SOURCE_STR is based on rbenv
@@ -74,5 +74,5 @@ else
   fi
 fi
 
-source $PROFILE
-echo "=> Sourced $PROFILE. Enjoy using Attaché\!"
+echo "=> Close and reopen your terminal to start using Attaché"
+echo "=> Alternatively, simply `source $HOME/$PROFILE`"
