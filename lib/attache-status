@@ -1,2 +1,13 @@
 #!/usr/bin/env bash
-echo "attache-status"
+#
+# Summary: Display the status of your attaché
+# Usage: attache status
+
+set -e
+[ -n "$ATTACHE_DEBUG" ] && set -x
+
+pushd $ATTACHE_DIR >/dev/null 2>/dev/null
+
+git status
+
+popd >/dev/null 2>/dev/null
