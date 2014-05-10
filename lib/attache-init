@@ -1,2 +1,22 @@
 #!/usr/bin/env bash
-echo "attache-init"
+# Summary: Start a new attaché profile
+# Usage: attache init [profile-name]
+
+set -e
+[ -n "$ATTACHE_DEBUG" ] && set -x
+
+[ -d $ATTACHE_DIR ] && echo "The folder $ATTACHE_DIR already exists!
+Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+
+mkdir -p $ATTACHE_DIR
+
+pushd $ATTACHE_DIR >/dev/null 2>/dev/null
+
+git init
+echo "*$SECRETS_SUFFIX" > .gitignore
+git add .gitignore
+git commit -m "Initial commit"
+
+popd >/dev/null 2>/dev/null
+
+echo "Congratulations! You now have a brand new attache located at $ATTACHE_DIR"
