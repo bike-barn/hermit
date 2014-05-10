@@ -23,4 +23,4 @@ if cd "$ATTACHE_ROOT" 2>/dev/null; then
   git_revision="${git_revision#v}"
 fi
 
-echo "attache ${git_revision:-$version}"
+echo "Attaché ${git_revision:-$version}"
