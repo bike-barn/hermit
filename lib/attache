@@ -59,7 +59,6 @@ else
 fi
 export ATTACHE_DIR
 
-
 shopt -s nullglob
 
 bin_path="$(abs_dirname "$0")"
@@ -68,11 +67,14 @@ for plugin_bin in "${ATTACHE_ROOT}/plugins/"*/bin; do
 done
 export PATH="${bin_path}:${PATH}"
 
-hook_path="${ATTACHE_HOOK_PATH}:${ATTACHE_ROOT}/attache.d:/usr/local/etc/attache.d:/etc/attache.d:/usr/lib/attache/hooks"
-for plugin_hook in "${ATTACHE_ROOT}/plugins/"*/etc/attache.d; do
-  hook_path="${hook_path}:${plugin_hook}"
-done
-export ATTACHE_HOOK_PATH="$hook_path"
+# Currently, we don't actually do anything with hooks. We may want to
+# support them in the future though, so keep this code hunk.
+
+# hook_path="${ATTACHE_HOOK_PATH}:${ATTACHE_ROOT}/attache.d:/usr/local/etc/attache.d:/etc/attache.d:/usr/lib/attache/hooks"
+# for plugin_hook in "${ATTACHE_ROOT}/plugins/"*/etc/attache.d; do
+#   hook_path="${hook_path}:${plugin_hook}"
+# done
+# export ATTACHE_HOOK_PATH="$hook_path"
 
 shopt -u nullglob
 
