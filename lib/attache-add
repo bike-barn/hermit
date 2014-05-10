@@ -1,2 +1,18 @@
 #!/usr/bin/env bash
-echo "attache-add"
+# Summary: Add files to your attaché
+# Usage: attache add [<filepattern>…]
+
+set -e
+[ -n "$ATTACHE_DEBUG" ] && set -x
+
+for file in $@; do
+    origfile=$file
+    newfile=$ATTACHE_DIR/${origfile#~/}
+
+    [ -f $newfile ] && echo "${origfile#~/} is already in your attache!" && exit 1
+
+    mkdir -vp $(basename $newfile)
+    mv -vn $origfile $newfile
+    ln -vs $newfile $origfile
+    attache_add_file $newfile
+done
