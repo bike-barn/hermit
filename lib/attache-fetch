@@ -1,2 +1,13 @@
 #!/usr/bin/env bash
-echo "attache-fetch"
+# Summary: Create a local attaché from an existing remote attaché
+# Usage: attache fetch <repository> [profile-name]
+
+set -e
+[ -n "$ATTACHE_DEBUG" ] && set -x
+
+[ $# -lt 1 ] || echo "Not enough arguments!" && exit 1
+
+[ -d $ATTACHE_DIR ] && echo "The folder $ATTACHE_DIR already exists!
+Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+
+git clone $1 $ATTACHE_DIR
