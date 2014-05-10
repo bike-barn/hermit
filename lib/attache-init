@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#
 # Summary: Start a new attaché profile
 # Usage: attache init [profile-name]
 

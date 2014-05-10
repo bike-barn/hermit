@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#
 # Summary: Create a local attaché from an existing remote attaché
 # Usage: attache fetch <repository> [profile-name]
 

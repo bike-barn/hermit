@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#
 # Summary: Add files to your attaché
 # Usage: attache add [<filepattern>…]
 
