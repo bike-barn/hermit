@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Copied shamelessly from nvm, copyright Tim Caswell
+# See LICENSE.nvm for details
+
 has() {
     type "$1" > /dev/null 2>&1
     return $?
