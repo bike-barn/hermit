@@ -1,170 +1,98 @@
 #!/usr/bin/env bash
 
-# Currently, this really doesn't do a whole lot. Eventually it will
-# help you manage your dotfiles with a git repository.
-
-# The main feature of attache is that it facilitates the good-idea of
-# not keeping your dotfiles git repo directly in your home dir.
-# Instead, it stores it in the ATTACHE_DIR, and then symlinks
-# all of the files and directories from there into your home
-# directory.
+# Copied shamelessly from rbenv, copyright Sam Stephenson
+# See LICENSE.rbenv for details
 
 set -e
-PROGNAME=$(basename $0)
-VERSION="0.1.0"
+export -n CDPATH
 
-ATTACHE_DIR=${ATTACHE_DIR:-~/.attache}
-SECRETS_SUFFIX=.secrets
+if [ "$1" = "--debug" ]; then
+  export ATTACHE_DEBUG=1
+  shift
+fi
 
-UNIMPLEMENTED=hasn\''t been implemented yet.\nYou should probably contribute it if you really want it done!'
+if [ -n "$ATTACHE_DEBUG" ]; then
+  export PS4='+ [${BASH_SOURCE##*/}:${LINENO}] '
+  set -x
+fi
 
-attache_add_file() {
+READLINK=$(type -p greadlink readlink | head -1)
+if [ -z "$READLINK" ]; then
+  echo "attache: cannot find readlink - are you missing GNU coreutils?" >&2
+  exit 1
+fi
 
-    ATTACHE_FILE=${1#$ATTACHE_DIR}
-    [ -f $ATTACHE_FILE ] || echo "File $1 does not exist in $ATTACHE_DIR" ; exit 1
-
-    git add -vf $ATTACHE_FILE
+resolve_link() {
+  $READLINK "$1"
 }
 
-check_attache_dir() {
-    [ -d $ATTACHE_DIR ] && echo "The folder $ATTACHE_DIR already exists!
-Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+abs_dirname() {
+  local cwd="$(pwd)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  pwd
+  cd "$cwd"
 }
 
-sub_help() {
-    echo -e "\nAttaché $VERSION\n"
-    echo    "Usage:"
-    echo    "    help    Show help for Attaché or a specific subcommand"
-    echo    "    init    Create a new attaché"
-    echo    "    fetch   Create a local attaché from an existing remote attaché"
-    echo    "    use     Use a specified attaché profile"
-    echo    "    add     Add a file to your attaché"
-    echo    "    redact  Add a file, but remove sensitive information from it first"
-    echo    "    link    Symlink the contents of your attaché to \$HOME"
-    echo    "    unlink  Remove symlinks to attaché"
-    echo    "    status  Display the status of your attaché"
-    echo    "    open    Go to your attaché directory"
-    echo    ""
-    echo    "See \`$PROGNAME help <command>' for information on a specific subcommand."
-    echo    "For full documentation, see: https://github.com/RadicalZephyr/attache"
-    echo    ""
-}
+if [ -z "${ATTACHE_ROOT}" ]; then
+  ATTACHE_ROOT="${HOME}/.attache"
+else
+  ATTACHE_ROOT="${ATTACHE_ROOT%/}"
+fi
+export ATTACHE_ROOT
 
-sub_init() {
+if [ -z "${ATTACHE_DIR}" ]; then
+  ATTACHE_DIR="$(pwd)"
+else
+  cd "$ATTACHE_DIR" 2>/dev/null || {
+    echo "attache: cannot change working directory to \`$ATTACHE_DIR'"
+    exit 1
+  } >&2
+  ATTACHE_DIR="$(pwd)"
+  cd "$OLDPWD"
+fi
+export ATTACHE_DIR
 
-    check_attache_dir
 
-    mkdir -p $ATTACHE_DIR
-    pushd $ATTACHE_DIR >/dev/null 2>/dev/null
-    git init
-    echo "*$SECRETS_SUFFIX" > .gitignore
-    git add .gitignore
-    git commit -m "Initial commit"
-    popd >/dev/null 2>/dev/null
+shopt -s nullglob
 
-    echo "Congratulations! You now have a brand new attache located at
-$ATTACHE_DIR"
- }
+bin_path="$(abs_dirname "$0")"
+for plugin_bin in "${ATTACHE_ROOT}/plugins/"*/bin; do
+  bin_path="${bin_path}:${plugin_bin}"
+done
+export PATH="${bin_path}:${PATH}"
 
-sub_fetch() {
+hook_path="${ATTACHE_HOOK_PATH}:${ATTACHE_ROOT}/attache.d:/usr/local/etc/attache.d:/etc/attache.d:/usr/lib/attache/hooks"
+for plugin_hook in "${ATTACHE_ROOT}/plugins/"*/etc/attache.d; do
+  hook_path="${hook_path}:${plugin_hook}"
+done
+export ATTACHE_HOOK_PATH="$hook_path"
 
-    check_attache_dir
+shopt -u nullglob
 
-    [ $# -lt 1 ] || echo "Not enough arguments!" && exit 1
-    git clone $1 $ATTACHE_DIR
-}
 
-sub_use() {
-    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
-}
+command="$1"
+case "$command" in
+"" | "-h" | "--help" )
+  echo -e "$(attache---version)\n$(attache-help)" >&2
+  ;;
+"-v" )
+  exec attache---version
+  ;;
+* )
+  command_path="$(command -v "attache-$command" || true)"
+  if [ -z "$command_path" ]; then
+    echo "attache: no such command \`$command'" >&2
+    exit 1
+  fi
 
-sub_add() {
-    TEMP=$(getopt -o '' -n $(basename $0) -- "$@")
-
-    if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-    eval set -- "$TEMP"
-
-    while true; do
-        case "$1" in
-            -- ) shift; break ;;
-        esac
-    done
-
-    for FILE in $@; do
-        ORIGFILE=$FILE
-        NEWFILE=$ATTACHE_DIR/${ORIGFILE#~/}
-
-        [ -f $NEWFILE ] && echo "${ORIGFILE#~/} is already in your attache!" && exit 1
-
-        mkdir -vp $(basename $NEWFILE)
-        mv -vn $ORIGFILE $NEWFILE
-        ln -vs $NEWFILE $ORIGFILE
-        attache_add_file $NEWFILE
-    done
-}
-
-sub_redact() {
-    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
-}
-
-sub_link() {
-    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
-}
-
-sub_unlink() {
-    echo -e \`"attache $subcommand"\` $UNIMPLEMENTED 1>&2
-}
-
-sub_status() {
-    TEMP=$(getopt -o 'h' -l 'help' -n "$PROGNAME $subcommand" -- "$@")
-
-    if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-    eval set -- "$TEMP"
-
-    while true; do
-        case "$1" in
-            -h | --help ) echo "Usage: $PROGNAME $subcommand\n";
-                          echo "Display the git status of your attache";
-                          shift; exit ;;
-            -- ) shift; break ;;
-        esac
-    done
-
-    pushd $ATTACHE_DIR >/dev/null 2>/dev/null
-    git status
-    popd >/dev/null 2>/dev/null
-}
-
-# Keep this snippet for use with subcommands
-
-# TEMP=$(getopt -o '' -n $(basename $0) -- "$@")
-
-# if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-# eval set -- "$TEMP"
-
-# while true; do
-#     case "$1" in
-#         -- ) shift; break ;;
-#     esac
-# done
-
-subcommand=$1
-case $subcommand in
-    "" | "-h" | "--help" | "help" )
-        sub_help
-        ;;
-    "open" | "go" )
-        cd $ATTACHE_DIR ;;
-    * )
-        shift
-        sub_${subcommand} $@
-        if [ $? = 127 ]; then
-            echo "Error: '$subcommand' is not a known subcommand." >&2
-            echo "       Run '$PROGNAME --help' for a list of known subcommands." >&2
-            exit 1
-        fi
-        ;;
+  shift 1
+  exec "$command_path" "$@"
+  ;;
 esac
