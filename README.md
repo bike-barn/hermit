@@ -40,7 +40,7 @@ You can customize the install source, directory and profile using the
 
 Just clone the attache repository with `git`.
 
-   git clone git@github.com:RadicalZephyr/attache.git ~/.attache
+    git clone git@github.com:RadicalZephyr/attache.git ~/.attache
 
 Now, you need to have `~/.attache/bin` on your path, so add something
 like this to your shell init file:
