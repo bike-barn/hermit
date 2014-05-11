@@ -40,7 +40,7 @@ else
 fi
 
 # Detect profile file if not specified as environment variable (eg: PROFILE=~/.myprofile).
-PROFILES=".bash_profile .zshrc .profile"
+PROFILES=".bash_profile .bashrc .zshrc .profile"
 if [ -z "$PROFILE" ]; then
     for i in $PROFILES; do
         if [ -f "$HOME/$i" ]; then
