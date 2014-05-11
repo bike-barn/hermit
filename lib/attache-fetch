@@ -3,7 +3,7 @@
 # Summary: Create a local attaché from an existing remote attaché
 # Usage: attache fetch <repository> [profile-name]
 
-# Copyright Geoff Shannon, 2014
+# Copyright 2014, Geoff Shannon
 
 # This file is part of Attaché.
 
