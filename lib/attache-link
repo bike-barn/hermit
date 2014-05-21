@@ -33,7 +33,8 @@ do
     # filename and replace concatenated with HOME
     basefile=$HOME/$(basename $file)
 
-    if [ -h $basefile ]
+    # Check for a symlink
+    if [ -L $basefile ]
     then
         if [ "$($READLINK $basefile)" = "$file" ]
         then
@@ -44,22 +45,23 @@ do
         fi
         continue
 
+    # Check for a regular file.  Order matters here, -f will match a
+    # symlink too!
     elif [ -f $basefile ]
     then
         echo "There's a real file at $basefile!"
         echo "We can't create a link there."
         continue
 
+    # Check if there is a directory.
     elif [ -d $basefile ]
     then
-        echo "There's a real directory at $basefile."
+        echo "There's a real directory at $basefile"
+        echo "We can't create a link there."
         continue
     fi
 
-    # Lots of other cases here, could be all sorts of other files
-    if [ \! -h $basefile ]
-    then
-        ln -s $file $basefile
-    fi
+    # Since we've done lots of checks already, this should work
+    ln -s $file $basefile
 
 done
