@@ -25,9 +25,9 @@ or Wget:
 
     wget -qO- https://raw.githubusercontent.com/RadicalZephyr/attache/master/install.sh | sh
 
-<sub>The script clones the Attaché repository to `~/.attache` and adds
-the source line to your profile (`~/.bash_profile`, `~/.zshrc` or
-`~/.profile`).</sub>
+<sub>[The script][install script] clones the Attaché repository to
+`~/.attache` and adds the source line to your profile
+(`~/.bash_profile`, `~/.zshrc` or `~/.profile`).</sub>
 
 You can customize the install source, directory and profile using the
 `ATTACHE_SOURCE` and `ATTACHE_DIR` variables: Eg:
