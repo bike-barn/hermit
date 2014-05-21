@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-
+#
+# Summary: Create symlinks to your attache dir files
+#
+# Usage: attache link
+#
+# Sets up the symbolic links for all the files and directories in your
+# attache directory.
+#
+# TODO: add the ability to NOT link certain files in.  Whether this is
+# by default, or there's an attache ignore file or something I'm not
+# sure.
 
 # Copyright 2014, Geoff Shannon
 
