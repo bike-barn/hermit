@@ -21,4 +21,27 @@
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
-echo "attache-link - NOT IMPLEMENTED"
+shopt -s dotglob
+files="$ATTACHE_ROOT/*"
+shopt -u dotglob
+
+for file in $files
+do
+    # ATTACHE_ROOT is an absolute path, so strip to just the base filename
+    basefile=$(basename $file)
+
+    if [ -f $HOME/$file ]
+    then
+        echo "There's a real file at $HOME/$file!"
+        echo "We can't create a link there."
+        # Might be neat to ask/offer the option of merging the two files
+        continue
+    fi
+
+    # Lots of other cases here, could be all sorts of other files
+    if [ \! -h $HOME/$file ]
+    then
+        ln -s $file $HOME/$basefile
+    fi
+
+done
