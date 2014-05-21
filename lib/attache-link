@@ -42,6 +42,9 @@ do
     if [ \! -h $HOME/$basefile ]
     then
         ln -s $file $HOME/$basefile
+    else
+        echo "There is already a symbolic link at $HOME/$basefile"
+        echo "Maybe you've already linked it?"
     fi
 
 done
