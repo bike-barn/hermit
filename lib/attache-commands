@@ -2,8 +2,8 @@
 # Summary: List all available attache commands
 # Usage: attache commands [--sh|--no-sh]
 
-# Copied shamelessly from attache, copyright Sam Stephenson
-# See LICENSE.attache for details
+# Copied shamelessly from rbenv, copyright Sam Stephenson
+# See LICENSE.rbenv for details
 
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x

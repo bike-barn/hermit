@@ -12,8 +12,8 @@
 # The remainder of the comment block is displayed as extended
 # documentation.
 
-# Copied shamelessly from attache, copyright Sam Stephenson
-# See LICENSE.attache for details
+# Copied shamelessly from rbenv, copyright Sam Stephenson
+# See LICENSE.rbenv for details
 
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x

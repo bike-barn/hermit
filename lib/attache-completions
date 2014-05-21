@@ -2,7 +2,7 @@
 # Usage: attache completions <command> [arg1 arg2...]
 
 # Copied shamelessly from rbenv, copyright Sam Stephenson
-# See LICENSE.attache for details
+# See LICENSE.rbenv for details
 
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
