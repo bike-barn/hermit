@@ -21,6 +21,8 @@
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
+# Major advantage of dotglob over .* dotglob doesn't grab the ./ and
+# ../ files
 shopt -s dotglob
 files=$(echo $ATTACHE_ROOT/*)
 shopt -u dotglob
