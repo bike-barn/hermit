@@ -27,8 +27,8 @@ shopt -u dotglob
 
 for file in $files
 do
-    # ATTACHE_ROOT is an absolute path, so strip to just the base filename
-    # and replace concatenated with HOME
+    # ATTACHE_ROOT is an absolute path, so strip to just the base
+    # filename and replace concatenated with HOME
     basefile=$HOME/$(basename $file)
 
     if [ -h $basefile ]
