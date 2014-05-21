@@ -33,8 +33,13 @@ do
 
     if [ -h $basefile ]
     then
-        echo "There is already a symbolic link at $basefile"
-        echo "Maybe you've already linked it?"
+        if [ "$($READLINK $basefile)" = "$file" ]
+        then
+            echo "$(basename $file) is already linked!"
+        else
+            echo "There is already a symbolic link at $basefile"
+            echo "But it doesn't point to $file."
+        fi
         continue
 
     elif [ -f $basefile ]
