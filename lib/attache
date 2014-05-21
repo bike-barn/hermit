@@ -47,6 +47,12 @@ else
 fi
 export ATTACHE_ROOT
 
+## I have a suspicion that this variable is totally irrelevant to
+## attache.  I think it is used by rbenv for figuring out what to do
+## about the current local dir, because it supports local gem installs
+## (I think!)
+## TODO: investigate whether this is useful or just confusing and
+## unnecessary
 if [ -z "${ATTACHE_DIR}" ]; then
   ATTACHE_DIR="$(pwd)"
 else
