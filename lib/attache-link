@@ -28,30 +28,31 @@ shopt -u dotglob
 for file in $files
 do
     # ATTACHE_ROOT is an absolute path, so strip to just the base filename
-    basefile=$(basename $file)
+    # and replace concatenated with HOME
+    basefile=$HOME/$(basename $file)
 
-    if [ -h $HOME/$basefile ]
+    if [ -h $basefile ]
     then
-        echo "There is already a symbolic link at $HOME/$basefile"
+        echo "There is already a symbolic link at $basefile"
         echo "Maybe you've already linked it?"
         continue
 
-    elif [ -f $HOME/$basefile ]
+    elif [ -f $basefile ]
     then
-        echo "There's a real file at $HOME/$basefile!"
+        echo "There's a real file at $basefile!"
         echo "We can't create a link there."
         continue
 
-    elif [ -d $HOME/$basefile ]
+    elif [ -d $basefile ]
     then
-        echo "There's a real directory at $HOME/$basefile."
+        echo "There's a real directory at $basefile."
         continue
     fi
 
     # Lots of other cases here, could be all sorts of other files
-    if [ \! -h $HOME/$basefile ]
+    if [ \! -h $basefile ]
     then
-        ln -s $file $HOME/$basefile
+        ln -s $file $basefile
     fi
 
 done
