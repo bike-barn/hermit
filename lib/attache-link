@@ -22,7 +22,7 @@ set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
 shopt -s dotglob
-files="$ATTACHE_ROOT/*"
+files=$(echo $ATTACHE_ROOT/*)
 shopt -u dotglob
 
 for file in $files
@@ -30,16 +30,16 @@ do
     # ATTACHE_ROOT is an absolute path, so strip to just the base filename
     basefile=$(basename $file)
 
-    if [ -f $HOME/$file ]
+    if [ -f $HOME/$basefile ]
     then
-        echo "There's a real file at $HOME/$file!"
+        echo "There's a real file at $HOME/$basefile!"
         echo "We can't create a link there."
         # Might be neat to ask/offer the option of merging the two files
         continue
     fi
 
     # Lots of other cases here, could be all sorts of other files
-    if [ \! -h $HOME/$file ]
+    if [ \! -h $HOME/$basefile ]
     then
         ln -s $file $HOME/$basefile
     fi
