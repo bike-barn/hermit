@@ -23,18 +23,18 @@
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
-[ -d $ATTACHE_DIR ] && echo "The folder $ATTACHE_DIR already exists!
-Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+[ -d $ATTACHE_PROFILE ] && echo "The directory $ATTACHE_PROFILE already exists!
+Maybe you should change your ATTACHE_PROFILE environment variable..." && exit 1
 
-mkdir -p $ATTACHE_DIR
+mkdir -p $ATTACHE_PROFILE
 
-pushd $ATTACHE_DIR >/dev/null 2>/dev/null
+pushd $ATTACHE_PROFILE >/dev/null 2>/dev/null
 
 git init
-echo "*$SECRETS_SUFFIX" > .gitignore
+echo "*${SECRETS_SUFFIX}" > .gitignore
 git add .gitignore
 git commit -m "Initial commit"
 
 popd >/dev/null 2>/dev/null
 
-echo "Congratulations! You now have a brand new attache located at $ATTACHE_DIR"
+echo "Congratulations! You now have a brand new attache located at $ATTACHE_PROFILE"

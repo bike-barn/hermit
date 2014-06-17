@@ -47,23 +47,15 @@ else
 fi
 export ATTACHE_ROOT
 
-## I have a suspicion that this variable is totally irrelevant to
-## attache.  I think it is used by rbenv for figuring out what to do
-## about the current local dir, because it supports local gem installs
-## (I think!)
-## TODO: investigate whether this is useful or just confusing and
-## unnecessary
-if [ -z "${ATTACHE_DIR}" ]; then
-  ATTACHE_DIR="$(pwd)"
-else
-  cd "$ATTACHE_DIR" 2>/dev/null || {
-    echo "attache: cannot change working directory to \`$ATTACHE_DIR'"
-    exit 1
-  } >&2
-  ATTACHE_DIR="$(pwd)"
-  cd "$OLDPWD"
+if [ -z "${ATTACHE_PROFILE}" ]; then
+  ATTACHE_PROFILE="${ATTACHE_ROOT}/profiles/default"
 fi
-export ATTACHE_DIR
+export ATTACHE_PROFILE
+
+if [ -z "${SECRETS_SUFFIX}" ]; then
+  SECRETS_SUFFIX=".attache_secrets"
+fi
+export SECRETS_SUFFIX
 
 shopt -s nullglob
 
