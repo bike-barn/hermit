@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Summary: Open the currently active profile
+# Usage: attache open [profile-name]
 
 # Copyright 2014, Geoff Shannon
 
