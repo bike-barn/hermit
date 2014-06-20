@@ -22,3 +22,12 @@ set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
 echo "attache-use - NOT IMPLEMENTED"
+
+# First check if the name given is a directory under
+# $ATTACHE_ROOT/profiles.
+
+# Now, unlink all files from the currently active profile (attache unlink)
+
+# Set the $ATTACHE_CURRENT_KEY to the new profile
+
+# Link all the files for the current profile (attache link)
