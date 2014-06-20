@@ -25,7 +25,7 @@ set -e
 
 [ $# -lt 1 ] || echo "Not enough arguments!" && exit 1
 
-[ -d $ATTACHE_DIR ] && echo "The folder $ATTACHE_DIR already exists!
-Maybe you should change your ATTACHE_DIR environment variable..." && exit 1
+[ -d $ATTACHE_PROFILE ] && echo "The folder $ATTACHE_PROFILE already exists!
+Maybe you should change your ATTACHE_PROFILE environment variable..." && exit 1
 
-git clone $1 $ATTACHE_DIR
+git clone $1 $ATTACHE_PROFILE

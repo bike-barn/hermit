@@ -25,7 +25,7 @@ set -e
 
 for file in $@; do
     origfile=$file
-    newfile=$ATTACHE_DIR/${origfile#~/}
+    newfile=$ATTACHE_PROFILE/${origfile#~/}
 
     [ -f $newfile ] && echo "${origfile#~/} is already in your attache!" && exit 1
 

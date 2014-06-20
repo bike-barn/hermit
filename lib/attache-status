@@ -23,7 +23,7 @@
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
-pushd $ATTACHE_DIR >/dev/null 2>/dev/null
+pushd $ATTACHE_PROFILE >/dev/null 2>/dev/null
 
 git status
 
