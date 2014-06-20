@@ -52,7 +52,7 @@ fi
 
 #UNBREAK: This still doesn't load Attaché. The SOURCE_STR is based on rbenv
 #         and may require an equivalent of rbenv's eval "$(rbenv init -).
-SOURCE_STR="export PATH=\"\$HOME/.attache/bin:\$PATH\" # This loads Attaché"
+SOURCE_STR="export PATH=\"\$HOME/.attache/bin:\$PATH\" # This loads Attache"
 
 if [ -z "$PROFILE" ] || [ ! -f "$PROFILE" ] ; then
   if [ -z $PROFILE ]; then
