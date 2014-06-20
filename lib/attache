@@ -69,8 +69,15 @@ else
 fi
 export ATTACHE_ROOT
 
+export ATTACHE_CURRENT_KEY="attache.current"
+
 if [ -z "${ATTACHE_PROFILE}" ]; then
-  ATTACHE_PROFILE="${ATTACHE_ROOT}/profiles/default"
+    pushd $ATTACHE_ROOT 2> /dev/null > /dev/null
+    PROFILE_NAME="$(git config $ATTACHE_CURRENT_KEY | head -1)"
+    popd 2> /dev/null > /dev/null
+
+    PROFILE_NAME="${PROFILE_NAME:-default}"
+    ATTACHE_PROFILE="${ATTACHE_ROOT}/profiles/${PROFILE_NAME}"
 fi
 export ATTACHE_PROFILE
 
