@@ -16,14 +16,21 @@ if [ -n "$ATTACHE_DEBUG" ]; then
   set -x
 fi
 
+# Make sure git is installed
+GIT=$(type -p git | head -1)
+if [ -z "$GIT" ]; then
+    echo "Attache relies heavily on git for it's functionality."
+    echo
+    echo "Please install git before attempting to use Attache."
+    exit 1
+fi
+
 # Make sure that git commands won't fail because user isn't configured
 if git config --global user.name > /dev/null &&
    git config --global user.email > /dev/null
 then
     :
 else
-    echo "Attache relies heavily on git for it's functionality."
-    echo
     echo -e 'Please set your git name and email with:\n
   git config --global user.name "Your Name"
   git config --global user.email "you@example.com"'
