@@ -12,14 +12,9 @@ then
     exit 1
 fi
 
-if [ -z "$ATTACHE_DIR" ]
+if [ \! -d $INSTALL_DIR ]
 then
-    ATTACHE_DIR="$HOME/.attache"
-fi
-
-if [ \! -d $ATTACHE_DIR ]
-then
-    echo ".attache directory not found."
+    echo "Installed attache not found at $INSTALL_DIR."
     exit 1
 fi
 
