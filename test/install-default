@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Run the install test with the default ATTACHE_DIR location
+export ATTACHE_DIR="$HOME/.attache"
+
+exec ./.do-install

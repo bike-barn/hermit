@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 # Run the install test with a different install location
-export ATTACHE_DIR=".adifferentplace"
+export ATTACHE_DIR="$HOME/.adifferentplace"
 
-exec ./install
+exec ./.do-install
