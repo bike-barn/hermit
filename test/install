@@ -6,6 +6,16 @@ curl https://raw.githubusercontent.com/RadicalZephyr/attache/master/install.sh |
 
 RET=$?
 
-[ $RET -eq 0 -a -d $HOME/.attache -a -d $HOME/.attache/.git ]  && exit 0
+if [ $RET -ne 0 ]
+then
+    echo "Install script exited with status: $RET."
+    exit 1
+fi
 
-exit 1
+if [ -d $HOME/.attache ]
+then
+    echo ".attache directory not found."
+    exit 1
+fi
+
+exit 0
