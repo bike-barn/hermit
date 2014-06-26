@@ -1,3 +1,4 @@
 
-HOME=$TESTDIR
+# Make home the full path to TESTDIR
+HOME=$(cd $TESTDIR; pwd)
 cd $TESTDIR
