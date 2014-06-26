@@ -7,6 +7,8 @@ like [rbenv], and [nvm]. It's (going to be) like having profiles for
 your shell environments. Or, it just helps manage your home directory
 being under version control.
 
+[![Build Status](https://travis-ci.org/RadicalZephyr/attache.svg?branch=master)](https://travis-ci.org/RadicalZephyr/attache)
+
 [Briefcase]: https://github.com/jim/briefcase
 [rbenv]: https://github.com/sstephenson/rbenv
 [nvm]: https://github.com/creationix/nvm
