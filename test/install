@@ -12,7 +12,12 @@ then
     exit 1
 fi
 
-if [ -d $HOME/.attache ]
+if [ -z "$ATTACHE_DIR" ]
+then
+    ATTACHE_DIR="$HOME/.attache"
+fi
+
+if [ \! -d $ATTACHE_DIR ]
 then
     echo ".attache directory not found."
     exit 1
