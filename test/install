@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+source .environment
+
+curl https://raw.githubusercontent.com/RadicalZephyr/attache/master/install.sh | sh
+
+RET=$?
+
+[ $RET -eq 0 -a -d $HOME/.attache -a -d $HOME/.attache/.git ]  && exit 0
+
+exit 1
