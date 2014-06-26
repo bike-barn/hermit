@@ -4,4 +4,4 @@ install:
 before_script:
   - curl -o /tmp/urchin https://raw.githubusercontent.com/scraperwiki/urchin/master/urchin && chmod +x /tmp/urchin
 script:
-  - ATTACHE_DIR=$TRAVIS_BUILD_DIR make TEST_SUITE=$TEST_SUITE URCHIN=/tmp/urchin $SHELL
+  - ./runtests.sh
