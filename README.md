@@ -52,6 +52,10 @@ Usage
 
 Still working on this... Try checking out `attache help`.
 
+Running the Tests
+-----------------
+
+Attaché now has a test suite! You can run it with `./runtests.sh`.
 
 Feature Checklist/Roadmap
 -------------------------
