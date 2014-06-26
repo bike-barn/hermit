@@ -1,0 +1,3 @@
+
+HOME=$TESTDIR
+cd $TESTDIR
