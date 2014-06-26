@@ -31,9 +31,10 @@ or Wget:
 `~/.attache` and adds the source line to your profile
 (`~/.bash_profile`, `~/.zshrc` or `~/.profile`).</sub>
 
-You can customize the install source, directory and profile using the
-`ATTACHE_SOURCE` and `ATTACHE_DIR` variables: Eg:
-`curl ... | ATTACHE_DIR=/usr/local/attache sh` for a global install.
+You can customize the install source, directory and profile
+respectively using the `ATTACHE_SOURCE`, `ATTACHE_DIR` and `PROFILE`
+variables: Eg: `curl ... | ATTACHE_DIR=/usr/local/attache sh` for a
+global install.
 
 
 [install script]: https://raw.githubusercontent.com/RadicalZephyr/attache/master/install.sh
