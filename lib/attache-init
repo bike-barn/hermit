@@ -23,6 +23,16 @@
 set -e
 [ -n "$ATTACHE_DEBUG" ] && set -x
 
+# Check for extraneous arguments and exit with an error if they exist.
+if [ ! $# -le 1 ]
+then
+    echo "Error: attache: Too many arguments."
+    attache help init && exit 1
+fi
+
+# Change profile name from default if optional argument is given.
+[ -n "$1" ] && ATTACHE_PROFILE="${ATTACHE_ROOT}/profiles/${1}"
+
 [ -d $ATTACHE_PROFILE ] && echo "The directory $ATTACHE_PROFILE already exists!
 Maybe you should change your ATTACHE_PROFILE environment variable..." && exit 1
 
@@ -37,4 +47,4 @@ git commit -m "Initial commit"
 
 popd >/dev/null 2>/dev/null
 
-echo "Congratulations! You now have a brand new attache located at $ATTACHE_PROFILE"
+echo "Congratulations! You now have a brand new attache located at $ATTACHE_PROFILE."
