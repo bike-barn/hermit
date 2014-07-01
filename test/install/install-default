@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ../.environment
+
 # Run the install test with the default ATTACHE_DIR location
 export INSTALL_DIR="$HOME/.attache"
 

@@ -3,5 +3,3 @@
 export HOME=$(cd $TESTDIR; pwd)
 export PROFILE=$HOME/.profile
 touch $PROFILE
-
-cd $TESTDIR

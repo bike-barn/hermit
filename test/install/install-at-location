@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ../.environment
+
 # Run the install test with a different install location
 export INSTALL_DIR="$HOME/.adifferentplace"
 export ATTACHE_DIR=$INSTALL_DIR

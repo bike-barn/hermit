@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-source ../.environment
-
 curl https://raw.githubusercontent.com/RadicalZephyr/attache/master/install.sh | sh
 
 RET=$?
