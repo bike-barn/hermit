@@ -1,4 +1,4 @@
 
 # Make home the full path to TESTDIR
-HOME=$(cd $TESTDIR; pwd)
+export HOME=$(cd $TESTDIR; pwd)
 cd $TESTDIR
