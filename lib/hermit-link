@@ -1,45 +1,45 @@
 #!/usr/bin/env bash
 #
-# Summary: Create symlinks to your attache dir files
+# Summary: Create symlinks to your hermit dir files
 #
-# Usage: attache link
+# Usage: hermit link
 #
 # Sets up the symbolic links for all the files and directories in your
-# attache directory.
+# hermit directory.
 #
 # TODO: add the ability to NOT link certain files in.  Whether this is
-# by default, or there's an attache ignore file or something I'm not
+# by default, or there's an hermit ignore file or something I'm not
 # sure.
 
 # Copyright 2014, Geoff Shannon
 
-# This file is part of Attaché.
+# This file is part of Hermit.
 
-# Attaché is free software: you can redistribute it and/or modify it
+# Hermit is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Attaché is distributed in the hope that it will be useful, but
+# Hermit is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with Attaché. If not, see <http://www.gnu.org/licenses/>.
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
 
 set -e
-[ -n "$ATTACHE_DEBUG" ] && set -x
+[ -n "$HERMIT_DEBUG" ] && set -x
 
 # Major advantage of dotglob over .* dotglob doesn't grab the ./ and
 # ../ files
 shopt -s dotglob
-files=$(echo $ATTACHE_ROOT/*)
+files=$(echo $HERMIT_ROOT/*)
 shopt -u dotglob
 
 for file in $files
 do
-    # ATTACHE_ROOT is an absolute path, so strip to just the base
+    # HERMIT_ROOT is an absolute path, so strip to just the base
     # filename and replace concatenated with HOME
     basefile=$HOME/$(basename $file)
 

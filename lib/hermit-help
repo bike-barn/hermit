@@ -2,7 +2,7 @@
 #
 # Summary: Display help for a command
 #
-# Usage: attache help [--usage] COMMAND
+# Usage: hermit help [--usage] COMMAND
 #
 # Parses and displays help contents from a command's source file.
 #
@@ -16,11 +16,11 @@
 # See LICENSE.rbenv for details
 
 set -e
-[ -n "$ATTACHE_DEBUG" ] && set -x
+[ -n "$HERMIT_DEBUG" ] && set -x
 
 command_path() {
   local command="$1"
-  command -v attache-"$command" || command -v attache-sh-"$command" || true
+  command -v hermit-"$command" || command -v hermit-sh-"$command" || true
 }
 
 extract_initial_comment_block() {
@@ -115,7 +115,7 @@ print_help() {
     if [ -n "$usage" ]; then
       echo "$usage"
     else
-      echo "Usage: attache ${command}"
+      echo "Usage: hermit ${command}"
     fi
     if [ -n "$help" ]; then
       echo
@@ -141,15 +141,15 @@ if [ "$1" = "--usage" ]; then
   shift
 fi
 
-if [ -z "$1" ] || [ "$1" == "attache" ]; then
-  echo "Usage: attache <command> [<args>]"
+if [ -z "$1" ] || [ "$1" == "hermit" ]; then
+  echo "Usage: hermit <command> [<args>]"
   [ -z "$usage" ] || exit
   echo
-  echo "Some useful attache commands are:"
+  echo "Some useful hermit commands are:"
   print_summaries commands init fetch status open use link unlink add redact
   echo
-  echo "See \`attache help <command>' for information on a specific command."
-  echo "For full documentation, see: https://github.com/radicalzephyr/attache#readme"
+  echo "See \`hermit help <command>' for information on a specific command."
+  echo "For full documentation, see: https://github.com/radicalzephyr/hermit#readme"
 else
   command="$1"
   if [ -n "$(command_path "$command")" ]; then
@@ -159,7 +159,7 @@ else
       print_help "$command"
     fi
   else
-    echo "attache: no such command \`$command'" >&2
+    echo "hermit: no such command \`$command'" >&2
     exit 1
   fi
 fi

@@ -1,36 +1,36 @@
 #!/usr/bin/env bash
 #
-# Summary: Add files to your attaché
-# Usage: attache add [<filepattern>…]
+# Summary: Add files to your hermit
+# Usage: hermit add [<filepattern>…]
 
 # Copyright 2014, Geoff Shannon
 
-# This file is part of Attaché.
+# This file is part of Hermit.
 
-# Attaché is free software: you can redistribute it and/or modify it
+# Hermit is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Attaché is distributed in the hope that it will be useful, but
+# Hermit is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with Attaché. If not, see <http://www.gnu.org/licenses/>.
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
 
 set -e
-[ -n "$ATTACHE_DEBUG" ] && set -x
+[ -n "$HERMIT_DEBUG" ] && set -x
 
 for file in $@; do
     origfile=$file
-    newfile=$ATTACHE_PROFILE/${origfile#~/}
+    newfile=$HERMIT_PROFILE/${origfile#~/}
 
-    [ -f $newfile ] && echo "${origfile#~/} is already in your attache!" && exit 1
+    [ -f $newfile ] && echo "${origfile#~/} is already in your hermit!" && exit 1
 
     mkdir -vp $(basename $newfile)
     mv -vn $origfile $newfile
     ln -vs $newfile $origfile
-    attache_add_file $newfile
+    hermit_add_file $newfile
 done

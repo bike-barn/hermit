@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-curl https://raw.githubusercontent.com/RadicalZephyr/attache/master/install.sh | sh
+curl https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
 
 RET=$?
 
@@ -12,7 +12,7 @@ fi
 
 if [ \! -d $INSTALL_DIR ]
 then
-    echo "Installed attache not found at $INSTALL_DIR."
+    echo "Installed hermit not found at $INSTALL_DIR."
     exit 1
 fi
 

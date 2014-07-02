@@ -4,6 +4,6 @@ source ../.environment
 
 # Run the install test with a different install location
 export INSTALL_DIR="$HOME/.foo/.bar/.baz/.adifferentplace"
-export ATTACHE_DIR=$INSTALL_DIR
+export HERMIT_DIR=$INSTALL_DIR
 
 exec ./.do-install

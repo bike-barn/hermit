@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Summary: List all available attache commands
-# Usage: attache commands [--sh|--no-sh]
+# Summary: List all available hermit commands
+# Usage: hermit commands [--sh|--no-sh]
 
 # Copied shamelessly from rbenv, copyright Sam Stephenson
 # See LICENSE.rbenv for details
 
 set -e
-[ -n "$ATTACHE_DEBUG" ] && set -x
+[ -n "$HERMIT_DEBUG" ] && set -x
 
-# Provide attache completions
+# Provide hermit completions
 if [ "$1" = "--complete" ]; then
   echo --sh
   echo --no-sh
@@ -28,8 +28,8 @@ IFS=: paths=($PATH)
 shopt -s nullglob
 
 { for path in "${paths[@]}"; do
-    for command in "${path}/attache-"*; do
-      command="${command##*attache-}"
+    for command in "${path}/hermit-"*; do
+      command="${command##*hermit-}"
       if [ -n "$sh" ]; then
         if [ ${command:0:3} = "sh-" ]; then
           echo ${command##sh-}

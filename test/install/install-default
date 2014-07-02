@@ -2,7 +2,7 @@
 
 source ../.environment
 
-# Run the install test with the default ATTACHE_DIR location
-export INSTALL_DIR="$HOME/.attache"
+# Run the install test with the default HERMIT_DIR location
+export INSTALL_DIR="$HOME/.hermit"
 
 exec ./.do-install

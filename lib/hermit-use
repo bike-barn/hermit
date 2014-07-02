@@ -3,31 +3,31 @@
 
 # Copyright 2014, Geoff Shannon
 
-# This file is part of Attaché.
+# This file is part of Hermit.
 
-# Attaché is free software: you can redistribute it and/or modify it
+# Hermit is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-# Attaché is distributed in the hope that it will be useful, but
+# Hermit is distributed in the hope that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with Attaché. If not, see <http://www.gnu.org/licenses/>.
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
 
 set -e
-[ -n "$ATTACHE_DEBUG" ] && set -x
+[ -n "$HERMIT_DEBUG" ] && set -x
 
-echo "attache-use - NOT IMPLEMENTED"
+echo "hermit-use - NOT IMPLEMENTED"
 
 # First check if the name given is a directory under
-# $ATTACHE_ROOT/profiles.
+# $HERMIT_ROOT/profiles.
 
-# Now, unlink all files from the currently active profile (attache unlink)
+# Now, unlink all files from the currently active profile (hermit unlink)
 
-# Set the $ATTACHE_CURRENT_KEY to the new profile
+# Set the $HERMIT_CURRENT_KEY to the new profile
 
-# Link all the files for the current profile (attache link)
+# Link all the files for the current profile (hermit link)

@@ -7,11 +7,11 @@ set -e
 export -n CDPATH
 
 if [ "$1" = "--debug" ]; then
-  export ATTACHE_DEBUG=1
+  export HERMIT_DEBUG=1
   shift
 fi
 
-if [ -n "$ATTACHE_DEBUG" ]; then
+if [ -n "$HERMIT_DEBUG" ]; then
   export PS4='+ [${BASH_SOURCE##*/}:${LINENO}] '
   set -x
 fi
@@ -19,9 +19,9 @@ fi
 # Make sure git is installed
 GIT=$(type -p git | head -1)
 if [ -z "$GIT" ]; then
-    echo "Attache relies heavily on git for it's functionality."
+    echo "Hermit relies heavily on git for it's functionality."
     echo
-    echo "Please install git before attempting to use Attache."
+    echo "Please install git before attempting to use Hermit."
     exit 1
 fi
 
@@ -40,7 +40,7 @@ fi
 
 export READLINK=$(type -p greadlink readlink | head -1)
 if [ -z "$READLINK" ]; then
-  echo "attache: cannot find readlink - are you missing GNU coreutils?" >&2
+  echo "hermit: cannot find readlink - are you missing GNU coreutils?" >&2
   exit 1
 fi
 
@@ -62,34 +62,34 @@ abs_dirname() {
   cd "$cwd"
 }
 
-if [ -z "${ATTACHE_ROOT}" ]; then
-  ATTACHE_ROOT="${HOME}/.attache"
+if [ -z "${HERMIT_ROOT}" ]; then
+  HERMIT_ROOT="${HOME}/.hermit"
 else
-  ATTACHE_ROOT="${ATTACHE_ROOT%/}"
+  HERMIT_ROOT="${HERMIT_ROOT%/}"
 fi
-export ATTACHE_ROOT
+export HERMIT_ROOT
 
-export ATTACHE_CURRENT_KEY="attache.current"
+export HERMIT_CURRENT_KEY="hermit.current"
 
-if [ -z "${ATTACHE_PROFILE}" ]; then
-    pushd $ATTACHE_ROOT 2> /dev/null > /dev/null
-    PROFILE_NAME="$(git config $ATTACHE_CURRENT_KEY | head -1)"
+if [ -z "${HERMIT_PROFILE}" ]; then
+    pushd $HERMIT_ROOT 2> /dev/null > /dev/null
+    PROFILE_NAME="$(git config $HERMIT_CURRENT_KEY | head -1)"
     popd 2> /dev/null > /dev/null
 
     PROFILE_NAME="${PROFILE_NAME:-default}"
-    ATTACHE_PROFILE="${ATTACHE_ROOT}/profiles/${PROFILE_NAME}"
+    HERMIT_PROFILE="${HERMIT_ROOT}/profiles/${PROFILE_NAME}"
 fi
-export ATTACHE_PROFILE
+export HERMIT_PROFILE
 
 if [ -z "${SECRETS_SUFFIX}" ]; then
-  SECRETS_SUFFIX=".attache_secrets"
+  SECRETS_SUFFIX=".hermit_secrets"
 fi
 export SECRETS_SUFFIX
 
 shopt -s nullglob
 
 bin_path="$(abs_dirname "$0")"
-for plugin_bin in "${ATTACHE_ROOT}/plugins/"*/bin; do
+for plugin_bin in "${HERMIT_ROOT}/plugins/"*/bin; do
   bin_path="${bin_path}:${plugin_bin}"
 done
 export PATH="${bin_path}:${PATH}"
@@ -97,11 +97,11 @@ export PATH="${bin_path}:${PATH}"
 # Currently, we don't actually do anything with hooks. We may want to
 # support them in the future though, so keep this code hunk.
 
-# hook_path="${ATTACHE_HOOK_PATH}:${ATTACHE_ROOT}/attache.d:/usr/local/etc/attache.d:/etc/attache.d:/usr/lib/attache/hooks"
-# for plugin_hook in "${ATTACHE_ROOT}/plugins/"*/etc/attache.d; do
+# hook_path="${HERMIT_HOOK_PATH}:${HERMIT_ROOT}/hermit.d:/usr/local/etc/hermit.d:/etc/hermit.d:/usr/lib/hermit/hooks"
+# for plugin_hook in "${HERMIT_ROOT}/plugins/"*/etc/hermit.d; do
 #   hook_path="${hook_path}:${plugin_hook}"
 # done
-# export ATTACHE_HOOK_PATH="$hook_path"
+# export HERMIT_HOOK_PATH="$hook_path"
 
 shopt -u nullglob
 
@@ -109,15 +109,15 @@ shopt -u nullglob
 command="$1"
 case "$command" in
 "" | "-h" | "--help" )
-  echo -e "$(attache---version)\n$(attache-help)" >&2
+  echo -e "$(hermit---version)\n$(hermit-help)" >&2
   ;;
 "-v" )
-  exec attache---version
+  exec hermit---version
   ;;
 * )
-  command_path="$(command -v "attache-$command" || true)"
+  command_path="$(command -v "hermit-$command" || true)"
   if [ -z "$command_path" ]; then
-    echo "attache: no such command \`$command'" >&2
+    echo "hermit: no such command \`$command'" >&2
     exit 1
   fi
 

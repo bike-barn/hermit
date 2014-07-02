@@ -8,34 +8,34 @@ has() {
     return $?
 }
 
-if [ -z "$ATTACHE_DIR" ]; then
-    ATTACHE_DIR="$HOME/.attache"
+if [ -z "$HERMIT_DIR" ]; then
+    HERMIT_DIR="$HOME/.hermit"
 fi
 
 install() {
-    if [ -z "$ATTACHE_SOURCE" ]; then
-        ATTACHE_SOURCE="https://github.com/RadicalZephyr/attache.git"
+    if [ -z "$HERMIT_SOURCE" ]; then
+        HERMIT_SOURCE="https://github.com/RadicalZephyr/hermit.git"
     fi
 
-    if [ -d "$ATTACHE_DIR/.git" ]; then
-        echo "=> Attaché is already installed in $ATTACHE_DIR, trying to update"
+    if [ -d "$HERMIT_DIR/.git" ]; then
+        echo "=> Hermit is already installed in $HERMIT_DIR, trying to update"
         echo -e "\r=> \c"
-        cd "$ATTACHE_DIR" && git pull 2> /dev/null || {
-            echo >&2 "Failed to update Attaché, run 'git pull' in $ATTACHE_DIR yourself..."
+        cd "$HERMIT_DIR" && git pull 2> /dev/null || {
+            echo >&2 "Failed to update Hermit, run 'git pull' in $HERMIT_DIR yourself..."
        }
     else
-        # Cloning into $ATTACHE_DIR
-        echo "=> Downloading Attaché from GitHub to '$ATTACHE_DIR'"
+        # Cloning into $HERMIT_DIR
+        echo "=> Downloading Hermit from GitHub to '$HERMIT_DIR'"
         echo -e "\r=> \c"
-        mkdir -p "$ATTACHE_DIR"
-        git clone "$ATTACHE_SOURCE" "$ATTACHE_DIR"
+        mkdir -p "$HERMIT_DIR"
+        git clone "$HERMIT_SOURCE" "$HERMIT_DIR"
     fi
 }
 
 if has "git"; then
     install
 else
-    echo >&2 "You need git in order to install Attaché"
+    echo >&2 "You need git in order to install Hermit"
     exit 1
 fi
 
@@ -50,9 +50,9 @@ if [ -z "$PROFILE" ]; then
     done
 fi
 
-#UNBREAK: This still doesn't load Attaché. The SOURCE_STR is based on rbenv
+#UNBREAK: This still doesn't load Hermit. The SOURCE_STR is based on rbenv
 #         and may require an equivalent of rbenv's eval "$(rbenv init -).
-SOURCE_STR="export PATH=\"\$HOME/.attache/bin:\$PATH\" # This loads Attache"
+SOURCE_STR="export PATH=\"\$HOME/.hermit/bin:\$PATH\" # This loads Hermit"
 
 if [ -z "$PROFILE" ] || [ ! -f "$PROFILE" ] ; then
   if [ -z $PROFILE ]; then
@@ -68,7 +68,7 @@ if [ -z "$PROFILE" ] || [ ! -f "$PROFILE" ] ; then
   echo "   $SOURCE_STR"
   echo
 else
-  if ! grep -qc '.attache/bin' $PROFILE; then
+  if ! grep -qc '.hermit/bin' $PROFILE; then
     echo "=> Appending source string to $PROFILE"
     echo "" >> "$PROFILE"
     echo $SOURCE_STR >> "$PROFILE"
@@ -77,5 +77,5 @@ else
   fi
 fi
 
-echo "=> Close and reopen your terminal to start using Attaché"
+echo "=> Close and reopen your terminal to start using Hermit"
 echo "=> Alternatively, simply 'source $PROFILE'"

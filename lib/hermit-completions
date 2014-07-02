@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Usage: hermit completions <command> [arg1 arg2...]
+
+# Copied shamelessly from rbenv, copyright Sam Stephenson
+# See LICENSE.rbenv for details
+
+set -e
+[ -n "$HERMIT_DEBUG" ] && set -x
+
+COMMAND="$1"
+if [ -z "$COMMAND" ]; then
+  hermit-help --usage completions >&2
+  exit 1
+fi
+
+COMMAND_PATH="$(command -v "hermit-$COMMAND" || command -v "hermit-sh-$COMMAND")"
+if grep -iE "^([#%]|--|//) provide hermit completions" "$COMMAND_PATH" >/dev/null; then
+  shift
+  exec "$COMMAND_PATH" --complete "$@"
+fi

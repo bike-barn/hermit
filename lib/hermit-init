@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+# Summary: Start a new hermit profile
+# Usage: hermit init [profile-name]
+
+# Copyright 2014, Geoff Shannon
+
+# This file is part of Hermit.
+
+# Hermit is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Hermit is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+[ -n "$HERMIT_DEBUG" ] && set -x
+
+# Check for extraneous arguments and exit with an error if they exist.
+if [ ! $# -le 1 ]
+then
+    echo "Error: hermit: Too many arguments."
+    hermit help init && exit 1
+fi
+
+# Change profile name from default if optional argument is given.
+[ -n "$1" ] && HERMIT_PROFILE="${HERMIT_ROOT}/profiles/${1}"
+
+[ -d $HERMIT_PROFILE ] && echo "The directory $HERMIT_PROFILE already exists!
+Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
+
+mkdir -p $HERMIT_PROFILE
+
+pushd $HERMIT_PROFILE >/dev/null 2>/dev/null
+
+git init
+echo "*${SECRETS_SUFFIX}" > .gitignore
+git add .gitignore
+git commit -m "Initial commit"
+
+popd >/dev/null 2>/dev/null
+
+echo "Congratulations! You now have a brand new hermit located at $HERMIT_PROFILE."
