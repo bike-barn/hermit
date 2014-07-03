@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Hermit : Bring your home with you" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Hermit</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/RadicalZephyr/hermit">View on GitHub</a>
+
+          <h1 id="project_title">Hermit</h1>
+          <h2 id="project_tagline">Bring your home with you</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/RadicalZephyr/hermit/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/RadicalZephyr/hermit/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="hermit---a-home-directory-configuration-management-tool" class="anchor" href="#hermit---a-home-directory-configuration-management-tool"><span class="octicon octicon-link"></span></a>Hermit - A home directory configuration management tool</h1>
+
+<p>Hermit is a home directory configuration management tool. Inspired
+originally by <a href="https://github.com/jim/briefcase">Briefcase</a> but also heavily borrows from awesome tools
+like <a href="https://github.com/sstephenson/rbenv">rbenv</a>, and <a href="https://github.com/creationix/nvm">nvm</a>. It's (going to be) like having profiles for
+your shell environments. Or, it just helps manage your home directory
+being under version control.</p>
+
+<p><a href="https://travis-ci.org/RadicalZephyr/hermit"><img src="https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<h3>
+<a name="install-script" class="anchor" href="#install-script"><span class="octicon octicon-link"></span></a>Install script</h3>
+
+<p>To install you could use the <a href="https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh">install script</a> using cURL:</p>
+
+<pre><code>curl https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
+</code></pre>
+
+<p>or Wget:</p>
+
+<pre><code>wget -qO- https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
+</code></pre>
+
+<p><sub><a href="https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh">The script</a> clones the Hermit repository to
+<code>~/.hermit</code> and adds the source line to your profile
+(<code>~/.bash_profile</code>, <code>~/.zshrc</code> or <code>~/.profile</code>).</sub></p>
+
+<p>You can customize the install source, directory and profile
+respectively using the <code>HERMIT_SOURCE</code>, <code>HERMIT_DIR</code> and <code>PROFILE</code>
+variables: Eg: <code>curl ... | HERMIT_DIR=/usr/local/hermit sh</code> for a
+global install.</p>
+
+<h3>
+<a name="manual-install" class="anchor" href="#manual-install"><span class="octicon octicon-link"></span></a>Manual Install</h3>
+
+<p>Just clone the hermit repository with <code>git</code>.</p>
+
+<pre><code>git clone git@github.com:RadicalZephyr/hermit.git ~/.hermit
+</code></pre>
+
+<p>Now, you need to have <code>~/.hermit/bin</code> on your path, so add something
+like this to your shell init file:</p>
+
+<pre><code>export PATH="$PATH":~/.hermit/bin
+</code></pre>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Still working on this... Try checking out <code>hermit help</code>.</p>
+
+<h2>
+<a name="running-the-tests" class="anchor" href="#running-the-tests"><span class="octicon octicon-link"></span></a>Running the Tests</h2>
+
+<p>Hermit now has a test suite! You can run it with <code>./runtests.sh</code>.</p>
+
+<h2>
+<a name="feature-checklistroadmap" class="anchor" href="#feature-checklistroadmap"><span class="octicon octicon-link"></span></a>Feature Checklist/Roadmap</h2>
+
+<p>Checkout
+<a href="https://github.com/RadicalZephyr/hermit/issues/12">the issue</a> for
+the latest status.</p>
+
+<h2>
+<a name="thoughts-n-stuff" class="anchor" href="#thoughts-n-stuff"><span class="octicon octicon-link"></span></a>Thoughts n' stuff</h2>
+
+<p>We've got a whole <a href="http://www.zephyrizing.net/images/timey-wimey.gif">themey-wemey</a> thing going on. Any suggestions or
+problems with the names should take this into consideration ;)</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright 2014, Geoff Shannon</p>
+
+<p>This file is part of Hermit.</p>
+
+<p>Hermit is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.</p>
+
+<p>Hermit is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.</p>
+
+<p>You should have received a copy of the GNU General Public License
+along with Hermit. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Hermit maintained by <a href="https://github.com/RadicalZephyr">RadicalZephyr</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
