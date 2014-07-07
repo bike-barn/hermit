@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Run hermit init with appropriate arguments
+if [ -z "$NAMED_PROFILE" ]
+then
+    $HOME/.hermit/bin/hermit init
+else
+    $HOME/.hermit/bin/hermit init $NAMED_PROFILE
+fi
+
+RET=$?
+
+if [ $RET -ne 0 ]
+then
+    echo "Init script exited with status: $RET."
+    exit 1
+fi
+
+exit 0

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source ../.environment
+source ../.install-environment
 
 # Run the install test with a different install location
 export INSTALL_DIR="$HOME/.adifferentplace"

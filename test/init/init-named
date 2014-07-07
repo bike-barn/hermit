@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+export NAMED_PROFILE="namedprofile"
+
+exec ./.do-init

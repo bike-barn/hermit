@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+exec ./.do-init
