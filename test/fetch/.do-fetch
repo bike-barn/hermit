@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# Run hermit fetch with appropriate arguments
+if [ -z "$NAMED_PROFILE" ]
+then
+    $HOME/.hermit/bin/hermit fetch $FETCH_REPO
+else
+    $HOME/.hermit/bin/hermit fetch $FETCH_REPO $NAMED_PROFILE
+fi
+
+RET=$?
+
+if [ $RET -ne 0 ]
+then
+    echo "Fetch script exited with status: $RET."
+    exit 1
+fi
+
+exit 0

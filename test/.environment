@@ -3,3 +3,13 @@
 export HOME=$(cd $TESTDIR; pwd)
 export PROFILE=$HOME/.profile
 touch $PROFILE
+
+# Create a fake gitconfig
+git config --global user.name "Foo Bar"
+git config --global user.email "baz@foo.bar"
+
+# Install hermit into testing environment via git clone
+git clone ../../ $HOME/.hermit
+SOURCE_STR="export PATH=\"\$HOME/.hermit/bin:\$PATH\" # This loads Hermit"
+echo "" >> $PROFILE
+echo $SOURCE_STR >> $PROFILE

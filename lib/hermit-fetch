@@ -23,9 +23,26 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-[ $# -lt 1 ] || echo "Not enough arguments!" && exit 1
+# Make sure we have at least one argument
+if [ ! $# -ge 1 ]
+then
+    echo "Error: hermit: Too few arguments."
+    hermit help fetch && exit 1
+fi
+
+# Make sure we don't have more than 2 arguments
+if [ ! $# -le 2 ]
+then
+    echo "Error: hermit: Too many arguments."
+    hermit help fetch && exit 1
+fi
+
+# Change profile name from default if optional argument is given
+[ -n "$2" ] && HERMIT_PROFILE="${HERMIT_ROOT}/profile/${2}"
 
 [ -d $HERMIT_PROFILE ] && echo "The folder $HERMIT_PROFILE already exists!
 Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
 git clone $1 $HERMIT_PROFILE
+
+echo "Successfully fetched remote profile into $HERMIT_PROFILE."
