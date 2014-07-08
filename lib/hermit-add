@@ -27,10 +27,13 @@ for file in $@; do
     origfile=$file
     newfile=$HERMIT_PROFILE/${origfile#~/}
 
-    [ -f $newfile ] && echo "${origfile#~/} is already in your hermit!" && exit 1
+    if [ -f $newfile ]
+    then
+        echo "${origfile#~/} is already in your hermit!"
+        exit 1
+    fi
 
-    mkdir -vp $(basename $newfile)
-    mv -vn $origfile $newfile
-    ln -vs $newfile $origfile
-    hermit_add_file $newfile
+    mkdir -vp $(dirname $newfile)
+    echo "mv: $(mv -vn $origfile $newfile)"
+    echo "ln: $(ln -vs $newfile $origfile)"
 done
