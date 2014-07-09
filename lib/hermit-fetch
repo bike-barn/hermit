@@ -38,7 +38,7 @@ then
 fi
 
 # Change profile name from default if optional argument is given
-[ -n "$2" ] && HERMIT_PROFILE="${HERMIT_ROOT}/profile/${2}"
+[ -n "$2" ] && HERMIT_PROFILE="${HERMIT_ROOT}/profiles/${2}"
 
 [ -d $HERMIT_PROFILE ] && echo "The folder $HERMIT_PROFILE already exists!
 Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
