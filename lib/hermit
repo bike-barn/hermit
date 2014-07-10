@@ -72,13 +72,6 @@ get_hermit_profile() {
     popd 2> /dev/null > /dev/null
 }
 
-set_hermit_profile() {
-    pushd $HERMIT_ROOT 2> /dev/null > /dev/null
-    git config $HERMIT_CURRENT_KEY $1
-    PROFILE_NAME="$(git config $HERMIT_CURRENT_KEY | head -1)"
-    popd 2> /dev/null > /dev/null
-}
-
 if [ -z "${HERMIT_ROOT}" ]; then
   HERMIT_ROOT="${HOME}/.hermit"
 else

@@ -47,6 +47,9 @@ git commit -m "Initial commit"
 
 popd >/dev/null 2>/dev/null
 
-set_hermit_profile $HERMIT_PROFILE
+# Actually persist the change of profile
+pushd $HERMIT_ROOT 2> /dev/null > /dev/null
+git config $HERMIT_CURRENT_KEY $HERMIT_PROFILE
+popd 2> /dev/null > /dev/null
 
 echo "Congratulations! You now have a brand new hermit located at $HERMIT_PROFILE."
