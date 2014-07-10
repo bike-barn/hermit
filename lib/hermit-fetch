@@ -47,4 +47,6 @@ Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
 git clone $FETCH_URL $HERMIT_PROFILE
 
+set_hermit_profile $HERMIT_PROFILE
+
 echo "Successfully fetched remote profile into $HERMIT_PROFILE."
