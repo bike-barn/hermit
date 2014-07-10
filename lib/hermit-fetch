@@ -30,6 +30,8 @@ then
     hermit help fetch && exit 1
 fi
 
+FETCH_URL="$1"
+
 # Make sure we don't have more than 2 arguments
 if [ ! $# -le 2 ]
 then
@@ -43,6 +45,6 @@ fi
 [ -d $HERMIT_PROFILE ] && echo "The folder $HERMIT_PROFILE already exists!
 Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
-git clone $1 $HERMIT_PROFILE
+git clone $FETCH_URL $HERMIT_PROFILE
 
 echo "Successfully fetched remote profile into $HERMIT_PROFILE."
