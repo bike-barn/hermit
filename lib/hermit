@@ -62,6 +62,23 @@ abs_dirname() {
   cd "$cwd"
 }
 
+export HERMIT_CURRENT_KEY="hermit.current"
+
+# Use these functions in the subcommands to get
+# and set the current profile.
+get_hermit_profile() {
+    pushd $HERMIT_ROOT 2> /dev/null > /dev/null
+    PROFILE_NAME="$(git config $HERMIT_CURRENT_KEY | head -1)"
+    popd 2> /dev/null > /dev/null
+}
+
+set_hermit_profile() {
+    pushd $HERMIT_ROOT 2> /dev/null > /dev/null
+    git config $HERMIT_CURRENT_KEY $1
+    PROFILE_NAME="$(git config $HERMIT_CURRENT_KEY | head -1)"
+    popd 2> /dev/null > /dev/null
+}
+
 if [ -z "${HERMIT_ROOT}" ]; then
   HERMIT_ROOT="${HOME}/.hermit"
 else
@@ -69,12 +86,8 @@ else
 fi
 export HERMIT_ROOT
 
-export HERMIT_CURRENT_KEY="hermit.current"
-
 if [ -z "${HERMIT_PROFILE}" ]; then
-    pushd $HERMIT_ROOT 2> /dev/null > /dev/null
-    PROFILE_NAME="$(git config $HERMIT_CURRENT_KEY | head -1)"
-    popd 2> /dev/null > /dev/null
+    get_hermit_profile
 
     PROFILE_NAME="${PROFILE_NAME:-default}"
     HERMIT_PROFILE="${HERMIT_ROOT}/profiles/${PROFILE_NAME}"
