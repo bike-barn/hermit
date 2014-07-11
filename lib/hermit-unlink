@@ -21,4 +21,6 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-echo "hermit-unlink - NOT IMPLEMENTED"
+find ~/ -lname "$HERMIT_PROFILE/*" -delete
+
+#echo "hermit-unlink - NOT IMPLEMENTED"
