@@ -9,7 +9,7 @@ then
 else
     $HOME/.hermit/bin/hermit init $NAMED_PROFILE
     RET=$?
-    CHECK_PROFILE=default
+    CHECK_PROFILE=$NAMED_PROFILE
 fi
 
 if [ $RET -ne 0 ]
