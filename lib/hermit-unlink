@@ -21,6 +21,19 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-find ~/ -lname "$HERMIT_PROFILE/*" -delete
+
+find $HERMIT_PROFILE/ |
+{
+#find all possible symlinks to profile
+while read file_path; 
+do
+    #Strip file_path of hermit profile path.
+    #Add root file path to file_path
+    if [ $(readlink ~/${file_path#$HERMIT_PROFILE}) ]
+    then
+	rm ~/${file_path#$HERMIT_PROFILE/}
+    fi
+done
+}
 
 #echo "hermit-unlink - NOT IMPLEMENTED"
