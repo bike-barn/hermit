@@ -1,0 +1,9 @@
+awk
+bash
+git
+grep
+ln
+mkdir
+readlink
+sort
+uniq
