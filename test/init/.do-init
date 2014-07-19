@@ -4,15 +4,29 @@
 if [ -z "$NAMED_PROFILE" ]
 then
     $HOME/.hermit/bin/hermit init
+    RET=$?
+    CHECK_PROFILE=default
 else
     $HOME/.hermit/bin/hermit init $NAMED_PROFILE
+    RET=$?
+    CHECK_PROFILE=default
 fi
-
-RET=$?
 
 if [ $RET -ne 0 ]
 then
     echo "Init script exited with status: $RET."
+    exit 1
+fi
+
+if [ \! -d $HOME/.hermit/profiles/$CHECK_PROFILE ]
+then
+    echo "Profile $CHECK_PROFILE does not exist after running init."
+    exit 1
+fi
+
+if [ \! -d $HOME/.hermit/profiles/$CHECK_PROFILE/.git ]
+then
+    echo "Profile $CHECK_PROFILE is not a git repository."
     exit 1
 fi
 
