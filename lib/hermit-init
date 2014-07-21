@@ -31,17 +31,19 @@ then
 fi
 
 # Change profile name from default if optional argument is given.
-[ -n "$1" ] && HERMIT_PROFILE="${HERMIT_ROOT}/profiles/${1}"
+[ -n "$1" ] && HERMIT_PROFILE="$1"
 
-[ -d $HERMIT_PROFILE ] && echo "The directory $HERMIT_PROFILE already exists!
+HERMIT_PROFILE_PATH="$HERMIT_ROOT/profiles/$HERMIT_PROFILE"
+
+[ -d $HERMIT_PROFILE_PATH ] && echo "The directory $HERMIT_PROFILE already exists!
 Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
-mkdir -p $HERMIT_PROFILE
+mkdir -p $HERMIT_PROFILE_PATH
 
-pushd $HERMIT_PROFILE >/dev/null 2>/dev/null
+pushd $HERMIT_PROFILE_PATH >/dev/null 2>/dev/null
 
 git init
-echo "*${SECRETS_SUFFIX}" > .gitignore
+echo "*$SECRETS_SUFFIX" > .gitignore
 git add .gitignore
 git commit -m "Initial commit"
 
@@ -49,7 +51,7 @@ popd >/dev/null 2>/dev/null
 
 # Actually persist the change of profile
 pushd $HERMIT_ROOT 2> /dev/null > /dev/null
-git config $HERMIT_CURRENT_KEY $HERMIT_PROFILE
+git config $HERMIT_CURRENT_KEY "$HERMIT_PROFILE"
 popd 2> /dev/null > /dev/null
 
 echo "Congratulations! You now have a brand new hermit located at $HERMIT_PROFILE."

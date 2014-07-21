@@ -82,8 +82,7 @@ export HERMIT_ROOT
 if [ -z "${HERMIT_PROFILE}" ]; then
     get_hermit_profile
 
-    PROFILE_NAME="${PROFILE_NAME:-default}"
-    HERMIT_PROFILE="${HERMIT_ROOT}/profiles/${PROFILE_NAME}"
+    HERMIT_PROFILE="${PROFILE_NAME:-default}"
 fi
 export HERMIT_PROFILE
 
