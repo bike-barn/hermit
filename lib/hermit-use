@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# Summary: Switch to using a different profile
+#
+# Usage: hermit use [profile-name]
 
 
 # Copyright 2014, Geoff Shannon
@@ -23,11 +27,23 @@ set -e
 
 echo "hermit-use - NOT IMPLEMENTED"
 
+TO_PROFILE="$1"
+
 # First check if the name given is a directory under
 # $HERMIT_ROOT/profiles.
+if [ \! -d "$HERMI_ROOT/profiles/$TO_PROFILE" ]
+then
+    echo "$TO_PROFILE is not a valid hermit profile."
+    exit 1
+fi
 
 # Now, unlink all files from the currently active profile (hermit unlink)
+hermit-unlink
 
 # Set the $HERMIT_CURRENT_KEY to the new profile
+set-current-profile $TO_PROFILE
 
 # Link all the files for the current profile (hermit link)
+hermit-link
+
+echo "You are now using profile $TO_PROFILE."
