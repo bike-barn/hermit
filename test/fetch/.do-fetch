@@ -30,4 +30,16 @@ then
     exit 1
 fi
 
+pushd $HOME/.hermit 2>&1 >/dev/null
+NEW_PROFILE=$(git config "hermit.current")
+popd 2>&1 >/dev/null
+
+if [ "$CHECK_PROFILE" \!= "$NEW_PROFILE" ]
+then
+    echo '$HERMIT_PROFILE'" is not set correctly."
+    echo "Actual value: $NEW_PROFILE"
+    echo "Should have been: $CHECK_PROFILE"
+    exit 1
+fi
+
 exit 0
