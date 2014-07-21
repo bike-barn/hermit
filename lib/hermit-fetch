@@ -49,9 +49,6 @@ Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
 git clone $FETCH_URL $HERMIT_PROFILE_PATH
 
-# Actually persist the change of profile
-pushd $HERMIT_ROOT 2> /dev/null > /dev/null
-git config $HERMIT_CURRENT_KEY $HERMIT_PROFILE
-popd 2> /dev/null > /dev/null
+set-current-profile $HERMIT_PROFILE
 
 echo "Successfully fetched remote profile into $HERMIT_PROFILE."

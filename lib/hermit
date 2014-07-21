@@ -64,27 +64,12 @@ abs_dirname() {
 
 export HERMIT_CURRENT_KEY="hermit.current"
 
-# Use these functions in the subcommands to get
-# and set the current profile.
-get_hermit_profile() {
-    pushd $HERMIT_ROOT 2> /dev/null > /dev/null
-    PROFILE_NAME="$(git config $HERMIT_CURRENT_KEY | head -1)"
-    popd 2> /dev/null > /dev/null
-}
-
 if [ -z "${HERMIT_ROOT}" ]; then
   HERMIT_ROOT="${HOME}/.hermit"
 else
   HERMIT_ROOT="${HERMIT_ROOT%/}"
 fi
 export HERMIT_ROOT
-
-if [ -z "${HERMIT_PROFILE}" ]; then
-    get_hermit_profile
-
-    HERMIT_PROFILE="${PROFILE_NAME:-default}"
-fi
-export HERMIT_PROFILE
 
 if [ -z "${SECRETS_SUFFIX}" ]; then
   SECRETS_SUFFIX=".hermit_secrets"
@@ -98,6 +83,15 @@ for plugin_bin in "${HERMIT_ROOT}/plugins/"*/bin; do
   bin_path="${bin_path}:${plugin_bin}"
 done
 export PATH="${bin_path}:${PATH}"
+
+# This MUST be after the addition to path, since get-current-profile
+# is a script in hermit/lib
+if [ -z "${HERMIT_PROFILE}" ]; then
+    get-current-profile
+
+    HERMIT_PROFILE="${PROFILE_NAME:-default}"
+fi
+export HERMIT_PROFILE
 
 # Currently, we don't actually do anything with hooks. We may want to
 # support them in the future though, so keep this code hunk.
