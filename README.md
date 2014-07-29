@@ -68,15 +68,6 @@ Checkout
 the latest status.
 
 
-Thoughts n' stuff
------------------
-
-We've got a whole [themey-wemey] thing going on. Any suggestions or
-problems with the names should take this into consideration ;)
-
-[themey-wemey]: http://www.zephyrizing.net/images/timey-wimey.gif
-
-
 License
 -------
 
