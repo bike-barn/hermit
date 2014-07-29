@@ -91,7 +91,8 @@ if [ -z "${HERMIT_PROFILE}" ]; then
 
     HERMIT_PROFILE="${PROFILE_NAME:-default}"
 fi
-export HERMIT_PROFILE
+HERMIT_PROFILE_PATH="$HERMIT_ROOT/profiles/$HERMIT_PROFILE"
+export HERMIT_PROFILE HERMIT_PROFILE_PATH
 
 # Currently, we don't actually do anything with hooks. We may want to
 # support them in the future though, so keep this code hunk.
