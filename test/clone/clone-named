@@ -2,7 +2,7 @@
 
 source ../.environment
 
-export FETCH_REPO="https://github.com/RadicalZephyr/hermit.git"
+export CLONE_REPO="https://github.com/RadicalZephyr/hermit.git"
 export NAMED_PROFILE="namedprofile"
 
-exec ./.do-fetch
+exec ./.do-clone

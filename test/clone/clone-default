@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+export CLONE_REPO="https://github.com/RadicalZephyr/hermit.git"
+
+exec ./.do-clone

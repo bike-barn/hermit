@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Summary: Create a local hermit from an existing remote hermit
-# Usage: hermit fetch <repository> [profile-name]
+# Usage: hermit clone <repository> [profile-name]
 #
 # Clones a hermit repository from a remote location.  'repository' can
 # be anything that would succeed when passed to git clone.
@@ -32,16 +32,16 @@ set -e
 if [ ! $# -ge 1 ]
 then
     echo "Error: hermit: Too few arguments."
-    hermit help fetch && exit 1
+    hermit help clone && exit 1
 fi
 
-FETCH_URL="$1"
+CLONE_URL="$1"
 
 # Make sure we don't have more than 2 arguments
 if [ ! $# -le 2 ]
 then
     echo "Error: hermit: Too many arguments."
-    hermit help fetch && exit 1
+    hermit help clone && exit 1
 fi
 
 # Change profile name from default if optional argument is given
@@ -52,8 +52,8 @@ HERMIT_PROFILE_PATH="${HERMIT_ROOT}/profiles/$HERMIT_PROFILE"
 [ -d $HERMIT_PROFILE ] && echo "The folder $HERMIT_PROFILE already exists!
 Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
-git clone $FETCH_URL $HERMIT_PROFILE_PATH
+git clone $CLONE_URL $HERMIT_PROFILE_PATH
 
 set-current-profile $HERMIT_PROFILE
 
-echo "Successfully fetched remote profile into $HERMIT_PROFILE."
+echo "Successfully cloneed remote profile into $HERMIT_PROFILE."

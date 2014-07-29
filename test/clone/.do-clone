@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 
-# Run hermit fetch with appropriate arguments
+# Run hermit clone with appropriate arguments
 if [ -z "$NAMED_PROFILE" ]
 then
-    $HOME/.hermit/bin/hermit fetch $FETCH_REPO
+    $HOME/.hermit/bin/hermit clone $CLONE_REPO
     RET=$?
     CHECK_PROFILE=default
 else
-    $HOME/.hermit/bin/hermit fetch $FETCH_REPO $NAMED_PROFILE
+    $HOME/.hermit/bin/hermit clone $CLONE_REPO $NAMED_PROFILE
     RET=$?
     CHECK_PROFILE=$NAMED_PROFILE
 fi
 
 if [ $RET -ne 0 ]
 then
-    echo "Fetch script exited with status: $RET."
+    echo "Clone script exited with status: $RET."
     exit 1
 fi
 
 if [ \! -d $HOME/.hermit/profiles/$CHECK_PROFILE ]
 then
-    echo "Profile $CHECK_PROFILE does not exist after running fetch."
+    echo "Profile $CHECK_PROFILE does not exist after running clone."
     exit 1
 fi
 

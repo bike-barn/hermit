@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-source ../.environment
-
-export FETCH_REPO="https://github.com/RadicalZephyr/hermit.git"
-
-exec ./.do-fetch
