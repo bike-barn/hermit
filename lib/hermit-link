@@ -6,10 +6,6 @@
 #
 # Sets up the symbolic links for all the files and directories in your
 # hermit directory.
-#
-# TODO: add the ability to NOT link certain files in.  Whether this is
-# by default, or there's an hermit ignore file or something I'm not
-# sure.
 
 # Copyright 2014, Geoff Shannon
 
@@ -31,24 +27,47 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-# Major advantage of dotglob over .* dotglob doesn't grab the ./ and
-# ../ files
-shopt -s dotglob
-files=$(echo $HERMIT_ROOT/*)
-shopt -u dotglob
+pushd 2>&1 >/dev/null
 
-for file in $files
+{
+    # Print the list of all files, but don't recurse into the .git folder
+    find . -type f -o -type d -name .git -prune
+
+    # Concatenate a listing of all .hignore files, with the path to the
+    # ignore file it came from prefixed to each pattern
+    {
+        # Process all directories with a .hignore file
+        find -X . -type f -name .hignore | xargs -n1 dirname |
+        while read dir
+        do
+            # Prefix the contents of each .hignore file with the path
+            # to the file it came from
+            sed 's|^|'"$dir/"'|' "$dir"/.hignore
+        done
+
+        # And finally, print out all of the files that match each of the
+        # patterns from all .hignore files. Using find and the -path
+        # option allows us to respect the relative placement of each
+        # pattern in the directory hiearchy.
+    } | xargs -n1 find . -type d -name .git -prune -o -type f -path
+
+    # Now, sort and then print only the unique lines.  This works
+    # because anything that matched an ignored pattern was printed
+    # once by the first find, and then once by the ignore find, thus
+    # duplicating it. Also, remove the leading ./
+} | sort | uniq -u | cut -c3-
+while read file
 do
-    # HERMIT_ROOT is an absolute path, so strip to just the base
-    # filename and replace concatenated with HOME
-    basefile=$HOME/$(basename $file)
+    # $file is a relative path, so we can find the right place for it
+    # by just concatenating with $HOME
+    basefile=$HOME/$file
 
     # Check for a symlink
     if [ -L $basefile ]
     then
         if [ "$($READLINK $basefile)" = "$file" ]
         then
-            echo "$(basename $file) is already linked!"
+            echo "$file is already linked!"
         else
             echo "There is already a symbolic link at $basefile"
             echo "But it doesn't point to $file."
@@ -72,6 +91,8 @@ do
     fi
 
     # Since we've done lots of checks already, this should work
-    ln -s $file $basefile
+    ln -s $HERMIT_PROFILE_PATH/$file $basefile
 
 done
+
+popd 2>&1 >/dev/null
