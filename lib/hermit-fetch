@@ -2,6 +2,11 @@
 #
 # Summary: Create a local hermit from an existing remote hermit
 # Usage: hermit fetch <repository> [profile-name]
+#
+# Clones a hermit repository from a remote location.  'repository' can
+# be anything that would succeed when passed to git clone.
+# 'profile-name' is an optional value for the name to be used for the
+# new profile.
 
 # Copyright 2014, Geoff Shannon
 
