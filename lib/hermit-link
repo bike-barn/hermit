@@ -6,6 +6,16 @@
 #
 # Sets up the symbolic links for all the files and directories in your
 # hermit directory.
+#
+# Link supports an ignore file similar in format to a .gitignore
+# file. The file should be named .hignore, and each line of the file
+# is a single pattern of file to be ignored. The patterns that are
+# allowed are the same patterns acknowledged by the -path option of
+# the find utility.
+#
+# NOTE: Unlike a .gitignore, prefixing a pattern with a slash will not
+# restrict the pattern to matching files in the current directory.  It
+# will probably just cause it to match nothing.
 
 # Copyright 2014, Geoff Shannon
 
