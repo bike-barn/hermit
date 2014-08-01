@@ -29,17 +29,26 @@ then
     exit 1
 fi
 
-for file in $@; do
-    origfile=$file
-    newfile=$HERMIT_PROFILE_PATH/${origfile#~/}
+for file in $@
+do
 
-    if [ -f $newfile ]
+    if [ -d $file ]
     then
-        echo "${origfile#~/} is already in your hermit!"
-        exit 1
+        file=$(find $file -type d -name .git -prune -o -type f)
     fi
 
-    mkdir -vp $(dirname $newfile)
-    echo "mv: $(mv -vn $origfile $newfile)"
-    echo "ln: $(ln -vs $newfile $origfile)"
+    for origfile in $file
+    do
+        newfile=$HERMIT_PROFILE_PATH/${origfile#~/}
+
+        if [ -f $newfile ]
+        then
+            echo "${origfile#~/} is already in your hermit!"
+            exit 1
+        fi
+
+        mkdir -vp $(dirname $newfile)
+        echo "mv: $(mv -vn $origfile $newfile)"
+        echo "ln: $(ln -vs $newfile $origfile)"
+    done
 done
