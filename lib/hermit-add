@@ -23,9 +23,15 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+if [ \! -d $HERMIT_PROFILE_PATH ]
+then
+    echo "Your profile hasn't been initialized yet, try running `hermit init`"
+    exit 1
+fi
+
 for file in $@; do
     origfile=$file
-    newfile=$HERMIT_PROFILE/${origfile#~/}
+    newfile=$HERMIT_PROFILE_PATH/${origfile#~/}
 
     if [ -f $newfile ]
     then
