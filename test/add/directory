@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init
+
+DIR=the-test-dir
+
+mkdir -p $HOME/$DIR
+
+echo things and stuff > $HOME/$DIR/foo
+echo other stuff ands > $HOME/$DIR/bar
+echo and stuff things > $HOME/$DIR/baz
+echo and things stuff > $HOME/$DIR/qux
+
+$HOME/.hermit/bin/hermit add $HOME/$DIR
+
+if [ \! -d $HOME/.hermit/profiles/default/$DIR ]
+then
+    echo "There is no directory $DIR inside the profile."
+    exit 1
+fi
+
+for file in foo bar baz qux
+do
+
+    if [ \! -f $HOME/.hermit/profiles/default/$DIR/$file ]
+    then
+        echo "$file is not present inside $DIR in the profile."
+        exit 1
+    fi
+
+done
