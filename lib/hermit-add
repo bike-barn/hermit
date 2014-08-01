@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 #
-# Summary: Add files to your hermit
+# Summary: Add files to your hermit directory
 # Usage: hermit add [<filepattern>…]
+#
+# Add takes a path (or paths) to some files and directories in your
+# home folder, and moves them into your active hermit profile, and
+# then creates a symlink to this moved file in the original location.
+#
+# Adding a directory is essentially a shorthand for adding all files
+# in that directory tree.
+#
+#  Note: you must have an initialized hermit profile.
 
 # Copyright 2014, Geoff Shannon
 
