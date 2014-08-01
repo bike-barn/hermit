@@ -1,4 +1,3 @@
-
 # Make home the full path to TESTDIR
 export HOME=$(cd $TESTDIR; pwd)
 export PROFILE=$HOME/.profile
@@ -7,6 +6,13 @@ touch $PROFILE
 # Create a fake gitconfig
 git config --global user.name "Foo Bar"
 git config --global user.email "baz@foo.bar"
+
+# On Travis, hermit is a shallow clone, so it can't officially be cloned from
+# So we remove the shallow marker if it's there
+if [ -f ../../.git/shallow ]
+then
+    rm ../../.git/shallow
+fi
 
 # Install hermit into testing environment via git clone
 git clone ../../ $HOME/.hermit
