@@ -25,19 +25,6 @@ if [ -z "$GIT" ]; then
     exit 1
 fi
 
-# Make sure that git commands won't fail because user isn't configured
-if git config --global user.name > /dev/null &&
-   git config --global user.email > /dev/null
-then
-    :
-else
-    echo -e 'Please set your git name and email with:\n
-  git config --global user.name "Your Name"
-  git config --global user.email "you@example.com"'
-    echo
-    exit 1
-fi
-
 export READLINK=$(type -p greadlink readlink | head -1)
 if [ -z "$READLINK" ]; then
   echo "hermit: cannot find readlink - are you missing GNU coreutils?" >&2

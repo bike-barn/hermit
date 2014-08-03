@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Make sure that git commands won't fail because user isn't configured
+if git config --global user.name  > /dev/null &&
+   git config --global user.email > /dev/null
+then
+    :
+else
+    echo -e 'Please set your git name and email with:\n
+  git config --global user.name "Your Name"
+  git config --global user.email "you@example.com"'
+    echo
+    exit 1
+fi
