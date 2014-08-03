@@ -56,4 +56,4 @@ git clone $CLONE_URL $HERMIT_PROFILE_PATH
 
 set-current-profile $HERMIT_PROFILE
 
-echo "Successfully cloneed remote profile into $HERMIT_PROFILE."
+echo "Successfully cloned remote profile into $HERMIT_PROFILE."
