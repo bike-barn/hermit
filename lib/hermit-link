@@ -37,7 +37,7 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-pushd 2>&1 >/dev/null
+pushd 2>&1 >/dev/null $HERMIT_PROFILE_PATH
 
 {
     # Print the list of all files, but don't recurse into the .git folder
@@ -65,7 +65,7 @@ pushd 2>&1 >/dev/null
     # because anything that matched an ignored pattern was printed
     # once by the first find, and then once by the ignore find, thus
     # duplicating it. Also, remove the leading ./
-} | sort | uniq -u | cut -c3-
+} | sort | uniq -u | cut -c3- |
 while read file
 do
     # $file is a relative path, so we can find the right place for it
