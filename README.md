@@ -8,6 +8,7 @@ your shell environments. Or, it just helps manage your home directory
 being under version control.
 
 [![Build Status](https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master)](https://travis-ci.org/RadicalZephyr/hermit)
+[![Crabs harmed](http://img.shields.io/badge/crabs_harmed-0-blue.svg)](http://shields.io/)
 
 [Briefcase]: https://github.com/jim/briefcase
 [rbenv]: https://github.com/sstephenson/rbenv
