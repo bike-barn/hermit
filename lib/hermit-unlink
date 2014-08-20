@@ -23,17 +23,14 @@ set -e
 
 
 #Find all files in current profile
-find $HERMIT_PROFILE/ |
+find $HERMIT_PROFILE |
 {
 while read file_path; 
 do
-    #Find out what the symbolic link of each file in profile is.
-    sym_link=~/${file_path#$HERMIT_PROFILE/}
+    #Strip profile prefix then prepend home directory
+    relative_path=~/${file_path#$HERMIT_PROFILE/}
     
-    #Make sure sym_link is a symbolic link
-    if [ $(readlink $sym_link) ]
-    then
-	rm $sym_link
-    fi
+    #Make sure relative_path is a symbolic link before delete
+    test -L $relative_path && rm $relative_path
 done
 }
