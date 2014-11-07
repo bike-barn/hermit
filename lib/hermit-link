@@ -103,6 +103,10 @@ do
         continue
     fi
 
+    # We've decided to link this file, so make sure that all of the
+    # parent directories exist
+    mkdir -p $(dirname $basefile)
+
     # Since we've done lots of checks already, this should work
     ln -s $HERMIT_PROFILE_PATH/$file $basefile
 
