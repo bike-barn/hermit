@@ -1,5 +1,13 @@
 # Make home the full path to TESTDIR
-export HOME=$(cd $TESTDIR; pwd)
+export HOME=${PWD}/${TESTDIR}
+
+if [ ! -d "${HOME}" ]
+then
+  echo "The faked home directory '$HOME' does not exist."
+  echo "Did the setup task fail to run?"
+  exit 1
+fi
+
 export PROFILE=$HOME/.profile
 touch $PROFILE
 
