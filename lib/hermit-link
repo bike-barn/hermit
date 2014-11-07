@@ -47,7 +47,7 @@ link_file () {
     mkdir -p $(dirname "$basefile")
 
     # Since we've done lots of checks already, this should work
-    ln -s "$flags" "$HERMIT_PROFILE_PATH/$file" "$basefile"
+    ln -s $flags "$HERMIT_PROFILE_PATH/$file" "$basefile"
 }
 
 # Process a potential -f flag
