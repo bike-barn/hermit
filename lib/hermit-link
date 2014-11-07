@@ -40,14 +40,23 @@ set -e
 link_file () {
     basefile="$1"
     file="$2"
+    flags="$3"
 
     # We've decided to link this file, so make sure that all of the
     # parent directories exist
     mkdir -p $(dirname "$basefile")
 
     # Since we've done lots of checks already, this should work
-    ln -s "$HERMIT_PROFILE_PATH/$file" "$basefile"
+    ln -s "$flags" "$HERMIT_PROFILE_PATH/$file" "$basefile"
 }
+
+# Process a potential -f flag
+unset FORCE
+if [ "$1" = "-f" ]
+then
+    FORCE="true"
+    shift
+fi
 
 pushd 2>&1 >/dev/null "$HERMIT_PROFILE_PATH"
 
@@ -86,6 +95,13 @@ do
     # $file is a relative path, so we can find the right place for it
     # by just concatenating with $HOME
     basefile="$HOME/$file"
+
+    # Skip all checks if we're forcing it
+    if [ "$FORCE" = "true" ]
+    then
+        link_file "$basefile" "$file" "-iF"
+        continue
+    fi
 
     # Check for a symlink
     if [ -L "$basefile" ]
