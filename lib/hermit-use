@@ -25,25 +25,23 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-echo "hermit-use - NOT IMPLEMENTED"
-
 TO_PROFILE="$1"
 
 # First check if the name given is a directory under
 # $HERMIT_ROOT/profiles.
-if [ \! -d "$HERMI_ROOT/profiles/$TO_PROFILE" ]
+if [ \! -d "$HERMIT_ROOT/profiles/$TO_PROFILE" ]
 then
     echo "$TO_PROFILE is not a valid hermit profile."
     exit 1
 fi
 
 # Now, unlink all files from the currently active profile (hermit unlink)
-hermit-unlink
+hermit unlink
 
 # Set the $HERMIT_CURRENT_KEY to the new profile
 set-current-profile $TO_PROFILE
 
 # Link all the files for the current profile (hermit link)
-hermit-link
+hermit link
 
 echo "You are now using profile $TO_PROFILE."
