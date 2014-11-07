@@ -25,11 +25,11 @@ set -e
 #Find all files in current profile
 find $HERMIT_PROFILE |
 {
-while read file_path; 
+while read file_path;
 do
     #Strip profile prefix then prepend home directory
     relative_path=~/${file_path#$HERMIT_PROFILE/}
-    
+
     #Make sure relative_path is a symbolic link before delete
     test -L $relative_path && rm $relative_path
 done
