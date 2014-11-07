@@ -2,6 +2,7 @@
 
 source ../.environment
 
+set -e
 
 recurse () {
     BASE="$1"
@@ -10,8 +11,9 @@ recurse () {
     do
         if [ -f "$entry" ]
         then
-            profile_path="$PROFILE_BASE"/${entry#"$BASE"}
-            [ -f "$profile_path" ] || exit 1
+            base_path="$CHECK_BASE"/${entry#"$BASE"}
+            [ -f "$base_path" ] || exit 1
+            diff "$base_path" "$entry"
         else
             recurse "$entry"
         fi
@@ -25,7 +27,7 @@ FIXTURE_NAME="$1"
 # Copy everything from the fixture into the newly created profile
 cp -r .fixtures/"$FIXTURE_NAME"/* $HOME/.hermit/profiles/default
 
-PROFILE_BASE="$HOME/.hermit/profiles/default"
+CHECK_BASE="$HOME/"
 
 # Attempt the link
 $HOME/.hermit/bin/hermit link
