@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+fixtures=$(cat .clean-tests)
+
+rm $fixtures
+rm .clean-tests

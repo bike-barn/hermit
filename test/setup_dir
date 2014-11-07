@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+fixtures=$(ls link/.fixtures)
+
+for fixture in $fixtures
+do
+    echo link/$fixture
+    cat >link/$fixture <<EOF
+#!/usr/bin/env bash
+./.link $fixture
+EOF
+    chmod +x link/$fixture
+done > .clean-tests
