@@ -37,6 +37,18 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+link_file () {
+    basefile="$1"
+    file="$2"
+
+    # We've decided to link this file, so make sure that all of the
+    # parent directories exist
+    mkdir -p $(dirname $basefile)
+
+    # Since we've done lots of checks already, this should work
+    ln -s $HERMIT_PROFILE_PATH/$file $basefile
+}
+
 pushd 2>&1 >/dev/null $HERMIT_PROFILE_PATH
 
 {
@@ -103,13 +115,7 @@ do
         continue
     fi
 
-    # We've decided to link this file, so make sure that all of the
-    # parent directories exist
-    mkdir -p $(dirname $basefile)
-
-    # Since we've done lots of checks already, this should work
-    ln -s $HERMIT_PROFILE_PATH/$file $basefile
-
+    link_file $basefile $file
 done
 
 popd 2>&1 >/dev/null
