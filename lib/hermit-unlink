@@ -23,7 +23,7 @@ set -e
 
 
 #Find all files in current profile
-find "$HERMIT_PROFILE_PATH" |
+find "$HERMIT_PROFILE_PATH" -type f |
 {
 while read file_path;
 do
