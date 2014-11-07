@@ -24,6 +24,11 @@ fi
 
 # Install hermit into testing environment via git clone
 git clone ../../ $HOME/.hermit
+
+# Override the potential user setting of HERMIT_ROOT for test
+# correctness
+export HERMIT_ROOT="$HOME/.hermit"
+
 SOURCE_STR="export PATH=\"\$HOME/.hermit/bin:\$PATH\" # This loads Hermit"
 echo "" >> $PROFILE
 echo $SOURCE_STR >> $PROFILE
