@@ -43,13 +43,13 @@ link_file () {
 
     # We've decided to link this file, so make sure that all of the
     # parent directories exist
-    mkdir -p $(dirname $basefile)
+    mkdir -p $(dirname "$basefile")
 
     # Since we've done lots of checks already, this should work
-    ln -s $HERMIT_PROFILE_PATH/$file $basefile
+    ln -s "$HERMIT_PROFILE_PATH/$file" "$basefile"
 }
 
-pushd 2>&1 >/dev/null $HERMIT_PROFILE_PATH
+pushd 2>&1 >/dev/null "$HERMIT_PROFILE_PATH"
 
 {
     # Print the list of all files, but don't recurse into the .git folder
@@ -85,10 +85,10 @@ while read file
 do
     # $file is a relative path, so we can find the right place for it
     # by just concatenating with $HOME
-    basefile=$HOME/$file
+    basefile="$HOME/$file"
 
     # Check for a symlink
-    if [ -L $basefile ]
+    if [ -L "$basefile" ]
     then
         if [ "$($READLINK $basefile)" = "$file" ]
         then
@@ -101,21 +101,21 @@ do
 
     # Check for a regular file.  Order matters here, -f will match a
     # symlink too!
-    elif [ -f $basefile ]
+    elif [ -f "$basefile" ]
     then
         echo "There's a real file at $basefile!"
         echo "We can't create a link there."
         continue
 
     # Check if there is a directory.
-    elif [ -d $basefile ]
+    elif [ -d "$basefile" ]
     then
         echo "There's a real directory at $basefile"
         echo "We can't create a link there."
         continue
     fi
 
-    link_file $basefile $file
+    link_file "$basefile" "$file"
 done
 
 popd 2>&1 >/dev/null
