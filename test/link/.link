@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+set -e
+
+recurse () {
+    BASE="$1"
+
+    for entry in "$1"/*
+    do
+        if [ -f "$entry" ]
+        then
+            base_path="$CHECK_BASE"/${entry#"$BASE"}
+            [ -f "$base_path" ] || exit 1
+            diff "$base_path" "$entry"
+        else
+            recurse "$entry"
+        fi
+    done
+}
+
+$HOME/.hermit/bin/hermit init
+
+FIXTURE_NAME="$1"
+
+# Copy everything from the fixture into the newly created profile
+cp -r .fixtures/"$FIXTURE_NAME"/* $HOME/.hermit/profiles/default
+
+CHECK_BASE="$HOME/"
+
+# Attempt the link
+$HOME/.hermit/bin/hermit link
+
+# Check the fixture directory recursively
+recurse "$PWD/.fixtures/$FIXTURE_NAME"

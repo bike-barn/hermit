@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init
+
+# What is the correct behavior for trying to add a symbolic link?
