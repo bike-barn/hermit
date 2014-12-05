@@ -23,4 +23,3 @@ set -e
 cd $HERMIT_ROOT
 
 git config $HERMIT_CURRENT_KEY | head -1
-

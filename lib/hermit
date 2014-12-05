@@ -74,7 +74,7 @@ export PATH="${bin_path}:${PATH}"
 # This MUST be after the addition to path, since get-current-profile
 # is a script in hermit/lib
 if [ -z "${HERMIT_PROFILE}" ]; then
-    get-current-profile
+    HERMIT_PROFILE=$(get-current-profile)
 
     HERMIT_PROFILE="${PROFILE_NAME:-default}"
 fi
