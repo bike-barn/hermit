@@ -76,7 +76,7 @@ export PATH="${bin_path}:${PATH}"
 if [ -z "${HERMIT_PROFILE}" ]; then
     HERMIT_PROFILE=$(get-current-profile)
 
-    HERMIT_PROFILE="${PROFILE_NAME:-default}"
+    HERMIT_PROFILE="${HERMIT_PROFILE:-default}"
 fi
 HERMIT_PROFILE_PATH="$HERMIT_ROOT/profiles/$HERMIT_PROFILE"
 export HERMIT_PROFILE HERMIT_PROFILE_PATH
