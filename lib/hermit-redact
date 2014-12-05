@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
-
+#
+# Summary:
+# Usage: hermit redact [<filepattern...>]
+#
+# Redact allows you to edit out parts of a file already stored in your
+# hermit profile, so that they won't be stored in git.  This is
+# typically used for things that should be secret, like API tokens,
+# passwords, IP addresses. Basically anything that you don't want to
+# share with the whole world.
 
 # Copyright 2014, Geoff Shannon
 
@@ -21,4 +29,42 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-echo "hermit-redact - NOT IMPLEMENTED"
+check-git-config
+check-hermit-profile
+
+file=$1
+
+if [ \! -L "$file" -a -f "$file" ]
+then
+
+    redactfile="${file}.redacted"
+
+    cp "$file" "$redactfile"
+
+    $EDITOR "$redactfile"
+
+    secretfile="${file}.${SECRETS_SUFFIX}"
+
+    diff "$redactfile" "$file" > "$secretfile"
+
+    echo "$file" >> "$HERMIT_PROFILE_PATH/.gitignore"
+
+elif [ -d "$file" ]
+then
+    echo "We don't (currently!) support redacting a whole directory."
+    exit 1
+
+elif [ -L "$file" ]
+then
+    hermitfile="$HERMIT_PROFILE_PATH/$file"
+
+    if [ "$($READLINK $file)" = "$hermitfile" ]
+    then
+        echo "$file is already in your hermit profile."
+        echo "The redact command only works with files not already in hermit."
+        exit 1
+    else
+        echo "$file is a symbolic link.  We don't currently handle adding these..."
+        exit 1
+    fi
+fi
