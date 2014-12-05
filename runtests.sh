@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-set -e
-
 URCHIN=$(which urchin)
 URCHIN=${URCHIN:-/tmp/urchin}
+
+set -e
 
 export TESTDIR=".test-place"
 export TEST_PROFILE_NAME=default
