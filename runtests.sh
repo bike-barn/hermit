@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 URCHIN=$(which urchin)
 URCHIN=${URCHIN:-/tmp/urchin}
 
