@@ -2,7 +2,7 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
 
 DIR=the-test-dir
 
@@ -15,7 +15,7 @@ echo and things stuff > $HOME/$DIR/qux
 
 $HOME/.hermit/bin/hermit add $HOME/$DIR
 
-if [ \! -d $HOME/.hermit/profiles/default/$DIR ]
+if [ \! -d $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$DIR ]
 then
     echo "There is no directory $DIR inside the profile."
     exit 1
@@ -24,7 +24,7 @@ fi
 for file in foo bar baz qux
 do
 
-    if [ \! -f $HOME/.hermit/profiles/default/$DIR/$file ]
+    if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$DIR/$file ]
     then
         echo "$file is not present inside $DIR in the profile."
         exit 1

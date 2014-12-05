@@ -2,6 +2,6 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
 
 # What is the correct behavior for trying to add a symbolic link?

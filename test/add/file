@@ -2,7 +2,7 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
 
 FILE=.testfile
 
@@ -18,7 +18,7 @@ EOF
 
 $HOME/.hermit/bin/hermit add $HOME/$FILE
 
-if [ \! -f $HOME/.hermit/profiles/default/$FILE ]
+if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE ]
 then
     echo "There is no actual file $FILE in the profile."
     exit 1
