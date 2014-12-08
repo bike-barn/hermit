@@ -54,7 +54,21 @@ like this to your shell init file:
 Usage
 -----
 
-Still working on this... Try checking out `hermit help`.
+Still working on this... Try checking out `hermit help`:
+
+```
+Usage: hermit <command> [<args>]
+
+Some useful hermit commands are:
+   commands    List all available hermit commands
+   init        Start a new hermit profile
+   clone       Create a local hermit from an existing remote hermit
+   status      Display the status of your hermit
+   use         Switch to using a different profile
+   add         Add files to your hermit directory
+
+See `hermit help <command>' for information on a specific command.
+```
 
 Running the Tests
 -----------------
