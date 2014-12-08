@@ -73,8 +73,19 @@ link_verbosely() {
     echo "ln: $(ln -vs $newfile $origfile)"
 }
 
+REDACTING=false
+
 for file in $@
 do
+    if [ "$file" = "-r" ]
+    then
+        REDACTING=true
+        continue
+    elif [ "$file" \!= "${file#--redact=}" ]
+    then
+        REDACTING=true
+        file="${file#--redact=}"
+    fi
 
     if [ -d $file ]
     then
@@ -91,7 +102,14 @@ do
             exit 1
         fi
 
-        move_verbosely "$origfile" "$newfile"
-        link_verbosely "$origfile" "$newfile"
+        if [ "$REDACTING" = "true" ]
+        then
+            :
+        else
+            move_verbosely "$origfile" "$newfile"
+            link_verbosely "$origfile" "$newfile"
+        fi
+
     done
+    REDACTING=false
 done
