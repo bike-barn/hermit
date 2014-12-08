@@ -54,28 +54,28 @@ check-git-config
 check-hermit-profile
 
 hermit_relative_path() {
-    origfile="$1"
+    local origfile="$1"
     echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
 }
 
 move_verbosely() {
-    origfile="$1"
-    newfile="$2"
+    local origfile="$1"
+    local newfile="$2"
 
     mkdir -vp $(dirname $newfile)
     echo "mv: $(mv -vn "$origfile" "$newfile")"
 }
 
 link_verbosely() {
-    origfile="$1"
-    newfile="$2"
+    local origfile="$1"
+    local newfile="$2"
 
     echo "ln: $(ln -vs "$newfile" "$origfile")"
 }
 
 copy_verbosely() {
-    origfile="$1"
-    newfile="$2"
+    local origfile="$1"
+    local newfile="$2"
 
     echo "cp: $(cp -vn "$origfile" "$newfile")"
 }
