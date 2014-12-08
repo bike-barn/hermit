@@ -114,7 +114,7 @@ do
         if [ -f $newfile ]
         then
             echo "${origfile#~/} is already in your hermit!"
-            exit 1
+            continue
         fi
 
         # We always need to move and link these files
