@@ -23,7 +23,11 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-pushd $HERMIT_PROFILE >/dev/null 2>/dev/null
+echo "Current profile: $HERMIT_PROFILE"
+echo "Located at: $HERMIT_PROFILE_PATH"
+echo
+
+pushd $HERMIT_PROFILE_PATH >/dev/null 2>/dev/null
 
 git status
 
