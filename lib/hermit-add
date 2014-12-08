@@ -40,6 +40,21 @@ hermit_relative_path() {
     echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
 }
 
+move_verbosely() {
+    origfile="$1"
+    newfile="$2"
+
+    mkdir -vp $(dirname $newfile)
+    echo "mv: $(mv -vn $origfile $newfile)"
+}
+
+link_verbosely() {
+    origfile="$1"
+    newfile="$2"
+
+    echo "ln: $(ln -vs $newfile $origfile)"
+}
+
 for file in $@
 do
 
@@ -58,8 +73,7 @@ do
             exit 1
         fi
 
-        mkdir -vp $(dirname $newfile)
-        echo "mv: $(mv -vn $origfile $newfile)"
-        echo "ln: $(ln -vs $newfile $origfile)"
+        move_verbosely "$origfile" "$newfile"
+        link_verbosely "$origfile" "$newfile"
     done
 done
