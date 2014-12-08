@@ -46,7 +46,6 @@ link_file () {
     # parent directories exist
     mkdir -p $(dirname "$basefile")
 
-    # Since we've done lots of checks already, this should work
     ln -s $flags "$HERMIT_PROFILE_PATH/$file" "$basefile"
 }
 
