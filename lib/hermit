@@ -59,7 +59,9 @@ fi
 export HERMIT_ROOT
 
 if [ -z "${SECRETS_SUFFIX}" ]; then
-  SECRETS_SUFFIX=".hermit_secrets"
+    SECRETS_SUFFIX="hermit_secrets"
+else
+    SECRETS_SUFFIX="${SECRETS_SUFFIX#.}"
 fi
 export SECRETS_SUFFIX
 
