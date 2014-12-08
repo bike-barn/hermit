@@ -25,6 +25,8 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+check-hermit-profile
+
 TO_PROFILE="$1"
 
 # First check if the name given is a directory under
