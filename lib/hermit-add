@@ -58,6 +58,13 @@ hermit_relative_path() {
     echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
 }
 
+hermit_ignore_files() {
+    for file in $@
+    do
+        echo "${file#$HERMIT_PROFILE_PATH}" >> "$HERMIT_PROFILE_PATH/.gitignore"
+    done
+}
+
 move_verbosely() {
     local origfile="$1"
     local newfile="$2"
