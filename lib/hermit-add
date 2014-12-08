@@ -35,6 +35,11 @@ set -e
 check-git-config
 check-hermit-profile
 
+hermit_relative_path() {
+    origfile="$1"
+    echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
+}
+
 for file in $@
 do
 
@@ -45,7 +50,7 @@ do
 
     for origfile in $file
     do
-        newfile=$HERMIT_PROFILE_PATH/${origfile#~/}
+        newfile="$(hermit_relative_path "$origfile")"
 
         if [ -f $newfile ]
         then
