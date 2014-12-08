@@ -83,7 +83,7 @@ Feature Checklist/Roadmap
 -------------------------
 
 Checkout
-[the issue](https://github.com/RadicalZephyr/hermit/issues/12) for
+[the feature checklist](https://github.com/RadicalZephyr/hermit/issues/12) for
 the latest status.
 
 
