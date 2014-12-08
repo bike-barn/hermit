@@ -63,15 +63,23 @@ move_verbosely() {
     newfile="$2"
 
     mkdir -vp $(dirname $newfile)
-    echo "mv: $(mv -vn $origfile $newfile)"
+    echo "mv: $(mv -vn "$origfile" "$newfile")"
 }
 
 link_verbosely() {
     origfile="$1"
     newfile="$2"
 
-    echo "ln: $(ln -vs $newfile $origfile)"
+    echo "ln: $(ln -vs "$newfile" "$origfile")"
 }
+
+copy_verbosely() {
+    origfile="$1"
+    newfile="$2"
+
+    echo "cp: $(cp -vn "$origfile" "$newfile")"
+}
+
 
 REDACTING=false
 
