@@ -54,7 +54,11 @@ like this to your shell init file:
 Usage
 -----
 
-Still working on this... Try checking out `hermit help`:
+Still working on this... Try checking out the
+[docs folder][hermit-docs] or running `hermit help`:
+
+[hermit-docs]: https://github.com/RadicalZephyr/hermit/tree/master/doc
+
 
 ```
 Usage: hermit <command> [<args>]
