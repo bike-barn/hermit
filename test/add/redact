@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+
+FILE=.testfile
+
+cat > $HOME/$FILE <<EOF
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+massive secret stuff
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+more secret, secret, secret
+pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum."
+EOF
+
+
+EDITOR=ed $HOME/.hermit/bin/hermit add -r $HOME/$FILE <<EOF
+7d
+3d
+w
+EOF
+
+if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE -o \
+     \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.redacted -o \
+     \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_secrets ]
+then
+    echo "One of the files ${FILE}, ${FILE}.redacted, ${FILE}.hermit_secrets is missing."
+    echo "Found $(ls $HOME/.hermit/profiles/$TEST_PROFILE_NAME/{${FILE},${FILE}.redacted,${FILE}.hermit_secrets})"
+    exit 1
+fi
+
+if [ \! -L $HOME/$FILE ]
+then
+    echo "There is no symbolic link at $HOME/$FILE."
+    exit 1
+fi
