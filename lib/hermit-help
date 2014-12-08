@@ -146,7 +146,7 @@ if [ -z "$1" ] || [ "$1" == "hermit" ]; then
   [ -z "$usage" ] || exit
   echo
   echo "Some useful hermit commands are:"
-  print_summaries commands init clone status open use add redact
+  print_summaries commands init clone status use add update
   echo
   echo "See \`hermit help <command>' for information on a specific command."
   echo "For full documentation, see: https://github.com/radicalzephyr/hermit#readme"
