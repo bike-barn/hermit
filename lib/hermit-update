@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+# Copyright 2014, Geoff Shannon
+
+# This file is part of Hermit.
+
+# Hermit is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Hermit is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+[ -n "$HERMIT_DEBUG" ] && set -x
+
+check-git-config
+check-hermit-profile
+
+hermit_relative_path() {
+    local origfile="$1"
+    echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
+}
+
+
+for file in $@
+do
+
+    # Check for absolute or relative path
+    if [ "" != "${file%%/*}" ]
+    then
+        # If it's relative though, we need to assume that it is
+        # relative to the current directory
+        file="$PWD/$file"
+    fi
+
+    if [ -d "$file" ]
+    then
+        file=$(find "$file" -type d -name .git -prune -o -type f -o -type l)
+    fi
+
+    for origfile in $file
+    do
+
+        if [ -L "$origfile" ]
+        then
+
+            newfile="$(hermit_relative_path "$origfile")"
+            link_target=$($READLINK "$origfile")
+
+            if [ "$link_target" != "$newfile" ]
+            then
+                echo >&2 "hermit: This symlink is not handled by hermit: $origfile"
+                echo >&2
+                continue
+            fi
+
+            redactfile="${newfile}.redacted"
+            secretfile="${newfile}.${SECRETS_SUFFIX}"
+
+            if [ -f "$redactfile" -a -f "$secretfile" ]
+            then
+                echo "Do a secondary redaction"
+            else
+                echo "This is the first redaction"
+                copy_verbosely "$newfile" "$redactfile"
+
+                ${EDITOR:-editor} "$redactfile"
+
+            fi
+
+            echo
+
+        elif [ -f "$origfile" ]
+        then
+            echo >&2 "hermit: update only works on files already tracked by hermit."
+            echo >&2 "$origfile can be added to hermit with 'hermit add $origfile'"
+            echo >&2
+
+        fi
+
+    done
+done
