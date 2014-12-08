@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # Summary: Add files to your hermit directory
-# Usage: hermit add [<filepattern>…]
+# Usage: hermit add [[-r|--redact=] <filepattern>…]
 #
 # Add takes a path (or paths) to some files and directories in your
 # home folder, and moves them into your active hermit profile, and
@@ -11,6 +11,24 @@
 # in that directory tree.
 #
 #  Note: you must have an initialized hermit profile.
+#
+# -r <file>, --redact=<file>
+#     Redact secrets from a file before it is added to hermit.
+#
+# File Redaction
+#
+# When you ask hermit to let you redact a file, there are several
+# differences from the normal add process. First, hermit will make a
+# copy of the original file inside your hermit profile.  Then, you are
+# given the chance to edit this copy to remove any sensitive
+# information. This will be the "redacted file" and given the suffix
+# ".redacted".
+#
+# Next, the original file is moved to your hermit directory and git is
+# directed to ignore it. The secrets that were edited out of the
+# original file are then placed into a file with the suffix ".secrets"
+# and are also ignored by git. Hermit can optionally encrypt this file
+# using GPG and then you can commit the encrypted version.
 
 # Copyright 2014, Geoff Shannon
 
