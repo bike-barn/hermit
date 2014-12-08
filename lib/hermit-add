@@ -32,7 +32,7 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
-check-git-config || exit 1
+check-git-config
 
 if [ \! -d $HERMIT_PROFILE_PATH ]
 then
