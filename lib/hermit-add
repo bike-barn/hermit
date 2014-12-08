@@ -117,12 +117,24 @@ do
             exit 1
         fi
 
+        # We always need to move and link these files
+        move_verbosely "$origfile" "$newfile"
+        link_verbosely "$origfile" "$newfile"
+
         if [ "$REDACTING" = "true" ]
         then
-            :
-        else
-            move_verbosely "$origfile" "$newfile"
-            link_verbosely "$origfile" "$newfile"
+            redactfile="${newfile}.redacted"
+            secretfile="${newfile}.${SECRETS_SUFFIX}"
+
+            copy_verbosely "$newfile" "$redactfile"
+
+            ${EDITOR:-editor} "$redactfile"
+
+            diff -u "$redactfile" $"newfile" > "$secretfile"
+
+            echo "Ignoring original file ${newfile#~/} secret file ${secretfile#~/}"
+            hermit_ignore_files "$newfile" "$secretfile"
+
         fi
 
     done
