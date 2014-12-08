@@ -1,6 +1,6 @@
 language: c # defaults to ruby
 install:
-  - sudo apt-get install ksh zsh -y
+  - sudo apt-get install ksh zsh ed -y
 before_script:
   - curl -o /tmp/urchin https://raw.githubusercontent.com/scraperwiki/urchin/master/urchin && chmod +x /tmp/urchin
 script:
