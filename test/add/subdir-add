@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+
+SUBDIR=.interior-dir
+FILE=.testfile
+
+mkdir -vp $HOME/$SUBDIR
+
+cat > $HOME/$SUBDIR/$FILE <<EOF
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum."
+EOF
+
+pushd $HOME/$SUBDIR >/dev/null 2>&1
+
+$HOME/.hermit/bin/hermit add $FILE
+
+popd >/dev/null 2>&1
+
+echo "Contents of $SUBDIR"
+find $HOME/$SUBDIR
+echo
+echo "Contents of hermit profile"
+find $HOME/.hermit/profiles/$TEST_PROFILE_NAME -type d -name .git -prune -o -print
+
+if [ \! -d $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$SUBDIR ]
+then
+    echo "The subdirectory $SUBDIR is missing from the profile."
+    exit 1
+fi
+
+if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$SUBDIR/$FILE ]
+then
+    echo "There is no actual file $FILE in the profile."
+    exit 1
+fi
+
+if [ \! -L $HOME/$SUBDIR/$FILE ]
+then
+    echo "There is no symbolic link at $HOME/$SUBDIR/$FILE."
+    exit 1
+fi
