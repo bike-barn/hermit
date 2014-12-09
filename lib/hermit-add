@@ -147,7 +147,7 @@ do
 
             diff -u "$redactfile" "$completefile" > "$secretfile" || true
 
-            echo "Ignoring original file ${completefile#~/} secret file ${secretfile#~/}"
+            echo "Ignoring original file and secret file: ${completefile#~/}, ${secretfile#~/}"
             hermit_ignore_files "$completefile" "$secretfile"
 
             echo "Relinking the original file to point at the complete file."
