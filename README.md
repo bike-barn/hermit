@@ -10,6 +10,9 @@ like [rbenv], and [nvm]. It's (going to be) like having profiles for
 your shell environments. Or, it just helps manage your home directory
 being under version control.
 
+_Hermit is currently alpha software. I use it and we have some
+tests, but there may be bugs._
+
 [![Build Status](https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master)](https://travis-ci.org/RadicalZephyr/hermit)
 [![Crabs harmed](http://img.shields.io/badge/crabs_harmed-0-blue.svg)](http://shields.io/)
 
