@@ -44,10 +44,7 @@ do
 
     file="$(absolute_path "$file")"
 
-    if [ -d "$file" ]
-    then
-        file=$(find "$file" -type d -name .git -prune -o -type f -o -type l)
-    fi
+    file="$(files_when_dir "$file")"
 
     for origfile in $file
     do

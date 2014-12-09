@@ -22,6 +22,16 @@ hermit_ignore_files() {
     done
 }
 
+files_when_dir() {
+    local file="$1"
+    if [ -d "$file" ]
+    then
+        find "$file" -type d -name .git -prune -o -type f -o -type l
+    else
+        echo "$file"
+    fi
+}
+
 move_verbosely() {
     local origfile="$1"
     local newfile="$2"
