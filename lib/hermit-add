@@ -145,7 +145,7 @@ do
 
             ${EDITOR:-editor} "$redactfile"
 
-            diff -u "$redactfile" $"completefile" > "$secretfile"
+            diff -u "$redactfile" "$completefile" > "$secretfile" || true
 
             echo "Ignoring original file ${completefile#~/} secret file ${secretfile#~/}"
             hermit_ignore_files "$completefile" "$secretfile"
