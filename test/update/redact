@@ -32,7 +32,7 @@ massive secret stuff
 w
 EOF
 
-EDITOR=ed $HOME/.hermit/bin/hermit update $HOME/$FILE <<EOF
+EDITOR=ed $HOME/.hermit/bin/hermit update -r $HOME/$FILE <<EOF
 7d
 3d
 w
