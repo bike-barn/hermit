@@ -44,7 +44,10 @@ hermit_do_redaction() {
     local redactfile"=$(redact_filename "$file")"
     local secretfile"=$(secret_filename "$file")"
 
-    copy_verbosely "$redactfile" "$completefile"
+    # Make sure that both completefile and redactfile have the same content
+    # At least one of these will fail
+    copy_verbosely "$file" "$completefile"
+    copy_verbosely "$file" "$redactfile"
 
     ${EDITOR:-editor} "$redactfile"
 
