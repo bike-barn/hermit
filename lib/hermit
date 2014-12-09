@@ -65,6 +65,13 @@ else
 fi
 export SECRETS_SUFFIX
 
+if [ -z "${ENCRYPTED_SECRETS_SUFFIX}" ]; then
+    ENCRYPTED_SECRETS_SUFFIX="gpg"
+else
+    ENCRYPTED_SECRETS_SUFFIX="${ENCRYPTED_SECRETS_SUFFIX#.}"
+fi
+export ENCRYPTED_SECRETS_SUFFIX
+
 if [ -z "${COMPLETE_SUFFIX}" ]; then
     COMPLETE_SUFFIX="hermit_complete"
 else
