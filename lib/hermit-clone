@@ -54,6 +54,16 @@ Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
 git clone $CLONE_URL $HERMIT_PROFILE_PATH
 
+if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1
+then
+    enc_secrets=$(find $HERMIT_PROFILE_PATH -type d -name .git -prune -o -type f -name '*.'${ENCRYPTED_SECRETS_SUFFIX} -print)
+
+    for file in $enc_secrets
+    do
+        gpg -d $file --output ${file%$ENCRYPTED_SECRETS_SUFFIX}
+    done
+fi
+
 set-current-profile $HERMIT_PROFILE
 
 echo "Successfully cloned remote profile into $HERMIT_PROFILE."
