@@ -22,6 +22,21 @@ hermit_ignore_files() {
     done
 }
 
+complete_filename() {
+    local file="$1"
+    echo "${file}.${COMPLETE_SUFFIX}"
+}
+
+redact_filename() {
+    local file="$1"
+    echo "${file}"
+}
+
+secret_filename() {
+    local file="$1"
+    echo "${file}.${SECRETS_SUFFIX}"
+}
+
 hermit_do_redaction() {
     completefile="$1"
     redactfile="$2"
