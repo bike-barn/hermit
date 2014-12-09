@@ -55,9 +55,9 @@ do
             newfile="$(hermit_relative_path "$origfile")"
             link_target=$($READLINK "$origfile")
 
-            completefile"=$(complete_filename "$newfile")"
-            redactfile"=$(redact_filename "$newfile")"
-            secretfile"=$(secret_filename "$newfile")"
+            completefile="$(complete_filename "$newfile")"
+            redactfile="$(redact_filename "$newfile")"
+            secretfile="$(secret_filename "$newfile")"
 
             if [ "$link_target" != "$newfile" -a \
                  "$link_target" != "$completefile" ]

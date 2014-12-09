@@ -40,9 +40,9 @@ secret_filename() {
 hermit_do_redaction() {
     local file="$1"
 
-    local completefile"=$(complete_filename "$file")"
-    local redactfile"=$(redact_filename "$file")"
-    local secretfile"=$(secret_filename "$file")"
+    local completefile="$(complete_filename "$file")"
+    local redactfile="$(redact_filename "$file")"
+    local secretfile="$(secret_filename "$file")"
 
     # Make sure that both completefile and redactfile have the same content
     # At least one of these will fail
