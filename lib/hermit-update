@@ -58,18 +58,37 @@ do
                 continue
             fi
 
-            redactfile="${newfile}.redacted"
-            secretfile="${newfile}.${SECRETS_SUFFIX}"
+            completefile="$newfile"
+            redactfile="${completefile}.redacted"
+            secretfile="${completefile}.${SECRETS_SUFFIX}"
 
-            if [ -f "$redactfile" -a -f "$secretfile" ]
+            if [ -f "$completefile" -a -f "$redactfile" -a -f "$secretfile" ]
             then
                 echo "Do a secondary redaction"
             else
-                echo "This is the first redaction"
-                copy_verbosely "$newfile" "$redactfile"
+                copy_verbosely "$completefile" "$redactfile"
 
                 ${EDITOR:-editor} "$redactfile"
 
+                diff -u "$redactfile" "$completefile" > "$secretfile" || true
+
+                pushd "$HERMIT_PROFILE_PATH" >/dev/null 2>&1
+
+                git rm --cached "$completefile"
+
+                git add "$redactfile"
+
+                echo "Ignoring original file and secret file: ${completefile#~/}, ${secretfile#~/}"
+                hermit_ignore_files "$completefile" "$secretfile"
+
+                git add ".gitignore"
+
+                popd >/dev/null 2>&1
+
+                echo "Relinking the original file to point at the complete file."
+
+                remove_verbosely "$origfile"
+                link_verbosely "$origfile" "$completefile"
             fi
 
             echo
