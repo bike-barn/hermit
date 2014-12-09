@@ -65,6 +65,13 @@ else
 fi
 export SECRETS_SUFFIX
 
+if [ -z "${COMPLETE_SUFFIX}" ]; then
+    COMPLETE_SUFFIX="hermit_complete"
+else
+    COMPLETE_SUFFIX="${COMPLETE_SUFFIX#.}"
+fi
+export COMPLETE_SUFFIX
+
 shopt -s nullglob
 
 bin_path="$(abs_dirname "$0")"
