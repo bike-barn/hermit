@@ -1,5 +1,8 @@
-Hermit - Bring your home with you
-==================================
+Hermit
+======
+
+Bring your home with you
+------------------------
 
 Hermit is a home directory configuration management tool. Inspired
 originally by [Briefcase] but also heavily borrows from awesome tools
