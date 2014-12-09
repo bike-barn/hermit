@@ -15,6 +15,10 @@
 # -r <file>, --redact=<file>
 #     Redact secrets from a file before it is added to hermit.
 #
+# It should be pointed out that attempting to redact information that
+# has already been committed to the git repository is TOTALLY
+# INEFFECTIVE.
+#
 # File Redaction
 #
 # When you ask hermit to let you redact a file, there are several
