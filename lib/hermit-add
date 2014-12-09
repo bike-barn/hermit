@@ -147,6 +147,12 @@ do
 
             diff -u "$redactfile" "$completefile" > "$secretfile" || true
 
+            pushd "$HERMIT_PROFILE_PATH" >/dev/null 2>&1
+
+            git add "$redactfile"
+
+            popd >/dev/null 2>&1
+
             echo "Ignoring original file and secret file: ${completefile#~/}, ${secretfile#~/}"
             hermit_ignore_files "$completefile" "$secretfile"
 
