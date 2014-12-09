@@ -94,7 +94,7 @@ copy_verbosely() {
     local origfile="$1"
     local newfile="$2"
 
-    echo "$cp: $(cp -vn "$origfile" "$newfile" 2>&1)"
+    echo "cp: $(cp -vn "$origfile" "$newfile" 2>&1)"
 }
 
 remove_verbosely() {
