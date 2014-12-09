@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+
+FILE=.testfile
+
+cat > $HOME/$FILE <<EOF
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum."
+EOF
+
+# Do an initial redaction
+
+EDITOR=ed $HOME/.hermit/bin/hermit add -r $HOME/$FILE <<EOF
+7d
+3d
+w
+EOF
+
+# Edit the file again
+
+ed $HOME/$FILE <<EOF
+5a
+more secret, secret, secret
+.
+2a
+massive secret stuff
+.
+EOF
