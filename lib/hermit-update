@@ -62,9 +62,9 @@ do
                 continue
             fi
 
-            completefile="$newfile"
-            redactfile="${completefile}.redacted"
-            secretfile="${completefile}.${SECRETS_SUFFIX}"
+            completefile="${newfile}.complete"
+            redactfile="${newfile}"
+            secretfile="${newfile}.${SECRETS_SUFFIX}"
 
             if [ -f "$completefile" -a -f "$redactfile" -a -f "$secretfile" ]
             then
@@ -77,8 +77,6 @@ do
                 diff -u "$redactfile" "$completefile" > "$secretfile" || true
 
                 pushd "$HERMIT_PROFILE_PATH" >/dev/null 2>&1
-
-                git rm --cached "$completefile"
 
                 git add "$redactfile"
 

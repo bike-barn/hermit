@@ -90,9 +90,9 @@ do
 
         if [ "$REDACTING" = "true" ]
         then
-            completefile="$newfile"
-            redactfile="${completefile}.redacted"
-            secretfile="${completefile}.${SECRETS_SUFFIX}"
+            completefile="${newfile}.complete"
+            redactfile="${newfile}"
+            secretfile="${newfile}.${SECRETS_SUFFIX}"
 
             copy_verbosely "$completefile" "$redactfile"
 
