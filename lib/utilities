@@ -61,7 +61,9 @@ hermit_do_redaction() {
     # a secret key
     if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1
     then
-        gpg -se -r $(whoami) "$secretfile" && git add "${secretfile}.gpg"
+        gpg -se -r $(whoami) "$secretfile" \
+            --output "${secretfile}.${ENCRYPTED_SECRETS_SUFFIX}" \
+            && git add "${secretfile}.gpg"
     fi
 
     git add "$redactfile"
