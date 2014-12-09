@@ -25,6 +25,14 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+# Provide hermit completions
+if [ "$1" = "--complete" ]; then
+    profile_dir="$HERMIT_ROOT/profiles"
+    find "$profile_dir" -type d -depth 1 | cut -c$((${#profile_dir}+2))-
+
+    exit
+fi
+
 check-hermit-profile
 
 TO_PROFILE="$1"
