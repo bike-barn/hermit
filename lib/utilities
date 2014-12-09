@@ -77,25 +77,25 @@ move_verbosely() {
     local newfile="$2"
 
     mkdir -vp $(dirname $newfile)
-    echo "mv: $(mv -vn "$origfile" "$newfile")"
+    echo "mv: $(mv -vn "$origfile" "$newfile" 2>&1)"
 }
 
 link_verbosely() {
     local origfile="$1"
     local newfile="$2"
 
-    echo "ln: $(ln -vs "$newfile" "$origfile")"
+    echo "ln: $(ln -vs "$newfile" "$origfile" 2>&1)"
 }
 
 copy_verbosely() {
     local origfile="$1"
     local newfile="$2"
 
-    echo "cp: $(cp -vn "$origfile" "$newfile")"
+    echo "$cp: $(cp -vn "$origfile" "$newfile" 2>&1)"
 }
 
 remove_verbosely() {
     local origfile="$1"
 
-    echo "rm: $(rm -v "$origfile")"
+    echo "rm: $(rm -v "$origfile" 2>&1)"
 }
