@@ -2,9 +2,9 @@
 <html>
 
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Hermit : Bring your home with you" />
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Hermit : Bring your home with you">
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
@@ -32,21 +32,36 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="hermit---a-home-directory-configuration-management-tool" class="anchor" href="#hermit---a-home-directory-configuration-management-tool"><span class="octicon octicon-link"></span></a>Hermit - A home directory configuration management tool</h1>
-
-<p>Hermit is a home directory configuration management assistant. Inspired
-originally by <a href="https://github.com/jim/briefcase">Briefcase</a> but
-also heavily borrows from awesome tools like <a href="https://github.com/sstephenson/rbenv">rbenv</a>, and <a href="https://github.com/creationix/nvm">nvm</a>. It's
-(going to be) like having profiles for your shell environments. Or, it
-just helps manage your home directory being under version control.</p>
-
-<p><a href="https://travis-ci.org/RadicalZephyr/hermit"><img src="https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master" alt="Build Status"></a></p>
+<a id="hermit" class="anchor" href="#hermit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hermit</h1>
 
 <h2>
-<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
+<a id="bring-your-home-with-you" class="anchor" href="#bring-your-home-with-you" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bring your home with you</h2>
+
+<p>Hermit is a home directory configuration management tool. Inspired
+originally by <a href="https://github.com/jim/briefcase">Briefcase</a> but also heavily borrows from awesome tools
+like <a href="https://github.com/sstephenson/rbenv">rbenv</a>, and <a href="https://github.com/creationix/nvm">nvm</a>. It's (going to be) like having profiles for
+your shell environments. Or, it just helps manage your home directory
+being under version control.</p>
+
+<p><a href="https://travis-ci.org/RadicalZephyr/hermit"><img src="https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master" alt="Build Status"></a>
+<a href="http://shields.io/"><img src="http://img.shields.io/badge/crabs_harmed-0-blue.svg" alt="Crabs harmed"></a></p>
+
+<h2>
+<a id="philosophy" class="anchor" href="#philosophy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Philosophy</h2>
+
+<p>Hermit aims to be an assistant, it's not trying to run the show. As a
+consequence, Hermit will never actually commit anything to your
+profile repository. Instead - like the perfect office assistant -
+Hermit will prepare everything for you, and then let you decide
+whether or not to commit it. This gives you the option of reviewing
+exactly the changes that Hermit is proposing to make to your profile
+and helps you avoid accidentally committing any secrets.</p>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
 
 <h3>
-<a name="install-script" class="anchor" href="#install-script"><span class="octicon octicon-link"></span></a>Install script</h3>
+<a id="install-script" class="anchor" href="#install-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install script</h3>
 
 <p>To install you could use the <a href="https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh">install script</a> using cURL:</p>
 
@@ -68,7 +83,7 @@ variables: Eg: <code>curl ... | HERMIT_DIR=/usr/local/hermit sh</code> for a
 global install.</p>
 
 <h3>
-<a name="manual-install" class="anchor" href="#manual-install"><span class="octicon octicon-link"></span></a>Manual Install</h3>
+<a id="manual-install" class="anchor" href="#manual-install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual Install</h3>
 
 <p>Just clone the hermit repository with <code>git</code>.</p>
 
@@ -82,30 +97,38 @@ like this to your shell init file:</p>
 </code></pre>
 
 <h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Still working on this... Try checking out <code>hermit help</code>.</p>
+<p>Still working on this... Try checking out the
+<a href="https://github.com/RadicalZephyr/hermit/tree/master/doc">docs folder</a> or running <code>hermit help</code>:</p>
+
+<pre><code>Usage: hermit &lt;command&gt; [&lt;args&gt;]
+
+Some useful hermit commands are:
+   commands    List all available hermit commands
+   init        Start a new hermit profile
+   clone       Create a local hermit from an existing remote hermit
+   status      Display the status of your hermit
+   use         Switch to using a different profile
+   add         Add files to your hermit directory
+
+See `hermit help &lt;command&gt;' for information on a specific command.
+</code></pre>
 
 <h2>
-<a name="running-the-tests" class="anchor" href="#running-the-tests"><span class="octicon octicon-link"></span></a>Running the Tests</h2>
+<a id="running-the-tests" class="anchor" href="#running-the-tests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Running the Tests</h2>
 
 <p>Hermit now has a test suite! You can run it with <code>./runtests.sh</code>.</p>
 
 <h2>
-<a name="feature-checklistroadmap" class="anchor" href="#feature-checklistroadmap"><span class="octicon octicon-link"></span></a>Feature Checklist/Roadmap</h2>
+<a id="feature-checklistroadmap" class="anchor" href="#feature-checklistroadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feature Checklist/Roadmap</h2>
 
 <p>Checkout
-<a href="https://github.com/RadicalZephyr/hermit/issues/12">the issue</a> for
+<a href="https://github.com/RadicalZephyr/hermit/issues/12">the feature checklist</a> for
 the latest status.</p>
 
 <h2>
-<a name="thoughts-n-stuff" class="anchor" href="#thoughts-n-stuff"><span class="octicon octicon-link"></span></a>Thoughts n' stuff</h2>
-
-<p>We've got a whole <a href="http://www.zephyrizing.net/images/timey-wimey.gif">themey-wemey</a> thing going on. Any suggestions or
-problems with the names should take this into consideration ;)</p>
-
-<h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
 
 <p>Copyright 2014, Geoff Shannon</p>
 
@@ -134,7 +157,7 @@ along with Hermit. If not, see <a href="http://www.gnu.org/licenses/">http://www
       </footer>
     </div>
 
-
+    
 
   </body>
 </html>
