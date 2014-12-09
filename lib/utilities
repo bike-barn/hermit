@@ -55,6 +55,15 @@ hermit_do_redaction() {
 
     pushd "$HERMIT_PROFILE_PATH" >/dev/null 2>&1
 
+    echo "Attempting to encrypt secrets file"
+
+    # Test for existence of gpg command and that the current user has
+    # a secret key
+    if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1
+    then
+        gpg -se -r $(whoami) "$secretfile" && git add "${secretfile}.gpg"
+    fi
+
     git add "$redactfile"
 
     popd >/dev/null 2>&1
