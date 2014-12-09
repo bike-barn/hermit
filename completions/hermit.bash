@@ -5,8 +5,8 @@ _hermit() {
         COMPREPLY=( $(compgen -W "$(hermit commands)" -- "$word") )
     else
         local words=("${COMP_WORDS[@]}")
-        unset words[0]
-        unset words[$COMP_CWORD]
+        unset words[0] # Get rid of hermit in comp_words
+        #unset words[$COMP_CWORD] # Get rid of last argument
         local completions=$(hermit completions "${words[@]}")
         COMPREPLY=( $(compgen -W "$completions" -- "$word") )
     fi
