@@ -18,6 +18,13 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+# Provide hermit completions
+if [ "$1" = "--complete" ]; then
+    shift 1
+    exec hermit-commands
+    exit
+fi
+
 command_path() {
   local command="$1"
   command -v hermit-"$command" || command -v hermit-sh-"$command" || true
