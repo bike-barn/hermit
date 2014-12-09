@@ -15,6 +15,17 @@ being under version control.
 [nvm]: https://github.com/creationix/nvm
 
 
+Philosophy
+----------
+
+Hermit aims to be an assistant, it's not trying to run the show. As a
+consequence, Hermit will never actually commit anything to your
+profile repository. Instead - like the perfect office assistant -
+Hermit will prepare everything for you, and then let you decide
+whether or not to commit it. This gives you the option of reviewing
+exactly the changes that Hermit is proposing to make to your profile
+and helps you avoid accidentally committing any secrets.
+
 Install
 -------
 
