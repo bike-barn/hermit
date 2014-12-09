@@ -90,11 +90,7 @@ do
 
         if [ "$REDACTING" = "true" ]
         then
-            completefile="${newfile}.complete"
-            redactfile="${newfile}"
-            secretfile="${newfile}.${SECRETS_SUFFIX}"
-
-            hermit_do_redaction "$completefile" "$redactfile" "$secretfile"
+            hermit_do_redaction "$newfile"
         fi
 
     done

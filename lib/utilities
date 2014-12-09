@@ -38,9 +38,11 @@ secret_filename() {
 }
 
 hermit_do_redaction() {
-    completefile="$1"
-    redactfile="$2"
-    secretfile="$3"
+    local file="$1"
+
+    local completefile"=$(complete_filename "$file")"
+    local redactfile"=$(redact_filename "$file")"
+    local secretfile"=$(secret_filename "$file")"
 
     copy_verbosely "$redactfile" "$completefile"
 

@@ -62,15 +62,11 @@ do
                 continue
             fi
 
-            completefile="${newfile}.complete"
-            redactfile="${newfile}"
-            secretfile="${newfile}.${SECRETS_SUFFIX}"
-
             if [ -f "$completefile" -a -f "$redactfile" -a -f "$secretfile" ]
             then
                 echo "Do a secondary redaction"
             else
-                hermit_do_redaction "$completefile" "$redactfile" "$secretfile"
+                hermit_do_redaction "$newfile"
             fi
 
             echo

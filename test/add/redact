@@ -28,11 +28,11 @@ EOF
 RET=$?
 
 if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE -o \
-     \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.complete -o \
+     \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_complete -o \
      \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_secrets ]
 then
     echo "One of the files ${FILE}, ${FILE}.complete, ${FILE}.hermit_secrets is missing."
-    echo "Found $(ls $HOME/.hermit/profiles/$TEST_PROFILE_NAME/{${FILE},${FILE}.complete,${FILE}.hermit_secrets})"
+    echo "Found $(ls $HOME/.hermit/profiles/$TEST_PROFILE_NAME/{${FILE},${FILE}.hermit_complete,${FILE}.hermit_secrets})"
     exit 1
 fi
 
