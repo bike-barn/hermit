@@ -87,6 +87,12 @@ copy_verbosely() {
     echo "cp: $(cp -vn "$origfile" "$newfile")"
 }
 
+remove_verbosely() {
+    local origfile="$1"
+
+    echo "rm: $(rm -v "$origfile")"
+}
+
 
 REDACTING=false
 
@@ -144,6 +150,10 @@ do
             echo "Ignoring original file ${completefile#~/} secret file ${secretfile#~/}"
             hermit_ignore_files "$completefile" "$secretfile"
 
+            echo "Relinking the original file to point at the complete file."
+
+            remove_verbosely "$origfile"
+            link_verbosely "$origfile" "$completefile"
         fi
 
     done
