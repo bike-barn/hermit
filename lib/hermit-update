@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 #
 # Summary: Redact files already stored in git
-# Usage: hermit update [<filepattern>...]
+# Usage: hermit update [[-r|--redact=] <filepattern>…]
 #
 # Update takes a path (or paths) to some files or directories in your
 # home folder. For all the files that are already being tracked by
 # Hermit, you are given the opportunity to redact the file.  The
 # semantics of the redaction are the same as when passing a -r option
 # to hermit add.
+#
+# -r <file>, --redact=<file>
+#     Redact secrets from a file before it is added to hermit.
 #
 # It should be pointed out that attempting to redact information that
 # has already been committed to the git repository is TOTALLY
