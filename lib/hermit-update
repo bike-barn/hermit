@@ -23,10 +23,7 @@ set -e
 check-git-config
 check-hermit-profile
 
-hermit_relative_path() {
-    local origfile="$1"
-    echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
-}
+source $(dirname $0)/utilities
 
 
 for file in $@
