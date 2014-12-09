@@ -102,6 +102,14 @@ do
         file="${file#--redact=}"
     fi
 
+    # Check for absolute or relative path
+    if [ "" != "${file%%/*}" ]
+    then
+        # If it's relative though, we need to assume that it is
+        # relative to the current directory
+        file="$PWD/$file"
+    fi
+
     if [ -d $file ]
     then
         file=$(find $file -type d -name .git -prune -o -type f)
