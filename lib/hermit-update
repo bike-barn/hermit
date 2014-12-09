@@ -42,13 +42,7 @@ source $(dirname $0)/utilities
 for file in $@
 do
 
-    # Check for absolute or relative path
-    if [ "" != "${file%%/*}" ]
-    then
-        # If it's relative though, we need to assume that it is
-        # relative to the current directory
-        file="$PWD/$file"
-    fi
+    file="$(absolute_path "$file")"
 
     if [ -d "$file" ]
     then

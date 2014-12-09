@@ -3,6 +3,18 @@ hermit_relative_path() {
     echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
 }
 
+absolute_path() {
+    local file="$1"
+    # Check for absolute or relative path
+    if [ "" != "${file%%/*}" ]
+    then
+        # If it's relative though, we need to assume that it is
+        # relative to the current directory
+        file="$PWD/$file"
+    fi
+    echo $file
+}
+
 hermit_ignore_files() {
     for file in $@
     do
