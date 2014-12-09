@@ -55,7 +55,12 @@ do
             newfile="$(hermit_relative_path "$origfile")"
             link_target=$($READLINK "$origfile")
 
-            if [ "$link_target" != "$newfile" ]
+            completefile"=$(complete_filename "$newfile")"
+            redactfile"=$(redact_filename "$newfile")"
+            secretfile"=$(secret_filename "$newfile")"
+
+            if [ "$link_target" != "$newfile" -a \
+                 "$link_target" != "$completefile" ]
             then
                 echo >&2 "hermit: This symlink is not handled by hermit: $origfile"
                 echo >&2
@@ -64,12 +69,28 @@ do
 
             if [ -f "$completefile" -a -f "$redactfile" -a -f "$secretfile" ]
             then
-                echo "Do a secondary redaction"
-            else
-                hermit_do_redaction "$newfile"
-            fi
+                intermediatefile="${newfile}.intermediate"
 
-            echo
+                copy_verbosely "$completefile" "$intermediatefile"
+
+                # Rev. patch the intermediate file.  This preserves
+                # changes, but removes known secrets.
+                patch -R "$intermediatefile" "$secretfile"
+
+                pushd "$HERMIT_PROFILE_PATH" >/dev/null 2>&1
+                if git diff --quiet "$redactfile"
+                then
+                    remove_verbosely "$redactfile"
+                    move_verbosely "$intermediatefile" "$redactfile"
+                else
+                    echo >&2 "hermit: Changes were made to $redactfile"
+                    echo >&2 "        Please only make changes to $completefile"
+                    echo >&2
+                    continue
+                fi
+
+            fi
+            hermit_do_redaction "$newfile"
 
         elif [ -f "$origfile" ]
         then
