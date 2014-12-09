@@ -23,6 +23,8 @@ pushd $HOME/$SUBDIR >/dev/null 2>&1
 
 $HOME/.hermit/bin/hermit add $FILE
 
+RET=$?
+
 popd >/dev/null 2>&1
 
 echo "Contents of $SUBDIR"
@@ -48,3 +50,5 @@ then
     echo "There is no symbolic link at $HOME/$SUBDIR/$FILE."
     exit 1
 fi
+
+exit $RET

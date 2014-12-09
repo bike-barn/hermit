@@ -18,6 +18,8 @@ EOF
 
 $HOME/.hermit/bin/hermit add $HOME/$FILE
 
+RET=$?
+
 if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE ]
 then
     echo "There is no actual file $FILE in the profile."
@@ -30,3 +32,5 @@ then
     echo "There is no symbolic link at $HOME/$FILE."
     exit 1
 fi
+
+exit $RET

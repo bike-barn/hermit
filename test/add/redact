@@ -25,6 +25,8 @@ EDITOR=ed $HOME/.hermit/bin/hermit add -r $HOME/$FILE <<EOF
 w
 EOF
 
+RET=$?
+
 if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE -o \
      \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.redacted -o \
      \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_secrets ]
@@ -39,3 +41,5 @@ then
     echo "There is no symbolic link at $HOME/$FILE."
     exit 1
 fi
+
+exit $RET
