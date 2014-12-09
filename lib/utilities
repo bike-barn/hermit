@@ -1,0 +1,39 @@
+hermit_relative_path() {
+    local origfile="$1"
+    echo "$HERMIT_PROFILE_PATH/${origfile#~/}"
+}
+
+hermit_ignore_files() {
+    for file in $@
+    do
+        echo "${file#$HERMIT_PROFILE_PATH}" >> "$HERMIT_PROFILE_PATH/.gitignore"
+    done
+}
+
+move_verbosely() {
+    local origfile="$1"
+    local newfile="$2"
+
+    mkdir -vp $(dirname $newfile)
+    echo "mv: $(mv -vn "$origfile" "$newfile")"
+}
+
+link_verbosely() {
+    local origfile="$1"
+    local newfile="$2"
+
+    echo "ln: $(ln -vs "$newfile" "$origfile")"
+}
+
+copy_verbosely() {
+    local origfile="$1"
+    local newfile="$2"
+
+    echo "cp: $(cp -vn "$origfile" "$newfile")"
+}
+
+remove_verbosely() {
+    local origfile="$1"
+
+    echo "rm: $(rm -v "$origfile")"
+}
