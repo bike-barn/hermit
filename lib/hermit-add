@@ -131,17 +131,18 @@ do
 
         if [ "$REDACTING" = "true" ]
         then
-            redactfile="${newfile}.redacted"
-            secretfile="${newfile}.${SECRETS_SUFFIX}"
+            completefile="$newfile"
+            redactfile="${completefile}.redacted"
+            secretfile="${completefile}.${SECRETS_SUFFIX}"
 
-            copy_verbosely "$newfile" "$redactfile"
+            copy_verbosely "$completefile" "$redactfile"
 
             ${EDITOR:-editor} "$redactfile"
 
-            diff -u "$redactfile" $"newfile" > "$secretfile"
+            diff -u "$redactfile" $"completefile" > "$secretfile"
 
-            echo "Ignoring original file ${newfile#~/} secret file ${secretfile#~/}"
-            hermit_ignore_files "$newfile" "$secretfile"
+            echo "Ignoring original file ${completefile#~/} secret file ${secretfile#~/}"
+            hermit_ignore_files "$completefile" "$secretfile"
 
         fi
 
