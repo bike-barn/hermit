@@ -39,8 +39,19 @@ check-hermit-profile
 source $(dirname $0)/utilities
 
 
+REDACTING=false
+
 for file in $@
 do
+    if [ "$file" = "-r" ]
+    then
+        REDACTING=true
+        continue
+    elif [ "$file" != "${file#--redact=}" ]
+    then
+        REDACTING=true
+        file="${file#--redact=}"
+    fi
 
     file="$(absolute_path "$file")"
 
@@ -90,7 +101,11 @@ do
                 fi
 
             fi
-            hermit_do_redaction "$newfile"
+
+            if [ "$REDACTING" = "true" ]
+            then
+                hermit_do_redaction "$newfile"
+            fi
 
         elif [ -f "$origfile" ]
         then
@@ -101,4 +116,5 @@ do
         fi
 
     done
+    REDACTING=false
 done
