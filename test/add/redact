@@ -31,7 +31,6 @@ if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE -o \
      \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_complete -o \
      \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_secrets ]
 then
-    echo "One of the files ${FILE}, ${FILE}.complete, ${FILE}.hermit_secrets is missing."
     ls $HOME/.hermit/profiles/$TEST_PROFILE_NAME/{${FILE},${FILE}.hermit_complete,${FILE}.hermit_secrets} 2>&1 >/dev/null
     exit 1
 fi
