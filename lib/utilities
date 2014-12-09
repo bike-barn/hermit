@@ -54,11 +54,6 @@ hermit_do_redaction() {
 
     git add "$redactfile"
 
-    echo "Ignoring original file and secret file: ${completefile#~/}, ${secretfile#~/}"
-    hermit_ignore_files "$completefile" "$secretfile"
-
-    git add ".gitignore"
-
     popd >/dev/null 2>&1
 
     echo "Relinking the original file to point at the complete file."
