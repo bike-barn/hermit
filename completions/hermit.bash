@@ -12,4 +12,4 @@ _hermit() {
     fi
 }
 
-complete -F _hermit hermit
+complete -o nospace -F _hermit hermit
