@@ -29,6 +29,7 @@ echo
 
 pushd $HERMIT_PROFILE_PATH >/dev/null 2>/dev/null
 
+echo "Git status:"
 git status
 
 popd >/dev/null 2>/dev/null
