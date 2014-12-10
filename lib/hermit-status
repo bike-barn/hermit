@@ -23,6 +23,8 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+source $(dirname $0)/utilities
+
 echo "Current profile: $HERMIT_PROFILE"
 echo "Located at: $HERMIT_PROFILE_PATH"
 echo
