@@ -87,7 +87,7 @@ Some useful hermit commands are:
    status      Display the status of your hermit
    use         Switch to using a different profile
    add         Add files to your hermit directory
-   update      Redact files already stored in git
+   update      Update redacted files already stored in git
 
 See `hermit help <command>' for information on a specific command.
 ```

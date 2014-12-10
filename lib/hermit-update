@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Summary: Redact files already stored in git
+# Summary: Update redacted files already stored in git
 # Usage: hermit update [[-r|--redact=] <filepattern>…]
 #
 # Update takes a path (or paths) to some files or directories in your
