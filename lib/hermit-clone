@@ -60,7 +60,7 @@ then
 
     for file in $enc_secrets
     do
-        gpg --output ${file%$ENCRYPTED_SECRETS_SUFFIX} -d $file
+        gpg --output ${file%.$ENCRYPTED_SECRETS_SUFFIX} -d $file
     done
 fi
 
