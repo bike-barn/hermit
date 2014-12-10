@@ -37,16 +37,14 @@ do
 
     if git diff --quiet "$redactfile"
     then
-        intermediatefile="${redactfile}.intermediate"
-
-        copy_verbosely "$completefile" "$intermediatefile"
-
-        # Rev. patch the intermediate file.  This preserves
-        # changes, but removes known secrets.
-        patch -R "$intermediatefile" "$secretfile"
-
         remove_verbosely "$redactfile"
-        move_verbosely "$intermediatefile" "$redactfile"
+
+        copy_verbosely "$completefile" "$redactfile"
+
+        # Rev. patch the redact file.  This preserves
+        # changes, but removes known secrets.
+        patch -R "$redactfile" "$secretfile"
+
     else
         echo >&2 "hermit: Changes were made to $redactfile"
         echo >&2 "        Please only make changes to $completefile"
