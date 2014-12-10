@@ -29,6 +29,32 @@ echo
 
 pushd $HERMIT_PROFILE_PATH >/dev/null 2>/dev/null
 
+redacted_files=$(find "$HERMIT_PROFILE_PATH" -type d -name .git -prune -o -type f -name '*.'${COMPLETE_SUFFIX} -print)
+
+for file in $redacted_files
+do
+    redactfile="${file%.${COMPLETE_SUFFIX}}"
+
+    if git diff --quiet "$redactfile"
+    then
+        intermediatefile="${redactfile}.intermediate"
+
+        copy_verbosely "$completefile" "$intermediatefile"
+
+        # Rev. patch the intermediate file.  This preserves
+        # changes, but removes known secrets.
+        patch -R "$intermediatefile" "$secretfile"
+
+        remove_verbosely "$redactfile"
+        move_verbosely "$intermediatefile" "$redactfile"
+    else
+        echo >&2 "hermit: Changes were made to $redactfile"
+        echo >&2 "        Please only make changes to $completefile"
+        echo >&2
+    fi
+
+done
+
 echo "Git status:"
 git status
 
