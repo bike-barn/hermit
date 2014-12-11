@@ -54,4 +54,47 @@ then
     exit 1
 fi
 
+# In addition to doing an add and creating the redaction files, the
+# redaction files should have specific content.
+set -e
+cat >$HOME/$FILE.cmp <<EOF
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum."
+EOF
+diff $HOME/$FILE.cmp $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE
+
+cat >$HOME/$FILE.complete.cmp <<EOF
+"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+massive secret stuff
+minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+aliquip ex ea commodo consequat. Duis aute irure dolor in
+reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+more secret, secret, secret
+pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum."
+EOF
+diff $HOME/$FILE.complete.cmp $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_complete
+
+cat >$HOME/$FILE.secrets.cmp <<EOF
+@@ -1,7 +1,9 @@
+ "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+ eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
++massive secret stuff
+ minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+ aliquip ex ea commodo consequat. Duis aute irure dolor in
+ reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
++more secret, secret, secret
+ pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+ culpa qui officia deserunt mollit anim id est laborum."
+EOF
+# Skip the diff header because it has timestamps that will change
+tail -n+3 $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE.hermit_secrets > $HOME/$FILE.secrets.test
+diff $HOME/$FILE.secrets.cmp $HOME/$FILE.secrets.test
+
 exit $RET
