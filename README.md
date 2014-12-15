@@ -4,14 +4,23 @@ Hermit
 Bring your home with you
 ------------------------
 
-Hermit is a home directory configuration management tool. Inspired
-originally by [Briefcase] but also heavily borrows from awesome tools
-like [rbenv], and [nvm]. It's (going to be) like having profiles for
-your shell environments. Or, it just helps manage your home directory
-being under version control.
+Hermit is a home directory configuration management tool that
+facilitates moving between different computers without losing your
+shell.
 
-_Hermit is currently alpha software. I use it and we have some
-tests, but there may be bugs._
+Hermit was originally inspired by [Briefcase] which solves the same
+problem.  However, Briefcase is written in Ruby.  We wanted something
+more trivially portable. Since your shell configuration is so basic,
+it seemed like having minimal dependencies would be a good
+thing. Currently Hermit is dependent on the bash shell, but we hope to
+make it depend solely on POSIX shell capabilities to maximize
+portability.
+
+The code infrastructure is heavily borrowed from the awesome shell
+tools [rbenv], and [nvm].
+
+_Hermit is currently alpha software. I use it and we have a reasonable
+number of tests, but there may (will!) be bugs._
 
 [![Build Status](https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master)](https://travis-ci.org/RadicalZephyr/hermit)
 [![Crabs harmed](http://img.shields.io/badge/crabs_harmed-0-blue.svg)](http://shields.io/)
