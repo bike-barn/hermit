@@ -33,7 +33,11 @@ number of tests, but there may (will!) be bugs._
 Philosophy
 ----------
 
-Hermit aims to be an assistant, it's not trying to run the show. As a
+Hermit is dependent on Git for much of it's functionality. In theory
+any version control system could be used, but there has been no
+provision for making it easy to make such a switch.
+
+Hermit aims to be an assistant; it's not trying to run the show. As a
 consequence, Hermit will never actually commit anything to your
 profile repository. Instead - like the perfect office assistant -
 Hermit will prepare everything for you, and then let you decide
