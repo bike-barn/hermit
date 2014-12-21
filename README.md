@@ -87,9 +87,10 @@ like this to your shell init file:
 Usage
 -----
 
-Still working on this... Try checking out the
-[docs folder][hermit-docs] or running `hermit help`:
+Still working on this... Check out the [tutorial], or peruse the
+[docs folder][hermit-docs] or run `hermit help`.
 
+[tutorial]: https://github.com/RadicalZephyr/hermit/tree/master/doc/tutorial.md
 [hermit-docs]: https://github.com/RadicalZephyr/hermit/tree/master/doc
 
 
