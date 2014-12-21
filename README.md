@@ -34,6 +34,18 @@ number of tests, but there may (will!) be bugs._
 [rbenv]: https://github.com/sstephenson/rbenv
 [nvm]: https://github.com/creationix/nvm
 
+The Problem
+-----------
+
+Hermit aims to alleviate three separate but related problems related
+to keeping
+
+- Keeping your
+
+<sub>This section was inspired by David Nolen's talk given to
+[Hacker School][HS] about "Solution Oriented Language."</sub>
+
+[HS]: https://www.hackerschool.com/
 
 Philosophy
 ----------
