@@ -6,7 +6,7 @@ Bring your home with you
 
 Hermit is a home directory configuration management tool that
 facilitates moving between different computers without losing your
-shell.
+shell (configurations).
 
 Hermit was originally inspired by [Briefcase] which solves the same
 problem.  However, Briefcase is written in Ruby.  We wanted something
