@@ -1,12 +1,12 @@
 Hermit
 ======
 
-<img src="http://www.zephyrizing.net/hermit/images/hermit-crab.png"
- alt="Hermit Logo" title="The Crab" align="right" />
-
 
 Bring your home with you
 ------------------------
+
+<img src="http://www.zephyrizing.net/hermit/images/hermit-crab.png"
+ alt="Hermit Logo" title="The Crab" align="right" />
 
 Hermit is a home directory configuration management tool that
 facilitates moving between different computers without losing your
