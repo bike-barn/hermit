@@ -1,0 +1,18 @@
+Documentation Comments:
+
+1) Unclear by what first sentence of READ.ME means. It would be really
+useful to have a couple of sentences elaborating on what exactly this
+does in a different way. Also, why is hermit good? It seems like
+Hermit allows you to port shell configurations between machines, which
+is super useful and convenient, so you should say something like that!
+
+2) I'm a little confused on how Hermit interacts with git
+
+4) Overall documentation was clear and concisely written. I would
+recommend cleaning up the "redacting" section. It might be useful to
+create a section where you are explaining the concept of redacting and
+then how it relates to Hermit, which is currently combined into one
+section.
+
+Hermit sounds awesome! Great work! I hope to eventually be cool enough
+to use it :)

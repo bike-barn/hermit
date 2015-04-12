@@ -1,0 +1,8 @@
+In /doc/ -- "redacting" is jarring by being in a different form
+(gerund) rather than the imperative, e.g. "add", "clone", "use"
+
+The explanations/help re individual commands like "add" and "clone"
+would be better with examples.
+
+"Update is the equivalent of staging files in git." I do not know what
+that means.
