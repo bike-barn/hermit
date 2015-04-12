@@ -1,6 +1,10 @@
 Hermit
 ======
 
+<img src="http://www.zephyrizing.net/hermit/images/hermit-crab.png"
+ alt="Hermit Logo" title="The Crab" align="right" />
+
+
 Bring your home with you
 ------------------------
 
