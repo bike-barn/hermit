@@ -42,9 +42,12 @@ The Problem
 -----------
 
 Hermit aims to alleviate three separate but related problems related
-to keeping
+to keeping your dotfiles under source control.
 
-- Keeping your
+1) Not having the source control directory in your home root
+2) Facilitating sym-link management because of #1
+3) Having secret information in your dotfiles that is NOT committed to
+   git
 
 <sub>This section was inspired by David Nolen's talk given to
 [Hacker School][HS] about "Solution Oriented Language."</sub>
