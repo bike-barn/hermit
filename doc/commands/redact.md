@@ -8,7 +8,8 @@ When you run `hermit add` you can prefix any file or directory name
 with either a `-r ` or a `--redact=` and hermit will allow you to
 redact these files. This means that you get a chance to edit them, and
 then hermit looks at the differences between the original and
-"redacted" files.
+"redacted" files. The idea is that you will manually "redact" the
+secret portions of the file by deleting them.
 
 If you've made changes, then hermit will offer to encrypt the secret
 portion in a special "secrets" file. Then, the non-secret portion of
