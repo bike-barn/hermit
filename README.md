@@ -23,8 +23,8 @@ _Hermit is currently alpha software. I use it and we have a reasonable
 number of tests, but there may (will!) be bugs._
 
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
-[![Build Status][badge-build](https://travis-ci.org/RadicalZephyr/hermit)
-[![Crabs harmed][badge-crabs](http://shields.io/)
+[![Build Status][badge-build]](https://travis-ci.org/RadicalZephyr/hermit)
+[![Crabs harmed][badge-crabs]](http://shields.io/)
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
 [badge-build]: https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master
