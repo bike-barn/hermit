@@ -50,9 +50,9 @@ to keeping your dotfiles under source control.
    git
 
 <sub>This section was inspired by David Nolen's talk given to
-[Hacker School][HS] about "Solution Oriented Language."</sub>
+[The Recurse Center][RC] about "Solution Oriented Language."</sub>
 
-[HS]: https://www.hackerschool.com/
+[RC]: https://www.recursecenter.com/
 
 Philosophy
 ----------
