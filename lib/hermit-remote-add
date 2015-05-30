@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+#
+# Summary: Add git remote for hermit profile
+# Usage: hermit remote-add [remote name] <remote address>
+#
+# This simply sets the current profiles git remote to the 
+# address specified. Remote is named origin by default unless otherwise 
+# specified.
+#
+# Copyright 2015, Aaron Griffin
+
+# This file is part of Hermit.
+
+# Hermit is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Hermit is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+[ -n "$HERMIT_DEBUG" ] && set -x
+
+check-git-config
+check-hermit-profile
+
+source $(dirname $0)/utilities
+
+echo "Current profile: $HERMIT_PROFILE"
+echo "Located at: $HERMIT_PROFILE_PATH"
+echo
+
+pushd $HERMIT_PROFILE_PATH >/dev/null 2>/dev/null
+
+if [ -n "$1" ]; then
+  if [ -n "$2" ]; then
+    echo "Adding remote $1 $2"
+    git remote add $1 $2
+  else
+    echo "Adding remote origin $1"
+    git remote add origin $1
+  fi
+else
+  echo "hermit: remote-add: no remote address specified"
+fi
