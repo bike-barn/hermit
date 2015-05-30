@@ -101,15 +101,8 @@ print_summary() {
   local summary usage help
   eval "$(documentation_for "$command")"
 
-  # Max number of characters we can print in summary without passing 80 total
-  summary_max=$(expr 80 - 9 - ${#command})
-
   if [ -n "$summary" ]; then
-    if [ "${#summary}" -gt "$summary_max" ]; then
-      printf "   %-20s   %s...\n" "hermit $command" "${summary:0:$summary_max}"
-    else
-      printf "   %-20s   %s\n" "hermit $command" "$summary"
-    fi
+    printf "   %-20s   %s\n" "hermit $command" "$summary"
   fi
 }
 
