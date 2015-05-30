@@ -101,8 +101,15 @@ print_summary() {
   local summary usage help
   eval "$(documentation_for "$command")"
 
+  # Max number of characters we can print in summary without passing 80 total
+  summary_max=$(expr 80 - 9 - ${#command})
+
   if [ -n "$summary" ]; then
-    printf "   %-9s   %s\n" "$command" "$summary"
+    if [ "${#summary}" -gt "$summary_max" ]; then
+      printf "   %-20s   %s...\n" "hermit $command" "${summary:0:$summary_max}"
+    else
+      printf "   %-20s   %s\n" "hermit $command" "$summary"
+    fi
   fi
 }
 
@@ -153,7 +160,7 @@ if [ -z "$1" ] || [ "$1" == "hermit" ]; then
   [ -z "$usage" ] || exit
   echo
   echo "Some useful hermit commands are:"
-  print_summaries commands init clone status use add update
+  print_summaries commands init clone status use add update --version
   echo
   echo "See \`hermit help <command>' for information on a specific command."
   echo "For full documentation, see: https://github.com/radicalzephyr/hermit#readme"
