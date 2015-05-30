@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-source ../.install-environment
-
-# Run the install test with the default HERMIT_DIR location
-export INSTALL_DIR="$HOME/.hermit"
-
-exec ./.do-install

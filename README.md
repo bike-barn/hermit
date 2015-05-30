@@ -72,31 +72,9 @@ and helps you avoid accidentally committing any secrets.
 Install
 -------
 
-### Install script
+### Use Git
 
-To install you could use the [install script] using cURL:
-
-    curl https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
-
-or Wget:
-
-    wget -qO- https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
-
-<sub>[The script][install script] clones the Hermit repository to
-`~/.hermit` and adds the source line to your profile
-(`~/.bash_profile`, `~/.zshrc` or `~/.profile`).</sub>
-
-You can customize the install source, directory and profile
-respectively using the `HERMIT_SOURCE`, `HERMIT_DIR` and `PROFILE`
-variables: Eg: `curl ... | HERMIT_DIR=/usr/local/hermit sh` for a
-global install.
-
-
-[install script]: https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh
-
-### Manual Install
-
-Just clone the hermit repository with `git`.
+You're going to need `git` to make use of `hermit`, so just clone the repo.
 
     git clone git@github.com:RadicalZephyr/hermit.git ~/.hermit
 
