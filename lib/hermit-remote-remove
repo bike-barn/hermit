@@ -41,6 +41,6 @@ if [ -n "$1" ]; then
   echo "Removing remote $1"
   git remote remove $1
 else
-  echo "Remote remote origin"
+  echo "Remote remove origin"
   git remtoe remove origin
 fi
