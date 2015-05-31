@@ -39,6 +39,10 @@ set -e
 check-git-config
 check-hermit-profile
 
+if [ "$1" = "--complete" ]; then
+    exit
+fi
+
 source $(dirname $0)/utilities
 
 

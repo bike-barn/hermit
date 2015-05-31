@@ -23,6 +23,10 @@
 set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
+if [ "$1" = "--complete" ]; then
+    exit
+fi
+
 check-git-config
 
 # Check for extraneous arguments and exit with an error if they exist.
