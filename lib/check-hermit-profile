@@ -19,6 +19,7 @@
 
 if [ \! -d $HERMIT_PROFILE_PATH ]
 then
-    echo "Your profile hasn't been initialized yet, try running `hermit init`"
+    echo "Your profile hasn't been initialized yet, try" \
+         "running 'hermit init'"
     exit 1
 fi
