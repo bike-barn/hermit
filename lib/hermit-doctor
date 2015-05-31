@@ -45,4 +45,23 @@ else
     :
 fi
 
-for ignore_file in "$HERMIT_ROOT/profiles/*/.gitignore"
+for profile_dir in "$HERMIT_ROOT/profiles/*"
+do
+    if [ -d "$profile_dir" ]; then
+        ignore_file="$profile_dir/.gitignore"
+        if [ -f "$ignore_file" ]; then
+           if grep -E '\*.hermit_(secrets|complete)' profiles/default/.gitignore > /dev/null 2>&1; then
+               : # properly ignored
+           else
+               : # missing ignores in profile
+           fi
+        fi
+    else
+        echo "Non-directory file" \
+             "${profile_dir#$HERMIT_ROOT/profiles/}"
+        echo "found in profiles directory."
+    fi
+
+done
+
+# Do printing of profiles missing ignores here
