@@ -4,4 +4,17 @@ source ../.environment
 
 $HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
 
-# What is the correct behavior for trying to add a symbolic link?
+FILE=.testfile
+ln -s nowhere $HOME/$FILE
+
+$HOME/.hermit/bin/hermit add $HOME/$FILE
+
+RET=$?
+
+if [ -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE ]
+then
+    echo "The symlink was erroneously added to the profile."
+    exit 1
+fi
+
+exit $RET
