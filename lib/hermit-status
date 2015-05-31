@@ -29,6 +29,8 @@ fi
 
 source $(dirname $0)/utilities
 
+check-hermit-profile
+
 echo "Current profile: $HERMIT_PROFILE"
 echo "Located at: $HERMIT_PROFILE_PATH"
 echo
