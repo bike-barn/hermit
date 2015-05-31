@@ -37,6 +37,7 @@ if [ -d "$HERMIT_ROOT" ]; then
     :
 else
     :
+    exit 1
 fi
 
 if [ -d "$HERMIT_PROFILE_PATH" ]; then
