@@ -86,7 +86,15 @@ do
     do
         newfile="$(hermit_relative_path "$origfile")"
 
-        if [ -f $newfile ]
+        if [ -L "$origfile" ]
+        then
+            echo "Skipping, ${origfile#~/} is a symbolic link."
+            echo
+            echo "Things get pretty confusing if you add"
+            echo "symbolic links to hermit."
+            echo
+            continue
+        elif [ -f "$newfile" ]
         then
             echo "${origfile#~/} is already in your hermit!"
             continue
