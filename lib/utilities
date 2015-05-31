@@ -118,3 +118,13 @@ remove_verbosely() {
 
     echo "rm: $(rm -v "$origfile" 2>&1)"
 }
+
+check-hermit-profile() {
+    if [ \! -d $HERMIT_PROFILE_PATH ]
+    then
+        echo "Your profile hasn't been initialized yet, try" \
+             "running 'hermit init'"
+        return 1
+    fi
+    return 0
+}
