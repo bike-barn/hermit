@@ -40,7 +40,7 @@ set -e
 # Provide hermit completions
 if [ "$1" = "--complete" ]; then
     profile_dir="$HERMIT_ROOT/profiles"
-    find "$profile_dir" -type d -depth 1 | cut -c$((${#profile_dir}+2))-
+    find "$profile_dir" -maxdepth 1 -type d | cut -c$((${#profile_dir}+2))-
 
     exit
 fi
