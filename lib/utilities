@@ -128,3 +128,18 @@ check-hermit-profile() {
     fi
     return 0
 }
+
+check-git-config() {
+    if git config --global user.name  > /dev/null &&
+       git config --global user.email > /dev/null
+    then
+        :
+    else
+        echo -e 'Please set your git name and email with:\n
+  git config --global user.name "Your Name"
+  git config --global user.email "you@example.com"'
+        echo
+        return 1
+    fi
+    return 0
+}
