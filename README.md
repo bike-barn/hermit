@@ -57,9 +57,16 @@ to keeping your dotfiles under source control.
 Philosophy
 ----------
 
-Hermit is dependent on Git for much of it's functionality. In theory
-any version control system could be used, but there has been no
-provision for making it easy to make such a switch.
+Hermit is dependent on Git for much of it's functionality. In fact, if
+you don't know how to use Git, Hermit won't be very useful for
+you. This is because Hermit as a tool fundamentally collaborates with
+Git.
+
+Hermit commands are mostly wrappers around the corresponding Git
+commands. But Hermit always adds some extra behavior on top of what
+Git normally does. As a convenience, Hermit also provides a way to run
+arbitrary Git commands against your dotfiles repository without
+`cd`ing to that directory.
 
 Hermit aims to be an assistant; it's not trying to run the show. As a
 consequence, Hermit will never actually commit anything to your
