@@ -74,7 +74,8 @@ Install
 
 ### Use Git
 
-You're going to need `git` to make use of `hermit`, so just clone the repo.
+You're going to need `git` to make use of `hermit`, so just make sure
+you have `git` [installed][install-git] and then clone the repo.
 
     git clone git@github.com:RadicalZephyr/hermit.git ~/.hermit
 
@@ -82,6 +83,8 @@ Now, you need to have `~/.hermit/bin` on your path, so add something
 like this to your shell init file:
 
     export PATH="$PATH":~/.hermit/bin
+
+[install-git]: https://git-scm.com/book/en/v1/Getting-Started-Installing-Git
 
 Usage
 -----
