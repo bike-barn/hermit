@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init
+
+FILE=.testfile
+
+touch $HOME/$FILE
+
+$HOME/.hermit/bin/hermit add $HOME/$FILE
+
+$HOME/.hermit/bin/hermit link # This is wrong. The flow should *not*
+                              # be that you init, add, and then need
+                              # to explicitly link your profile
+$HOME/.hermit/bin/hermit use default

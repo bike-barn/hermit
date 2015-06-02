@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init
+
+FILE=.testfile
+
+touch $HOME/$FILE
+
+$HOME/.hermit/bin/hermit add $HOME/$FILE
+
+$HOME/.hermit/bin/hermit link
+$HOME/.hermit/bin/hermit unlink
