@@ -1,5 +1,0 @@
-
-# Make home the full path to TESTDIR
-export HOME=$(cd $TESTDIR; pwd)
-export PROFILE=$HOME/.profile
-touch $PROFILE
