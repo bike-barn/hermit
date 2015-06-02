@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+$HOME/.hermit/bin/hermit git --version
+
+RET=$?
+
+exit $RET
