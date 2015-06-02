@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit doctor
