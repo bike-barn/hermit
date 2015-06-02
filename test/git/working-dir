@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+
+DIR="$($HOME/.hermit/bin/hermit git rev-parse --show-toplevel | tail -n 1)"
+
+if [ "$DIR" = $HOME/.hermit/profiles/$TEST_PROFILE_NAME ]; then
+  exit 0
+else
+  exit 1
+fi
