@@ -120,6 +120,9 @@ Checkout
 [the feature checklist](https://github.com/RadicalZephyr/hermit/issues/12) for
 the latest status.
 
+We also have a [Trello organization](https://trello.com/hermit4) for those so
+inclined.
+
 
 License
 -------
