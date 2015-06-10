@@ -29,8 +29,25 @@ fi
 
 cd "$HERMIT_ROOT"
 
-git fetch --all
+# Get a remote name we can use, defaulting to origin
+if git remote | grep origin >/dev/null 2>&1; then
+    remote=origin
+else
+    remote=$(git remote | head -n1)
+fi
 
-git checkout origin/master
+# Ensure that we can fetch all refs from this remote
+old_fetch=$(git config remote.${remote}.fetch)
+git config remote.${remote}.fetch "+refs/heads/*:refs/remotes/${remote}/*"
 
+# Specifically fetch master from our chosen remote
+git fetch $remote master
+
+# Update to the bleeding edge
+git checkout $remote/master
+
+# Revert to the latest release
 git checkout $(git describe HEAD --abbrev=0)
+
+#restore old fetch settings
+git config remote.${remote}.fetch "$old_fetch"
