@@ -119,12 +119,12 @@ do
     # Check for a symlink
     if [ -L "$basefile" ]
     then
-        if [ "$($READLINK $basefile)" = "$file" ]
+        if [ "$($READLINK $basefile)" = "$PWD/$file" ]
         then
-            echo "$file is already linked!"
+            echo "$file is already linked"
         else
             echo "There is already a symbolic link at $basefile"
-            echo "But it doesn't point to $file."
+            echo "But it doesn't point to $PWD/$file"
         fi
         continue
 
