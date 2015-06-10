@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# Summary: Upgrade gets you the latest released version of hermit
+# Usage: hermit upgrade
+
+# Copyright 2015, Geoff Shannon
+
+# This file is part of Hermit.
+
+# Hermit is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# Hermit is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with Hermit. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+[ -n "$HERMIT_DEBUG" ] && set -x
+
+if [ "$1" = "--complete" ]; then
+    exit
+fi
+
+cd "$HERMIT_ROOT"
+
+git fetch --all
+
+git checkout origin/master
+
+git checkout $(git describe HEAD --abbrev=0)
