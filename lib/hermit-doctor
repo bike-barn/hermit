@@ -45,7 +45,7 @@ if pushd "$HERMIT_ROOT" >/dev/null 2>&1; then
     git fetch --all >/dev/null 2>&1
 
     if git describe --exact-match >/dev/null 2>&1; then
-        echo "You're using a released version of hermit."
+        echo -n "You're using a released version of hermit: "
         git describe --exact-match
         echo
     else
@@ -82,7 +82,7 @@ needs_ignore_message() {
     echo
 }
 
-for profile_dir in "$HERMIT_ROOT/profiles/*"
+for profile_dir in "$HERMIT_ROOT"/profiles/*
 do
     if [ -d "$profile_dir" ]; then
         ignore_file="$profile_dir/.gitignore"
@@ -90,16 +90,14 @@ do
            if grep -E '\*.hermit_(secrets|complete)' profiles/default/.gitignore > /dev/null 2>&1; then
                : # properly ignored
            else
-               echo -n "The hermit profile $(basename $1)"
+               echo -n "The hermit profile $(basename $profile_dir)"
                echo " does not properly ignore hermit special files."
-               echo
                needs_ignore_message "$profile_dir"
            fi
         else
-            echo -n "The hermit profile $(basename $1)"
+            echo -n "The hermit profile $(basename $profile_dir)"
             echo " has no .gitignore and does not properly ignore"
             echo "hermit special files."
-            echo
             needs_ignore_message "$profile_dir"
         fi
     else
