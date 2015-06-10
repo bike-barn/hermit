@@ -77,6 +77,9 @@ pushd 2>&1 >/dev/null "$HERMIT_PROFILE_PATH"
     # Print out all .hignore files a second time so we ignore them
     find . -type f -name .hignore
 
+    # Print out all .git directories so we ignore them
+    find . -type d -name .git
+
     # Concatenate a listing of all .hignore files, with the path to the
     # ignore file it came from prefixed to each pattern
     {
