@@ -81,7 +81,7 @@ pushd 2>&1 >/dev/null "$HERMIT_PROFILE_PATH"
     # ignore file it came from prefixed to each pattern
     {
         # Process all directories with a .hignore file
-        find -X . -type f -name .hignore | xargs -n1 dirname |
+        find . -type f -name .hignore | xargs -n1 dirname 2>/dev/null |
         while read dir
         do
             # Prefix the contents of each .hignore file with the path
@@ -93,7 +93,7 @@ pushd 2>&1 >/dev/null "$HERMIT_PROFILE_PATH"
         # patterns from all .hignore files. Using find and the -path
         # option allows us to respect the relative placement of each
         # pattern in the directory hiearchy.
-    } | xargs -n1 find . -type d -name .git -prune -o -type f -path
+    } | xargs -n1 find . -type d -name .git -prune -o -type f -path 2>/dev/null
 
     # Now, sort and then print only the unique lines.  This works
     # because anything that matched an ignored pattern was printed
