@@ -40,6 +40,20 @@ else
     exit 1
 fi
 
+if pushd "$HERMIT_ROOT" >/dev/null 2>&1; then
+    if git describe --exact-match >/dev/null 2>&1; then
+        echo "You're using a released version of hermit."
+        git describe --exact-match
+        echo
+    else
+        echo "You're using a bleeding edge hermit!"
+        echo "I hope you know what you're doing\!"
+        echo
+    fi
+
+    popd >/dev/null 2>&1
+fi
+
 if [ -d "$HERMIT_PROFILE_PATH" ]; then
     :
 else
