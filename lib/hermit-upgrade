@@ -44,10 +44,12 @@ git config remote.${remote}.fetch "+refs/heads/*:refs/remotes/${remote}/*"
 git fetch $remote master
 
 # Update to the bleeding edge
-git checkout $remote/master
+git checkout $remote/master >/dev/null 2>&1
 
 # Revert to the latest release
-git checkout $(git describe HEAD --abbrev=0)
+git checkout $(git describe HEAD --abbrev=0) >/dev/null 2>&1
 
 #restore old fetch settings
 git config remote.${remote}.fetch "$old_fetch"
+
+echo "You are now using hermit:" $(git describe HEAD --exact-match)
