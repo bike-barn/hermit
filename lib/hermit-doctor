@@ -33,10 +33,11 @@ fi
 echo "Sanity checking your Hermit config..."
 echo
 
-if [ -d "$HERMIT_ROOT" ]; then
+if [ -n "$HERMIT_ROOT" -a -d "$HERMIT_ROOT" ]; then
     :
 else
-    :
+    echo "Your HERMIT_ROOT environment variable is set incorrectly."
+    echo "$HERMIT_ROOT is not an existing directory."
     exit 1
 fi
 
