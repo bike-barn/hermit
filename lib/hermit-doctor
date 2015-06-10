@@ -69,6 +69,11 @@ else
     echo
 fi
 
+needs_ignore_message() {
+    echo "Please add '*.hermit_secrets' and '*.hermit_complete'."
+    echo
+}
+
 for profile_dir in "$HERMIT_ROOT/profiles/*"
 do
     if [ -d "$profile_dir" ]; then
@@ -77,8 +82,17 @@ do
            if grep -E '\*.hermit_(secrets|complete)' profiles/default/.gitignore > /dev/null 2>&1; then
                : # properly ignored
            else
-               : # missing ignores in profile
+               echo -n "The hermit profile $(basename $1)"
+               echo " does not properly ignore hermit special files."
+               echo
+               needs_ignore_message "$profile_dir"
            fi
+        else
+            echo -n "The hermit profile $(basename $1)"
+            echo " has no .gitignore and does not properly ignore"
+            echo "hermit special files."
+            echo
+            needs_ignore_message "$profile_dir"
         fi
     else
         echo "Non-directory file" \
@@ -87,5 +101,3 @@ do
     fi
 
 done
-
-# Do printing of profiles missing ignores here
