@@ -55,10 +55,18 @@ if pushd "$HERMIT_ROOT" >/dev/null 2>&1; then
     popd >/dev/null 2>&1
 fi
 
-if [ -d "$HERMIT_PROFILE_PATH" ]; then
-    :
+if [ -n "$HERMIT_PROFILE_PATH" ]; then
+    if [ -d "$HERMIT_PROFILE_PATH" ]; then
+        :
+    else
+        echo "Your hermit profile directory does not exist!"
+        echo "This is okay if you deleted it manually."
+        echo
+
+    fi
 else
-    :
+    echo "Something is wrong. HERMIT_PROFILE_PATH is unset or blank."
+    echo
 fi
 
 for profile_dir in "$HERMIT_ROOT/profiles/*"
