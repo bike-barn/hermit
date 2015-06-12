@@ -28,10 +28,12 @@ number of tests, but there may (will!) be bugs._
 
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
 [![Build Status][badge-build]](https://travis-ci.org/RadicalZephyr/hermit)
+[![Stories in Ready][badge-ready]](https://waffle.io/RadicalZephyr/hermit)
 [![Crabs harmed][badge-crabs]](http://shields.io/)
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
 [badge-build]: https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master
+[badge-ready]: https://badge.waffle.io/RadicalZephyr/hermit.png?label=ready&title=Ready
 [badge-crabs]: http://img.shields.io/badge/crabs_harmed-0-blue.svg
 
 [Briefcase]: https://github.com/jim/briefcase
