@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/RadicalZephyr/hermit.png?label=ready&title=Ready)](https://waffle.io/RadicalZephyr/hermit)
 Hermit
 ======
 
