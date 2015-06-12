@@ -40,8 +40,7 @@ TO_PROFILE="$1"
 
 # First check if the name given is a directory under
 # $HERMIT_ROOT/profiles.
-if [ \! -d "$HERMIT_ROOT/profiles/$TO_PROFILE" ]
-then
+if [ \! -d "$HERMIT_ROOT/profiles/$TO_PROFILE" ]; then
     echo "$TO_PROFILE is not a valid hermit profile."
     exit 1
 fi

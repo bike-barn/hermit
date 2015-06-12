@@ -44,8 +44,7 @@ for file in $redacted_files
 do
     redactfile="${file%.${COMPLETE_SUFFIX}}"
 
-    if git diff --quiet "$redactfile"
-    then
+    if git diff --quiet "$redactfile"; then
         remove_verbosely "$redactfile"
 
         copy_verbosely "$completefile" "$redactfile"

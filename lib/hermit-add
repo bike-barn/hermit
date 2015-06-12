@@ -68,12 +68,10 @@ REDACTING=false
 
 for file in $@
 do
-    if [ "$file" = "-r" ]
-    then
+    if [ "$file" = "-r" ]; then
         REDACTING=true
         continue
-    elif [ "$file" \!= "${file#--redact=}" ]
-    then
+    elif [ "$file" \!= "${file#--redact=}" ]; then
         REDACTING=true
         file="${file#--redact=}"
     fi
@@ -86,16 +84,14 @@ do
     do
         newfile="$(hermit_relative_path "$origfile")"
 
-        if [ -L "$origfile" ]
-        then
+        if [ -L "$origfile" ]; then
             echo "Skipping, ${origfile#~/} is a symbolic link."
             echo
             echo "Things get pretty confusing if you add"
             echo "symbolic links to hermit."
             echo
             continue
-        elif [ -f "$newfile" ]
-        then
+        elif [ -f "$newfile" ]; then
             echo "${origfile#~/} is already in your hermit!"
             continue
         fi
@@ -104,8 +100,7 @@ do
         move_verbosely "$origfile" "$newfile"
         link_verbosely "$origfile" "$newfile"
 
-        if [ "$REDACTING" = "true" ]
-        then
+        if [ "$REDACTING" = "true" ]; then
             hermit_do_redaction "$newfile"
         fi
 

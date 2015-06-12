@@ -33,8 +33,7 @@ if [ "$1" = "--complete" ]; then
 fi
 
 # Make sure we have at least one argument
-if [ ! $# -ge 1 ]
-then
+if [ ! $# -ge 1 ]; then
     echo "Error: hermit: Too few arguments."
     hermit help clone && exit 1
 fi
@@ -42,8 +41,7 @@ fi
 CLONE_URL="$1"
 
 # Make sure we don't have more than 2 arguments
-if [ ! $# -le 2 ]
-then
+if [ ! $# -le 2 ]; then
     echo "Error: hermit: Too many arguments."
     hermit help clone && exit 1
 fi
@@ -58,8 +56,7 @@ Maybe you should change your HERMIT_PROFILE environment variable..." && exit 1
 
 git clone $CLONE_URL $HERMIT_PROFILE_PATH
 
-if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1
-then
+if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1; then
     enc_secrets=$(find $HERMIT_PROFILE_PATH -type d -name .git -prune -o -type f -name '*.'${ENCRYPTED_SECRETS_SUFFIX} -print)
 
     for file in $enc_secrets

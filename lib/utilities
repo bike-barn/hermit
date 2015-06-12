@@ -6,8 +6,7 @@ hermit_relative_path() {
 absolute_path() {
     local file="$1"
     # Check for absolute or relative path
-    if [ "" != "${file%%/*}" ]
-    then
+    if [ "" != "${file%%/*}" ]; then
         # If it's relative though, we need to assume that it is
         # relative to the current directory
         file="$PWD/$file"
@@ -64,8 +63,7 @@ hermit_do_redaction() {
 
     # Test for existence of gpg command and that the current user has
     # a secret key
-    if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1
-    then
+    if (which gpg && gpg -K $(whoami)) >/dev/null 2>&1; then
         gpg -se -r $(whoami) "$secretfile" \
             --output "${secretfile}.${ENCRYPTED_SECRETS_SUFFIX}" \
             && git add "${secretfile}.gpg"
@@ -83,8 +81,7 @@ hermit_do_redaction() {
 
 files_when_dir() {
     local file="$1"
-    if [ -d "$file" ]
-    then
+    if [ -d "$file" ]; then
         find "$file" -type d -name .git -prune -o -type f -print -o -type l -print
     else
         echo "$file"
@@ -120,8 +117,7 @@ remove_verbosely() {
 }
 
 check-hermit-profile() {
-    if [ \! -d $HERMIT_PROFILE_PATH ]
-    then
+    if [ \! -d $HERMIT_PROFILE_PATH ]; then
         echo "Your profile hasn't been initialized yet, try" \
              "running 'hermit init'"
         return 1
@@ -131,8 +127,7 @@ check-hermit-profile() {
 
 check-git-config() {
     if git config --global user.name  > /dev/null &&
-       git config --global user.email > /dev/null
-    then
+       git config --global user.email > /dev/null; then
         :
     else
         echo -e 'Please set your git name and email with:\n

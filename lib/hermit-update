@@ -50,12 +50,10 @@ REDACTING=false
 
 for file in $@
 do
-    if [ "$file" = "-r" ]
-    then
+    if [ "$file" = "-r" ]; then
         REDACTING=true
         continue
-    elif [ "$file" != "${file#--redact=}" ]
-    then
+    elif [ "$file" != "${file#--redact=}" ]; then
         REDACTING=true
         file="${file#--redact=}"
     fi
@@ -67,8 +65,7 @@ do
     for origfile in $file
     do
 
-        if [ -L "$origfile" ]
-        then
+        if [ -L "$origfile" ]; then
 
             newfile="$(hermit_relative_path "$origfile")"
             link_target=$($READLINK "$origfile")
@@ -78,15 +75,13 @@ do
             secretfile="$(secret_filename "$newfile")"
 
             if [ "$link_target" != "$newfile" -a \
-                 "$link_target" != "$completefile" ]
-            then
+                 "$link_target" != "$completefile" ]; then
                 echo >&2 "hermit: This symlink is not handled by hermit: $origfile"
                 echo >&2
                 continue
             fi
 
-            if [ -f "$completefile" -a -f "$redactfile" -a -f "$secretfile" ]
-            then
+            if [ -f "$completefile" -a -f "$redactfile" -a -f "$secretfile" ]; then
                 intermediatefile="${newfile}.intermediate"
 
                 copy_verbosely "$completefile" "$intermediatefile"
@@ -96,8 +91,7 @@ do
                 patch -R "$intermediatefile" "$secretfile"
 
                 pushd "$HERMIT_PROFILE_PATH" >/dev/null 2>&1
-                if git diff --quiet "$redactfile"
-                then
+                if git diff --quiet "$redactfile"; then
                     remove_verbosely "$redactfile"
                     move_verbosely "$intermediatefile" "$redactfile"
                 else
@@ -109,13 +103,11 @@ do
                 popd >/dev/null 2>&1
             fi
 
-            if [ "$REDACTING" = "true" ]
-            then
+            if [ "$REDACTING" = "true" ]; then
                 hermit_do_redaction "$newfile"
             fi
 
-        elif [ -f "$origfile" ]
-        then
+        elif [ -f "$origfile" ]; then
             echo >&2 "hermit: update only works on files already tracked by hermit."
             echo >&2 "$origfile can be added to hermit with 'hermit add $origfile'"
             echo >&2

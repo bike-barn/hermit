@@ -62,8 +62,7 @@ link_file () {
 
 # Process a potential -f flag
 unset FORCE
-if [ "$1" = "-f" ]
-then
+if [ "$1" = "-f" ]; then
     FORCE="true"
     shift
 fi
@@ -110,17 +109,14 @@ do
     basefile="$HOME/$file"
 
     # Skip all checks if we're forcing it
-    if [ "$FORCE" = "true" ]
-    then
+    if [ "$FORCE" = "true" ]; then
         link_file "$basefile" "$file" "-iF"
         continue
     fi
 
     # Check for a symlink
-    if [ -L "$basefile" ]
-    then
-        if [ "$($READLINK $basefile)" = "$PWD/$file" ]
-        then
+    if [ -L "$basefile" ]; then
+        if [ "$($READLINK $basefile)" = "$PWD/$file" ]; then
             echo "$file is already linked"
         else
             echo "There is already a symbolic link at $basefile"
@@ -130,15 +126,13 @@ do
 
     # Check for a regular file.  Order matters here, -f will match a
     # symlink too!
-    elif [ -f "$basefile" ]
-    then
+    elif [ -f "$basefile" ]; then
         echo "There's a real file at $basefile!"
         echo "We can't create a link there."
         continue
 
     # Check if there is a directory.
-    elif [ -d "$basefile" ]
-    then
+    elif [ -d "$basefile" ]; then
         echo "There's a real directory at $basefile"
         echo "We can't create a link there."
         continue
