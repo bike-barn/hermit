@@ -138,3 +138,21 @@ check-git-config() {
     fi
     return 0
 }
+
+yn-prompt() {
+    local ans
+    local ok=0
+
+    while [ "$ok" = 0 ]
+    do
+        read -p "$1"" (yes/no): " ans
+        ans=$(tr '[:upper:]' '[:lower:]' <<<$ans)
+        [ "$ans" = "y" -o "$ans" = "yes" ]
+        case "$ans" in
+            'y' | 'yes' | 'n' | 'no' ) ok=1 ;;
+            * ) echo "Valid answers are: yes y no n" ;;
+        esac
+    done
+
+    [ "$ok" = 'y' -o "$ok" = 'yes' ]
+}
