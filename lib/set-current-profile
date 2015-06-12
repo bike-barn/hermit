@@ -21,4 +21,4 @@ set -e
 [ -n "$HERMIT_DEBUG" ] && set -x
 
 cd $HERMIT_ROOT
-git config $HERMIT_CURRENT_KEY $HERMIT_PROFILE
+git config $HERMIT_CURRENT_KEY $1
