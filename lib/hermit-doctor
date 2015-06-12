@@ -87,7 +87,8 @@ do
     if [ -d "$profile_dir" ]; then
         ignore_file="$profile_dir/.gitignore"
         if [ -f "$ignore_file" ]; then
-           if grep -E '\*.hermit_(secrets|complete)' profiles/default/.gitignore > /dev/null 2>&1; then
+            if grep -E '\*.hermit_secrets'  $ignore_file > /dev/null 2>&1 \
+            && grep -E '\*.hermit_complete' $ignore_file > /dev/null 2>&1; then
                : # properly ignored
            else
                echo -n "The hermit profile $(basename $profile_dir)"
