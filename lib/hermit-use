@@ -46,7 +46,10 @@ if [ \! -d "$HERMIT_ROOT/profiles/$TO_PROFILE" ]; then
 fi
 
 # Now, unlink all files from the currently active profile (hermit unlink)
-hermit unlink
+
+# We use || true because hermit-unlink fails sometimes, possibly
+# related to using the idiom '| while read'
+hermit unlink || true
 
 # Set the $HERMIT_CURRENT_KEY to the new profile
 set-current-profile $TO_PROFILE
