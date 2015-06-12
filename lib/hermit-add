@@ -78,6 +78,17 @@ do
 
     file="$(absolute_path "$file")"
 
+    if [ "${file#$HERMIT_ROOT}" \!= "${file}" ]; then
+        echo "$file is under HERMIT_ROOT"
+        echo "Things get sort of weird and meta if you add"
+        echo "hermit to your hermit profile."
+        if yn-prompt "Are you sure you want to add it?"; then
+            :
+        else
+            continue
+        fi
+    fi
+
     file="$(files_when_dir "$file")"
 
     for origfile in $file
