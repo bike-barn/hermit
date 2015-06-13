@@ -56,6 +56,6 @@ git commit -m "Initial commit"
 
 popd >/dev/null 2>/dev/null
 
-set-current-profile $HERMIT_PROFILE
+set_current_profile $HERMIT_PROFILE
 
 echo "Congratulations! You now have a brand new hermit located at $HERMIT_PROFILE_PATH."
