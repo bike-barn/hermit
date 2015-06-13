@@ -46,7 +46,7 @@ if [ "$1" = "--complete" ]; then
     exit
 fi
 
-check-hermit-profile
+check_hermit_profile
 
 link_file () {
     basefile="$1"
