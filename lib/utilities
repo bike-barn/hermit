@@ -156,3 +156,16 @@ yn_prompt() {
 
     [ "$ok" = 'y' -o "$ok" = 'yes' ]
 }
+
+get_current_profile() {
+    pushd "$HERMIT_ROOT" >/dev/null 2>&1
+    local profile=$(git config $HERMIT_CURRENT_KEY | head -1)
+    popd >/dev/null 2>&1
+    echo $profile
+}
+
+set_current_profile() {
+    pushd "$HERMIT_ROOT" >/dev/null 2>&1
+    git config $HERMIT_CURRENT_KEY $1
+    popd >/dev/null 2>&1
+}
