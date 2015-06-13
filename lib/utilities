@@ -116,7 +116,7 @@ remove_verbosely() {
     echo "rm: $(rm -v "$origfile" 2>&1)"
 }
 
-check-hermit-profile() {
+check_hermit_profile() {
     if [ \! -d $HERMIT_PROFILE_PATH ]; then
         echo "Your profile hasn't been initialized yet, try" \
              "running 'hermit init'"
@@ -125,7 +125,7 @@ check-hermit-profile() {
     return 0
 }
 
-check-git-config() {
+check_git_config() {
     if git config --global user.name  > /dev/null &&
        git config --global user.email > /dev/null; then
         :
@@ -139,7 +139,7 @@ check-git-config() {
     return 0
 }
 
-yn-prompt() {
+yn_prompt() {
     local ans
     local ok=0
 

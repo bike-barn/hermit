@@ -30,7 +30,7 @@ if [ "$1" = "--complete" ]; then
     exit
 fi
 
-check-hermit-profile
+check_hermit_profile
 
 #Find all files in current profile
 find "$HERMIT_PROFILE_PATH" -type d -name .git -prune -o -type f -print |

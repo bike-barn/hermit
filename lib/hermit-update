@@ -42,8 +42,8 @@ fi
 
 source $(dirname $0)/utilities
 
-check-git-config
-check-hermit-profile
+check_git_config
+check_hermit_profile
 
 
 REDACTING=false

@@ -29,7 +29,7 @@ fi
 
 source $(dirname $0)/utilities
 
-check-git-config
+check_git_config
 
 # Check for extraneous arguments and exit with an error if they exist.
 if [ ! $# -le 1 ]; then

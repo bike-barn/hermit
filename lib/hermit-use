@@ -34,7 +34,7 @@ if [ "$1" = "--complete" ]; then
     exit
 fi
 
-check-hermit-profile
+check_hermit_profile
 
 TO_PROFILE="$1"
 

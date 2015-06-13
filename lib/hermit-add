@@ -60,8 +60,8 @@ fi
 
 source $(dirname $0)/utilities
 
-check-git-config
-check-hermit-profile
+check_git_config
+check_hermit_profile
 
 
 REDACTING=false
@@ -82,7 +82,7 @@ do
         echo "$file is under HERMIT_ROOT"
         echo "Things get sort of weird and meta if you add"
         echo "hermit to your hermit profile."
-        if yn-prompt "Are you sure you want to add it?"; then
+        if yn_prompt "Are you sure you want to add it?"; then
             :
         else
             continue
