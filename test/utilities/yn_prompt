@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+source ../../lib/utilities
+
+if yn_prompt "prompt" <<<"yes"; then
+    :
+else
+    echo "Exited failure when given yes"
+    exit 1
+fi
+
+if yn_prompt "prompt" <<<"y"; then
+    :
+else
+    echo "Exited failure when given y"
+    exit 1
+fi
+
+if yn_prompt "prompt" <<<"no"; then
+    echo "Exited success when given no"
+    exit 1
+else
+    :
+fi
+
+if yn_prompt "prompt" <<<"n"; then
+    echo "Exited success when given no"
+    exit 1
+else
+    :
+fi
