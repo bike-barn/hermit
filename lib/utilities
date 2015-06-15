@@ -146,15 +146,14 @@ yn_prompt() {
     while [ "$ok" = 0 ]
     do
         read -p "$1"" (yes/no): " ans
-        ans=$(tr '[:upper:]' '[:lower:]' <<<$ans)
-        [ "$ans" = "y" -o "$ans" = "yes" ]
+        ans=$(tr '[:upper:]' '[:lower:]' <<<"$ans")
         case "$ans" in
             'y' | 'yes' | 'n' | 'no' ) ok=1 ;;
-            * ) echo "Valid answers are: yes y no n" ;;
+            * ) echo "Valid answers are: yes, y, no, n" ;;
         esac
     done
 
-    [ "$ok" = 'y' -o "$ok" = 'yes' ]
+    [ "$ans" = "y" -o "$ans" = "yes" ]
 }
 
 get_current_profile() {
