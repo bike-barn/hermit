@@ -1,4 +1,12 @@
-language: c # defaults to ruby
+language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+matrix:
+  allow_failures:
+    - rust: nightly
+
 before_script:
   - curl -o /tmp/urchin https://raw.githubusercontent.com/scraperwiki/urchin/master/urchin && chmod +x /tmp/urchin
   - git fetch --unshallow
@@ -6,6 +14,5 @@ before_script:
   - git fetch $(git remote | head -n1) master
   - git checkout master
   - git checkout -
-
 script:
   - ./runtests.sh
