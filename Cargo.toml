@@ -1,9 +1,7 @@
 [package]
 name = "hermit"
 version = "0.1.0"
-authors = [
-  "Geoff Shannon <geoffpshannon@gmail.com>",
-  "Reilly Tucker Siemens <reilly.siemens@gmail.com>",
-  "Joe Houng <sjhoung@gmail.com>",
-  "Aaron Griffin <aig787@gmail.com>
-]
+authors = ["Geoff Shannon <geoffpshannon@gmail.com>",
+           "Reilly Tucker Siemens <reilly.siemens@gmail.com>",
+           "Joe Houng <sjhoung@gmail.com>",
+           "Aaron Griffin <aig787@gmail.com>"]
