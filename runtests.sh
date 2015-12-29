@@ -5,6 +5,9 @@ URCHIN=${URCHIN:-/tmp/urchin}
 
 set -e
 
+cargo build --verbose
+cargo test  --verbose
+
 export TESTDIR=".test-place"
 export TEST_PROFILE_NAME=default
 
