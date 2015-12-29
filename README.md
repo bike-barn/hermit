@@ -1,6 +1,13 @@
 Hermit
 ======
 
+Hermit is changing!
+------------------
+
+We feel that we've reached the limits of what seems reasonable to
+accomplish in shell. So we're switching to Rust!
+
+Stay tuned, exciting things will be happening soon.
 
 Bring your home with you
 ------------------------
@@ -27,13 +34,13 @@ _Hermit is currently alpha software. I use it and we have a reasonable
 number of tests, but there may (will!) be bugs._
 
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
-[![Build Status][badge-build]](https://travis-ci.org/RadicalZephyr/hermit)
-[![Stories in Ready][badge-ready]](https://waffle.io/RadicalZephyr/hermit)
+[![Build Status][badge-build]](https://travis-ci.org/bike-barn/hermit)
+[![Stories in Ready][badge-ready]](https://waffle.io/bike-barn/hermit)
 [![Crabs harmed][badge-crabs]](http://shields.io/)
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
-[badge-build]: https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master
-[badge-ready]: https://badge.waffle.io/RadicalZephyr/hermit.png?label=ready&title=Ready
+[badge-build]: https://travis-ci.org/bike-barn/hermit.svg?branch=master
+[badge-ready]: https://badge.waffle.io/bike-barn/hermit.svg?label=ready&title=Ready
 [badge-crabs]: http://img.shields.io/badge/crabs_harmed-0-blue.svg
 
 [Briefcase]: https://github.com/jim/briefcase
