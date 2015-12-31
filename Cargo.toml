@@ -5,3 +5,6 @@ authors = ["Geoff Shannon <geoffpshannon@gmail.com>",
            "Reilly Tucker Siemens <reilly.siemens@gmail.com>",
            "Joe Houng <sjhoung@gmail.com>",
            "Aaron Griffin <aig787@gmail.com>"]
+
+[dependencies]
+clap = "1"
