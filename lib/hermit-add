@@ -9,30 +9,6 @@
 #
 # Adding a directory is essentially a shorthand for adding all files
 # in that directory tree.
-#
-#  Note: you must have an initialized hermit profile.
-#
-# -r <file>, --redact=<file>
-#     Redact secrets from a file before it is added to hermit.
-#
-# It should be pointed out that attempting to redact information that
-# has already been committed to the git repository is TOTALLY
-# INEFFECTIVE.
-#
-# File Redaction
-#
-# When you ask hermit to let you redact a file, there are several
-# differences from the normal add process. First, hermit will make a
-# copy of the original file inside your hermit profile.  Then, you are
-# given the chance to edit this copy to remove any sensitive
-# information. This will be the "redacted file" and given the suffix
-# ".redacted".
-#
-# Next, the original file is moved to your hermit directory and git is
-# directed to ignore it. The secrets that were edited out of the
-# original file are then placed into a file with the suffix ".secrets"
-# and are also ignored by git. Hermit can optionally encrypt this file
-# using GPG and then you can commit the encrypted version.
 
 # Copyright 2014, Geoff Shannon
 
@@ -68,14 +44,6 @@ REDACTING=false
 
 for file in $@
 do
-    if [ "$file" = "-r" ]; then
-        REDACTING=true
-        continue
-    elif [ "$file" \!= "${file#--redact=}" ]; then
-        REDACTING=true
-        file="${file#--redact=}"
-    fi
-
     file="$(absolute_path "$file")"
 
     if [ "${file#$HERMIT_ROOT}" \!= "${file}" ]; then
@@ -111,10 +79,5 @@ do
         move_verbosely "$origfile" "$newfile"
         link_verbosely "$origfile" "$newfile"
 
-        if [ "$REDACTING" = "true" ]; then
-            hermit_do_redaction "$newfile"
-        fi
-
     done
-    REDACTING=false
 done
