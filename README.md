@@ -35,7 +35,7 @@ number of tests, but there may (will!) be bugs._
 
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
 [![Build Status][badge-build]](https://travis-ci.org/bike-barn/hermit)
-[![Stories in Ready][badge-ready]](https://waffle.io/bike-barn/hermit)
+[![Stories Ready to Work On][badge-ready]](https://waffle.io/bike-barn/hermit)
 [![Crabs harmed][badge-crabs]](http://shields.io/)
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
@@ -132,16 +132,33 @@ Running the Tests
 
 Hermit now has a test suite! You can run it with `./runtests.sh`.
 
-Feature Checklist/Roadmap
--------------------------
+Where We're Headed
+------------------
 
-Checkout
-[the feature checklist](https://github.com/RadicalZephyr/hermit/issues/12) for
-the latest status.
+Checkout our [Waffle.io][waffle] board for a more organized view of
+what's going on in the project.
 
-We also have a [Trello organization](https://trello.com/hermit4) for those so
-inclined.
+[waffle]: https://waffle.io/bike-barn/hermit
 
+Contributing
+------------
+
+First, please take a look at our
+[CONTRIBUTING.md][contributing]. Next, probably check out our
+[Waffle.io][waffle] board, and look at the size 1 issues in the To-Do
+column. From there, the standard "[fork], [branch], code,
+[pull request]" workflow works well.
+
+[contributing]: https://github.com/bike-barn/hermit/blob/master/CONTRIBUTING.md
+[fork]: https://help.github.com/articles/fork-a-repo/
+[branch]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
+[pull request]: https://help.github.com/articles/creating-a-pull-request/
+
+As a bonus, if you use the waffle.io
+[branch naming scheme][waffle-flow] for the issue you're working on,
+it will automatically update our Waffle board.
+
+[waffle-flow]: https://github.com/waffleio/waffle.io/wiki/FAQs#branch-moving
 
 License
 -------
