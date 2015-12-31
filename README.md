@@ -88,19 +88,25 @@ and helps you avoid accidentally committing any secrets.
 Install
 -------
 
-### Use Git
+### Use `cargo` with `git`
+
+Since we're using Rust we've decided to package our project for installation
+with Rust's package manager, [cargo][install-cargo].
 
 You're going to need `git` to make use of `hermit`, so just make sure
-you have `git` [installed][install-git] and then clone the repo.
+you have `git` [installed][install-git] and then install through `cargo`.
 
-    git clone git@github.com:RadicalZephyr/hermit.git ~/.hermit
+    cargo install --git https://github.com/bike-barn/hermit.git
 
-Now, you need to have `~/.hermit/bin` on your path, so add something
-like this to your shell init file:
-
-    export PATH="$PATH":~/.hermit/bin
-
+[install-cargo]: http://doc.crates.io/
 [install-git]: https://git-scm.com/book/en/v1/Getting-Started-Installing-Git
+
+Uninstall
+---------
+
+We're sorry to see you go, but it's straightforward to ditch `hermit`.
+
+    cargo uninstall hermit
 
 Usage
 -----
