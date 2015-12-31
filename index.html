@@ -16,14 +16,14 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/RadicalZephyr/hermit">View on GitHub</a>
+          <a id="forkme_banner" href="https://github.com/bike-barn/hermit">View on GitHub</a>
 
           <h1 id="project_title">Hermit</h1>
           <h2 id="project_tagline">Bring your home with you</h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/RadicalZephyr/hermit/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/RadicalZephyr/hermit/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="https://github.com/bike-barn/hermit/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/bike-barn/hermit/tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
     </div>
@@ -35,21 +35,72 @@
 <a id="hermit" class="anchor" href="#hermit" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hermit</h1>
 
 <h2>
+<a id="hermit-is-changing" class="anchor" href="#hermit-is-changing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hermit is changing!</h2>
+
+<p>We feel that we've reached the limits of what seems reasonable to
+accomplish in shell. So we're switching to Rust!</p>
+
+<p>Stay tuned, exciting things will be happening soon.</p>
+
+<h2>
 <a id="bring-your-home-with-you" class="anchor" href="#bring-your-home-with-you" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bring your home with you</h2>
 
-<p>Hermit is a home directory configuration management tool. Inspired
-originally by <a href="https://github.com/jim/briefcase">Briefcase</a> but also heavily borrows from awesome tools
-like <a href="https://github.com/sstephenson/rbenv">rbenv</a>, and <a href="https://github.com/creationix/nvm">nvm</a>. It's (going to be) like having profiles for
-your shell environments. Or, it just helps manage your home directory
-being under version control.</p>
+<p><img src="http://www.zephyrizing.net/hermit/images/hermit-crab.png" alt="Hermit Logo" title="The Crab" align="right"></p>
 
-<p><a href="https://travis-ci.org/RadicalZephyr/hermit"><img src="https://travis-ci.org/RadicalZephyr/hermit.svg?branch=master" alt="Build Status"></a>
+<p>Hermit is a home directory configuration management tool that
+facilitates moving between different computers without losing your
+shell (configurations).</p>
+
+<p>Hermit was originally inspired by <a href="https://github.com/jim/briefcase">Briefcase</a> which solves the same
+problem.  However, Briefcase is written in Ruby.  We wanted something
+more trivially portable. Since your shell configuration is so basic,
+it seemed like having minimal dependencies would be a good
+thing. Currently Hermit is dependent on the bash shell, but we hope to
+make it depend solely on POSIX shell capabilities to maximize
+portability.</p>
+
+<p>The code infrastructure is heavily borrowed from the awesome shell
+tools <a href="https://github.com/sstephenson/rbenv">rbenv</a>, and <a href="https://github.com/creationix/nvm">nvm</a>.</p>
+
+<p><em>Hermit is currently alpha software. I use it and we have a reasonable
+number of tests, but there may (will!) be bugs.</em></p>
+
+<p><a href="http://www.gnu.org/licenses/gpl-3.0.txt"><img src="https://img.shields.io/badge/license-GPL_3-green.svg" alt="License GPL 3"></a>
+<a href="https://travis-ci.org/bike-barn/hermit"><img src="https://travis-ci.org/bike-barn/hermit.svg?branch=master" alt="Build Status"></a>
+<a href="https://waffle.io/bike-barn/hermit"><img src="https://badge.waffle.io/bike-barn/hermit.svg?label=to-do&amp;title=To-Do" alt="Stories Ready to Work On"></a>
 <a href="http://shields.io/"><img src="http://img.shields.io/badge/crabs_harmed-0-blue.svg" alt="Crabs harmed"></a></p>
+
+<h2>
+<a id="the-problem" class="anchor" href="#the-problem" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Problem</h2>
+
+<p>Hermit aims to alleviate three separate but related problems related
+to keeping your dotfiles under source control.</p>
+
+<ol>
+<li>Not having the source control directory in your home root</li>
+<li>Facilitating sym-link management because of #1</li>
+<li>Having secret information in your dotfiles that is NOT committed to
+git</li>
+</ol>
+
+<p><sub>This section was inspired by David Nolen's talk given to
+<a href="https://www.recursecenter.com/">The Recurse Center</a> about "Solution Oriented Language."</sub></p>
 
 <h2>
 <a id="philosophy" class="anchor" href="#philosophy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Philosophy</h2>
 
-<p>Hermit aims to be an assistant, it's not trying to run the show. As a
+<p>Hermit is dependent on Git for much of it's functionality. In fact, if
+you don't know how to use Git, Hermit won't be very useful for
+you. This is because Hermit as a tool fundamentally collaborates with
+Git.</p>
+
+<p>Hermit commands are mostly wrappers around the corresponding Git
+commands. But Hermit always adds some extra behavior on top of what
+Git normally does. As a convenience, Hermit also provides a way to run
+arbitrary Git commands against your dotfiles repository without
+<code>cd</code>ing to that directory.</p>
+
+<p>Hermit aims to be an assistant; it's not trying to run the show. As a
 consequence, Hermit will never actually commit anything to your
 profile repository. Instead - like the perfect office assistant -
 Hermit will prepare everything for you, and then let you decide
@@ -61,31 +112,10 @@ and helps you avoid accidentally committing any secrets.</p>
 <a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
 
 <h3>
-<a id="install-script" class="anchor" href="#install-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install script</h3>
+<a id="use-git" class="anchor" href="#use-git" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use Git</h3>
 
-<p>To install you could use the <a href="https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh">install script</a> using cURL:</p>
-
-<pre><code>curl https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
-</code></pre>
-
-<p>or Wget:</p>
-
-<pre><code>wget -qO- https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh | sh
-</code></pre>
-
-<p><sub><a href="https://raw.githubusercontent.com/RadicalZephyr/hermit/master/install.sh">The script</a> clones the Hermit repository to
-<code>~/.hermit</code> and adds the source line to your profile
-(<code>~/.bash_profile</code>, <code>~/.zshrc</code> or <code>~/.profile</code>).</sub></p>
-
-<p>You can customize the install source, directory and profile
-respectively using the <code>HERMIT_SOURCE</code>, <code>HERMIT_DIR</code> and <code>PROFILE</code>
-variables: Eg: <code>curl ... | HERMIT_DIR=/usr/local/hermit sh</code> for a
-global install.</p>
-
-<h3>
-<a id="manual-install" class="anchor" href="#manual-install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Manual Install</h3>
-
-<p>Just clone the hermit repository with <code>git</code>.</p>
+<p>You're going to need <code>git</code> to make use of <code>hermit</code>, so just make sure
+you have <code>git</code> <a href="https://git-scm.com/book/en/v1/Getting-Started-Installing-Git">installed</a> and then clone the repo.</p>
 
 <pre><code>git clone git@github.com:RadicalZephyr/hermit.git ~/.hermit
 </code></pre>
@@ -99,8 +129,8 @@ like this to your shell init file:</p>
 <h2>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<p>Still working on this... Try checking out the
-<a href="https://github.com/RadicalZephyr/hermit/tree/master/doc">docs folder</a> or running <code>hermit help</code>:</p>
+<p>Still working on this... Check out the <a href="https://github.com/RadicalZephyr/hermit/tree/master/doc/tutorial.md">tutorial</a>, or peruse the
+<a href="https://github.com/RadicalZephyr/hermit/tree/master/doc">docs folder</a> or run <code>hermit help</code>.</p>
 
 <pre><code>Usage: hermit &lt;command&gt; [&lt;args&gt;]
 
@@ -111,6 +141,7 @@ Some useful hermit commands are:
    status      Display the status of your hermit
    use         Switch to using a different profile
    add         Add files to your hermit directory
+   update      Update redacted files already stored in git
 
 See `hermit help &lt;command&gt;' for information on a specific command.
 </code></pre>
@@ -121,11 +152,23 @@ See `hermit help &lt;command&gt;' for information on a specific command.
 <p>Hermit now has a test suite! You can run it with <code>./runtests.sh</code>.</p>
 
 <h2>
-<a id="feature-checklistroadmap" class="anchor" href="#feature-checklistroadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feature Checklist/Roadmap</h2>
+<a id="where-were-headed" class="anchor" href="#where-were-headed" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where We're Headed</h2>
 
-<p>Checkout
-<a href="https://github.com/RadicalZephyr/hermit/issues/12">the feature checklist</a> for
-the latest status.</p>
+<p>Checkout our <a href="https://waffle.io/bike-barn/hermit">Waffle.io</a> board for a more organized view of
+what's going on in the project.</p>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<p>First, please take a look at our
+<a href="https://github.com/bike-barn/hermit/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>. Next, probably check out our
+<a href="https://waffle.io/bike-barn/hermit">Waffle.io</a> board, and look at the size 1 issues in the To-Do
+column. From there, the standard "<a href="https://help.github.com/articles/fork-a-repo/">fork</a>, <a href="https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/">branch</a>, code,
+<a href="https://help.github.com/articles/creating-a-pull-request/">pull request</a>" workflow works well.</p>
+
+<p>As a bonus, if you use the waffle.io
+<a href="https://github.com/waffleio/waffle.io/wiki/FAQs#branch-moving">branch naming scheme</a> for the issue you're working on,
+it will automatically update our Waffle board.</p>
 
 <h2>
 <a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
@@ -152,8 +195,8 @@ along with Hermit. If not, see <a href="http://www.gnu.org/licenses/">http://www
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">Hermit maintained by <a href="https://github.com/RadicalZephyr">RadicalZephyr</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+        <p class="copyright">Hermit maintained by <a href="https://github.com/bike-barn">bike-barn</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
