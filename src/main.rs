@@ -2,8 +2,15 @@
 extern crate clap;
 
 fn main() {
+
+    let version = format!("{}.{}.{}{}",
+                          option_env!("CARGO_PKG_VERSION_MAJOR").unwrap_or("X"),
+                          option_env!("CARGO_PKG_VERSION_MINOR").unwrap_or("X"),
+                          option_env!("CARGO_PKG_VERSION_PATCH").unwrap_or("X"),
+                          option_env!("CARGO_PKG_VERSION_PRE").unwrap_or(""));
+
     let app = clap_app!(myapp =>
-        (version: "0.1.0")
+        (version: &*version)
         (author: "Bike Barn <https://github.com/bike-barn/hermit>")
         (about: "A home directory configuration management assistant.")
         (@subcommand add =>
