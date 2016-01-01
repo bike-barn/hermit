@@ -10,6 +10,7 @@ fn main() {
         (author: "Bike Barn <https://github.com/bike-barn/hermit>")
         (about: "A home directory configuration management assistant.")
         (@setting SubcommandRequiredElseHelp)
+        (@setting VersionlessSubcommands)
         (@subcommand add =>
             (about: "Add files to your hermit shell")
             (usage: "hermit add [<filepattern>…]"))
