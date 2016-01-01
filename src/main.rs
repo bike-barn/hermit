@@ -41,28 +41,28 @@ fn main() {
     let app_matches = app.get_matches();
 
     match app_matches.subcommand() {
-        ("add", Some(matches)) => {
+        ("add", Some(_matches)) => {
             println!("hermit add is not yet implemented");
         }
-        ("clone", Some(matches)) => {
+        ("clone", Some(_matches)) => {
             println!("hermit clone is not yet implemented");
         }
-        ("doctor", Some(matches)) => {
+        ("doctor", Some(_matches)) => {
             println!("hermit doctor is not yet implemented");
         }
-        ("git", Some(matches)) => {
+        ("git", Some(_matches)) => {
             println!("hermit git is not yet implemented");
         }
-        ("init", Some(matches)) => {
+        ("init", Some(_matches)) => {
             println!("hermit init is not yet implemented");
         }
-        ("nuke", Some(matches)) => {
+        ("nuke", Some(_matches)) => {
             println!("hermit nuke is not yet implemented");
         }
-        ("status", Some(matches)) => {
+        ("status", Some(_matches)) => {
             println!("hermit status is not yet implemented");
         }
-        ("use", Some(matches)) => {
+        ("use", Some(_matches)) => {
             println!("hermit use is not yet implemented");
         }
         _ => {
