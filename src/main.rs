@@ -9,6 +9,7 @@ fn main() {
         (version: version)
         (author: "Bike Barn <https://github.com/bike-barn/hermit>")
         (about: "A home directory configuration management assistant.")
+        (@setting SubcommandRequiredElseHelp)
         (@subcommand add =>
             (about: "Add files to your hermit shell")
             (usage: "hermit add [<filepattern>…]"))
@@ -61,8 +62,6 @@ fn main() {
         ("use", Some(_matches)) => {
             println!("hermit use is not yet implemented");
         }
-        _ => {
-            println!("no subcommand was called");
-        }
+        _ => {}
     }
 }
