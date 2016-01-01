@@ -15,36 +15,28 @@ fn main() {
         (about: "A home directory configuration management assistant.")
         (@subcommand add =>
             (about: "Add files to your hermit shell")
-            (usage: "hermit add [<filepattern>…]")
-        )
+            (usage: "hermit add [<filepattern>…]"))
         (@subcommand clone =>
             (about: "Create a local shell from an existing remote shell")
-            (usage: "hermit clone <repository> [shell-name]")
-        )
+            (usage: "hermit clone <repository> [shell-name]"))
         (@subcommand doctor =>
             (about: "Make sure your hermit setup is sane")
-            (usage: "hermit doctor")
-        )
+            (usage: "hermit doctor"))
         (@subcommand git =>
             (about: "Run git operations on the current shell")
-            (usage: "hermit git <git arguments>")
-        )
+            (usage: "hermit git <git arguments>"))
         (@subcommand init =>
             (about: "Create a new hermit shell")
-            (usage: "hermit init [shell-name]")
-        )
+            (usage: "hermit init [shell-name]"))
         (@subcommand nuke =>
             (about: "Permanently remove a hermit shell")
-            (usage: "hermit nuke <shell-name>")
-        )
+            (usage: "hermit nuke <shell-name>"))
         (@subcommand status =>
             (about: "Display the status of your hermit shell")
-            (usage: "hermit status")
-        )
+            (usage: "hermit status"))
         (@subcommand use =>
             (about: "Switch to using a different hermit shell")
-            (usage: "hermit use [shell-name]")
-        )
+            (usage: "hermit use [shell-name]"))
     );
     let app_matches = app.get_matches();
 
