@@ -2,8 +2,15 @@
 extern crate clap;
 
 fn main() {
+
+    let version = format!("{}.{}.{}{}",
+                          option_env!("CARGO_PKG_VERSION_MAJOR").unwrap_or("X"),
+                          option_env!("CARGO_PKG_VERSION_MINOR").unwrap_or("X"),
+                          option_env!("CARGO_PKG_VERSION_PATCH").unwrap_or("X"),
+                          option_env!("CARGO_PKG_VERSION_PRE").unwrap_or(""));
+
     let app = clap_app!(myapp =>
-        (version: "0.1.0")
+        (version: &*version)
         (author: "Bike Barn <https://github.com/bike-barn/hermit>")
         (about: "A home directory configuration management assistant.")
         (@subcommand add =>
@@ -44,30 +51,30 @@ fn main() {
     match app_matches.subcommand() {
         ("add", Some(matches)) => {
             println!("hermit add is not yet implemented");
-        },
+        }
         ("clone", Some(matches)) => {
             println!("hermit clone is not yet implemented");
-        },
+        }
         ("doctor", Some(matches)) => {
             println!("hermit doctor is not yet implemented");
-        },
+        }
         ("git", Some(matches)) => {
             println!("hermit git is not yet implemented");
-        },
+        }
         ("init", Some(matches)) => {
             println!("hermit init is not yet implemented");
-        },
+        }
         ("nuke", Some(matches)) => {
             println!("hermit nuke is not yet implemented");
-        },
+        }
         ("status", Some(matches)) => {
             println!("hermit status is not yet implemented");
-        },
+        }
         ("use", Some(matches)) => {
             println!("hermit use is not yet implemented");
-        },
+        }
         _ => {
             println!("no subcommand was called");
-        },
+        }
     }
 }

@@ -1,10 +1,16 @@
 [package]
 name = "hermit"
-version = "0.1.0"
+version = "0.0.1"
 authors = ["Geoff Shannon <geoffpshannon@gmail.com>",
            "Reilly Tucker Siemens <reilly.siemens@gmail.com>",
            "Joe Houng <sjhoung@gmail.com>",
            "Aaron Griffin <aig787@gmail.com>"]
+description = "A home directory configuration management assistant."
+homepage = "https://bike-barn.github.io/hermit"
+repository = "https://github.com/bike-barn/hermit"
+readme = "README.md"
+keywords = ["home", "directory", "configuration", "management", "dotfiles"]
+license = "GPL-3.0"
 
 [dependencies]
 clap = "1"
