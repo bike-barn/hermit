@@ -44,30 +44,30 @@ fn main() {
     match app_matches.subcommand() {
         ("add", Some(matches)) => {
             println!("hermit add is not yet implemented");
-        },
+        }
         ("clone", Some(matches)) => {
             println!("hermit clone is not yet implemented");
-        },
+        }
         ("doctor", Some(matches)) => {
             println!("hermit doctor is not yet implemented");
-        },
+        }
         ("git", Some(matches)) => {
             println!("hermit git is not yet implemented");
-        },
+        }
         ("init", Some(matches)) => {
             println!("hermit init is not yet implemented");
-        },
+        }
         ("nuke", Some(matches)) => {
             println!("hermit nuke is not yet implemented");
-        },
+        }
         ("status", Some(matches)) => {
             println!("hermit status is not yet implemented");
-        },
+        }
         ("use", Some(matches)) => {
             println!("hermit use is not yet implemented");
-        },
+        }
         _ => {
             println!("no subcommand was called");
-        },
+        }
     }
 }
