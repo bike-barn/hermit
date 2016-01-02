@@ -49,7 +49,8 @@ mod tests {
     #[test]
     fn can_resolve_its_path() {
         let root_path = root_path("/Users/geoff/.config/hermit");
-        let expected_path = root_path.join("shells/default");
+        let expected_path = root_path.join("shells")
+                                     .join("default");
         let s = ShellImpl::new("default", root_path);
 
         assert_eq!(s.root_path(), expected_path);
@@ -58,7 +59,8 @@ mod tests {
     #[test]
     fn resolves_empty_string_to_root() {
         let root_path = root_path("/Users/geoff/.config/hermit");
-        let expected_path = root_path.join("shells/default");
+        let expected_path = root_path.join("shells")
+                                     .join("default");
         let s = ShellImpl::new("default", root_path);
 
         assert_eq!(s.path_for(""), expected_path);
@@ -67,7 +69,9 @@ mod tests {
     #[test]
     fn can_resolve_paths() {
         let root_path = root_path("/Users/geoff/.config/hermit");
-        let expected_path = root_path.join("shells/default/.bashrc");
+        let expected_path = root_path.join("shells")
+                                     .join("default")
+                                     .join(".bashrc");
         let s = ShellImpl::new("default", root_path);
 
         assert_eq!(s.path_for(".bashrc"), expected_path);
