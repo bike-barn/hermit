@@ -3,6 +3,8 @@ extern crate clap;
 
 mod shell;
 
+mod init;
+
 fn main() {
 
     let version = env!("CARGO_PKG_VERSION");
@@ -27,7 +29,8 @@ fn main() {
             (usage: "hermit git <git arguments>"))
         (@subcommand init =>
             (about: "Create a new hermit shell")
-            (usage: "hermit init [shell-name]"))
+            (usage: "hermit init [shell-name]")
+            (@arg SHELL_NAME: "name of new shell"))
         (@subcommand nuke =>
             (about: "Permanently remove a hermit shell")
             (usage: "hermit nuke <shell-name>"))
@@ -54,6 +57,7 @@ fn main() {
             println!("hermit git is not yet implemented");
         }
         ("init", Some(_matches)) => {
+            init::new_shell(_matches);
             println!("hermit init is not yet implemented");
         }
         ("nuke", Some(_matches)) => {
