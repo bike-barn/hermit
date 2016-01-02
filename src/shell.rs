@@ -1,7 +1,9 @@
 use std::path::PathBuf;
 
 pub trait Shell {
-    fn to_path(&self) -> PathBuf;
+    fn root_path(&self) -> PathBuf;
+
+    fn path_for(&self, filename: &str) -> PathBuf;
 }
 
 pub struct ShellImpl {
@@ -19,8 +21,12 @@ impl ShellImpl {
 }
 
 impl Shell for ShellImpl {
-    fn to_path(&self) -> PathBuf {
+    fn root_path(&self) -> PathBuf {
         self.root_path.join("shells").join(&self.name)
+    }
+
+    fn path_for(&self, filename: &str) -> PathBuf {
+        self.root_path().join(filename)
     }
 }
 
@@ -45,6 +51,25 @@ mod tests {
         let root_path = root_path("/Users/geoff/.config/hermit");
         let expected_path = root_path.join("shells/default");
         let s = ShellImpl::new("default", root_path);
-        assert_eq!(s.to_path(), expected_path);
+
+        assert_eq!(s.root_path(), expected_path);
+    }
+
+    #[test]
+    fn resolves_empty_string_to_root() {
+        let root_path = root_path("/Users/geoff/.config/hermit");
+        let expected_path = root_path.join("shells/default");
+        let s = ShellImpl::new("default", root_path);
+
+        assert_eq!(s.path_for(""), expected_path);
+    }
+
+    #[test]
+    fn can_resolve_paths() {
+        let root_path = root_path("/Users/geoff/.config/hermit");
+        let expected_path = root_path.join("shells/default/.bashrc");
+        let s = ShellImpl::new("default", root_path);
+
+        assert_eq!(s.path_for(".bashrc"), expected_path);
     }
 }
