@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate clap;
 
+mod shell;
+
 fn main() {
 
     let version = env!("CARGO_PKG_VERSION");
