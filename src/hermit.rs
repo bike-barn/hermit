@@ -40,14 +40,19 @@ mod tests {
         Hermit { config: config.clone() }
     }
 
-    #[test]
-    fn returns_the_current_shell() {
-        let config = MockConfig {
+    fn mock_config() -> MockConfig {
+        MockConfig {
             root_path: PathBuf::from("/"),
             allowed_shell_names: vec!["default".to_string()],
             current_shell: "default".to_string(),
-        };
+        }
+    }
+
+    #[test]
+    fn returns_the_current_shell() {
+        let config = mock_config();
         let hermit = hermit(&config);
+
         let shell = hermit.current_shell();
         assert_eq!(shell.name, "default");
         assert_eq!(shell.root_path, config.root_path());
@@ -55,11 +60,8 @@ mod tests {
 
     #[test]
     fn can_set_the_current_shell() {
-        let config = MockConfig {
-            root_path: PathBuf::from("/"),
-            allowed_shell_names: vec!["default".to_string()],
-            current_shell: "current".to_string(),
-        };
+        let mut config = mock_config();
+        config.current_shell = "current".to_string();
         let mut hermit = hermit(&config);
 
         assert_eq!(hermit.current_shell().name, "current");
@@ -69,14 +71,10 @@ mod tests {
 
     #[test]
     fn cant_set_the_current_shell_to_a_nonexistent_shell() {
-        let config = MockConfig {
-            root_path: PathBuf::from("/"),
-            allowed_shell_names: vec!["default".to_string()],
-            current_shell: "current".to_string(),
-        };
+        let config = mock_config();
         let mut hermit = hermit(&config);
 
-        assert_eq!(hermit.current_shell().name, "current");
+        assert_eq!(hermit.current_shell().name, "default");
         let res = hermit.set_current_shell("non-existent");
         assert!(res.is_err());
         assert_eq!(res.err().unwrap(), Error::ShellDoesNotExist);
