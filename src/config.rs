@@ -1,4 +1,8 @@
+use std::path::PathBuf;
+
 pub trait HermitConfig {
+    fn root_path(&self) -> &PathBuf;
+
     fn current_shell_name(&self) -> String;
 
     fn set_current_shell_name(&mut self, name: &str);
@@ -8,15 +12,22 @@ pub trait HermitConfig {
 
 #[cfg(test)]
 pub mod mock {
+    use std::path::PathBuf;
+
     use super::HermitConfig;
 
     #[derive(Clone)]
     pub struct MockConfig {
+        pub root_path: PathBuf,
         pub default_shell: String,
         pub allowed_shell_names: Vec<String>,
     }
 
     impl HermitConfig for MockConfig {
+        fn root_path(&self) -> &PathBuf {
+            &self.root_path
+        }
+
         fn current_shell_name(&self) -> String {
             self.default_shell.clone()
         }
