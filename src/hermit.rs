@@ -1,7 +1,7 @@
-use config::HermitConfig;
+use config::Config;
 use shell::Shell;
 
-struct Hermit<T: HermitConfig> {
+struct Hermit<T: Config> {
     config: T,
 }
 
@@ -12,7 +12,7 @@ pub enum Error {
     ShellDoesNotExist,
 }
 
-impl<T: HermitConfig> Hermit<T> {
+impl<T: Config> Hermit<T> {
     fn current_shell(&self) -> Shell {
         Shell::new(self.config.current_shell_name(), self.config.root_path())
     }
@@ -31,7 +31,7 @@ impl<T: HermitConfig> Hermit<T> {
 mod tests {
     use std::path::PathBuf;
 
-    use config::HermitConfig;
+    use config::Config;
     use config::mock::MockConfig;
 
     use super::{Error, Hermit};
