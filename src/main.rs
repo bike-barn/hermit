@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate clap;
 
+mod config;
+mod hermit;
 mod shell;
 
 fn main() {
