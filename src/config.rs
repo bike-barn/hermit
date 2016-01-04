@@ -19,7 +19,7 @@ pub mod mock {
     #[derive(Clone)]
     pub struct MockConfig {
         pub root_path: PathBuf,
-        pub default_shell: String,
+        pub current_shell: String,
         pub allowed_shell_names: Vec<String>,
     }
 
@@ -29,11 +29,11 @@ pub mod mock {
         }
 
         fn current_shell_name(&self) -> String {
-            self.default_shell.clone()
+            self.current_shell.clone()
         }
 
         fn set_current_shell_name(&mut self, name: &str) {
-            self.default_shell = name.to_string();
+            self.current_shell = name.to_string();
         }
 
         fn does_shell_exist(&self, name: &str) -> bool {

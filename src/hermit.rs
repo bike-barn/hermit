@@ -41,11 +41,11 @@ mod tests {
     }
 
     #[test]
-    fn returns_the_default_shell() {
+    fn returns_the_current_shell() {
         let config = MockConfig {
             root_path: PathBuf::from("/"),
             allowed_shell_names: vec!["default".to_string()],
-            default_shell: "default".to_string(),
+            current_shell: "default".to_string(),
         };
         let hermit = hermit(&config);
         let shell = hermit.current_shell();
@@ -54,24 +54,11 @@ mod tests {
     }
 
     #[test]
-    fn returns_the_current_shell() {
-        let config = MockConfig {
-            root_path: PathBuf::from("/"),
-            allowed_shell_names: vec!["default".to_string()],
-            default_shell: "current".to_string(),
-        };
-        let hermit = hermit(&config);
-        let shell = hermit.current_shell();
-        assert_eq!(shell.name, "current");
-        assert_eq!(shell.root_path, config.root_path());
-    }
-
-    #[test]
     fn can_set_the_current_shell() {
         let config = MockConfig {
             root_path: PathBuf::from("/"),
             allowed_shell_names: vec!["default".to_string()],
-            default_shell: "current".to_string(),
+            current_shell: "current".to_string(),
         };
         let mut hermit = hermit(&config);
 
@@ -85,7 +72,7 @@ mod tests {
         let config = MockConfig {
             root_path: PathBuf::from("/"),
             allowed_shell_names: vec!["default".to_string()],
-            default_shell: "current".to_string(),
+            current_shell: "current".to_string(),
         };
         let mut hermit = hermit(&config);
 
