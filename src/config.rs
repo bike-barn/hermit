@@ -33,11 +33,11 @@ pub mod mock {
         }
 
         fn set_current_shell_name(&mut self, name: &str) {
-            self.current_shell = name.to_string();
+            self.current_shell = name.to_owned();
         }
 
         fn does_shell_exist(&self, name: &str) -> bool {
-            self.allowed_shell_names.contains(&name.to_string())
+            self.allowed_shell_names.contains(&name.to_owned())
         }
     }
 }

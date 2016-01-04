@@ -43,8 +43,8 @@ mod tests {
     fn mock_config() -> MockConfig {
         MockConfig {
             root_path: PathBuf::from("/"),
-            allowed_shell_names: vec!["default".to_string()],
-            current_shell: "default".to_string(),
+            allowed_shell_names: vec!["default".to_owned()],
+            current_shell: "default".to_owned(),
         }
     }
 
@@ -61,7 +61,7 @@ mod tests {
     #[test]
     fn can_set_the_current_shell() {
         let mut config = mock_config();
-        config.current_shell = "current".to_string();
+        config.current_shell = "current".to_owned();
         let mut hermit = hermit(&config);
 
         assert_eq!(hermit.current_shell().name, "current");
