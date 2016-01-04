@@ -1,38 +1,51 @@
 use std::fs;
+use std::io;
 use std::path::{Path, PathBuf};
+
+enum FileOp {
+    MkDir(PathBuf),
+    GitInit(PathBuf),
+}
 
 struct FileSet {
     root: PathBuf,
-    dir_names: Vec<PathBuf>,
-    git_names: Vec<PathBuf>,
+    operations: Vec<FileOp>,
 }
 
 impl FileSet {
     fn rooted_at<P: AsRef<Path>>(path: P) -> FileSet {
         FileSet {
             root: PathBuf::from(path.as_ref()),
-            dir_names: vec![],
-            git_names: vec![],
+            operations: vec![],
         }
     }
 
     fn make_dir<P: AsRef<Path>>(&mut self, name: P) {
-        self.dir_names.push(PathBuf::from(name.as_ref()))
+        let path = PathBuf::from(name.as_ref());
+        self.operations.push(FileOp::MkDir(path))
     }
 
     fn make_git_repo<P: AsRef<Path>>(&mut self, name: P) {
-        self.git_names.push(PathBuf::from(name.as_ref()))
+        let path = PathBuf::from(name.as_ref());
+        self.operations.push(FileOp::GitInit(path))
     }
 
-    fn commit(&mut self) {
-        for dir in &self.dir_names {
-            fs::create_dir(self.root.join(dir)).unwrap()
-        }
-        for dir in &self.git_names {
-            fs::create_dir(self.root.join(dir).join(".git")).unwrap()
-        }
+    fn commit(mut self) -> Vec<io::Result<()>> {
+        let ops = self.operations;
+        self.operations = vec![];
+        self.operations.push(FileOp::MkDir(PathBuf::from(".")));
+
+        ops.into_iter()
+           .map(|op| {
+               match op {
+                   FileOp::MkDir(ref dir) => fs::create_dir(self.root.join(dir)),
+                   FileOp::GitInit(ref dir) => fs::create_dir(self.root.join(dir).join(".git")),
+               }
+           })
+           .collect::<Vec<_>>()
     }
 }
+
 
 #[cfg(test)]
 mod tests {
