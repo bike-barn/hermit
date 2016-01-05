@@ -19,20 +19,28 @@ pub struct FilesystemConfig {
 }
 
 impl FilesystemConfig {
-    // TODO: Make sure this actually works.
+    // TODO: This should probably return a Result<Self, Error>.
     fn new(root_path: PathBuf) -> Self {
         let config_path = root_path.join("current_shell");
         let config_display = config_path.display();
 
         let mut file = match File::open(&config_path) {
             Ok(file) => file,
-            Err(e) => panic!("couldn't open {}: {}", config_display, e),
+            Err(e) => {
+                panic!("couldn't open {}: {}",
+                       config_display,
+                       Error::description(&e))
+            }
         };
 
         let mut current_shell = String::new();
         match file.read_to_string(&mut current_shell) {
-            Ok(_) => {},
-            Err(e) => panic!("error: couldn't read {}: {}", config_display, e),
+            Ok(_) => {}
+            Err(e) => {
+                panic!("error: couldn't read {}: {}",
+                       config_display,
+                       Error::description(&e))
+            }
         }
 
         FilesystemConfig {
@@ -40,7 +48,6 @@ impl FilesystemConfig {
             current_shell: current_shell,
         }
     }
-
 }
 
 impl Config for FilesystemConfig {
@@ -100,41 +107,59 @@ pub mod mock {
 
 #[cfg(test)]
 mod test {
-    use super::FilesystemConfig;
+    use std::fs;
+    use std::fs::File;
+    use std::path::PathBuf;
+    use std::io::prelude::*;
+    use super::{Config, FilesystemConfig};
 
-    // TODO: Figure out the best way to do FS setup/teardown in Rust.
-    /*
-    fn setup_test_dir() {
+    fn clean_up(test_root: &PathBuf) {
+        if test_root.exists() {
+            fs::remove_dir_all(test_root).unwrap();
+        }
+        assert!(!test_root.is_dir());
     }
 
-    fn teardown_test_dir() {
-    }
-    */
+    fn set_up(suffix: &str, contents: &str) -> PathBuf {
+        let test_root = PathBuf::from("./target/fs-config-tests-".to_owned() + suffix);
 
-    // TODO: Make sure this actually works.
+        clean_up(&test_root);
+        fs::create_dir(&test_root).unwrap();
+        assert!(test_root.is_dir());
+
+        let path = test_root.join("current_shell");
+        let mut file = File::create(&path).unwrap();
+        file.write_all(contents.as_bytes()).unwrap();
+
+        test_root
+    }
+
     #[test]
     fn has_a_root_path() {
-        let root_path = "./fs-config-test";
-        let config = FilesystemConfig::new(PathBuf::from(root_path));
-        assert_eq!(config.root_path(), "./fs-config-test")
+        let test_root = set_up("root-path", "default");
+        let config = FilesystemConfig::new(test_root.clone());
+        assert_eq!(config.root_path(), &test_root);
+
+        clean_up(&test_root);
     }
 
     // TODO: Actually implement the rest of the test methods.
-    /*
-    #[test]
-    fn returns_the_current_shell_name() {
-    }
+    //
+    // #[test]
+    // fn returns_the_current_shell_name() {
+    // }
+    //
+    // #[test]
+    // fn can_set_the_current_shell_name() {
+    // }
+    //
+    // #[test]
+    // fn can_confirm_a_shell_exists() {
+    // }
+    //
+    // #[test]
+    // fn can_confirm_a_shell_does_not_exist() {
+    // }
+    //
 
-    #[test]
-    fn can_set_the_current_shell_name() {
-    }
-
-    #[test]
-    fn can_confirm_a_shell_exists() {
-    }
-
-    #[test]
-    fn can_confirm_a_shell_does_not_exist() {
-    }
-    */
 }
