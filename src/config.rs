@@ -8,7 +8,8 @@ pub trait Config {
 
     fn current_shell_name(&self) -> String;
 
-    fn set_current_shell_name(&mut self, name: &str); // TODO: Consider making this trait return `Result<(), Error>`.
+    // TODO: Consider making this trait return `Result<(), Error>`.
+    fn set_current_shell_name(&mut self, name: &str);
 
     fn does_shell_exist(&self, name: &str) -> bool;
 }
@@ -61,9 +62,28 @@ impl Config for FilesystemConfig {
     }
 
     fn set_current_shell_name(&mut self, name: &str) {
-        // TODO: Write value of self.current_shell to `name` and
-        // update self.current_shell. This _might_ fail...
-        ()
+        let config_path = self.root_path.join("current_shell");
+        let config_display = config_path.display();
+
+        let mut file = match File::create(&config_path) {
+            Ok(file) => file,
+            Err(e) => {
+                panic!("couldn't open {}: {}",
+                       config_display,
+                       Error::description(&e))
+            }
+        };
+
+        match file.write_all(self.current_shell.as_bytes()) {
+            Ok(_) => {}
+            Err(e) => {
+                panic!("error: couldn't write to {}: {}",
+                       config_display,
+                       Error::description(&e))
+            }
+        }
+
+        self.current_shell = name.to_string();
     }
 
     fn does_shell_exist(&self, name: &str) -> bool {
@@ -143,15 +163,26 @@ mod test {
         clean_up(&test_root);
     }
 
+    #[test]
+    fn returns_the_current_shell_name() {
+        let test_root = set_up("current-shell-name", "current");
+        let config = FilesystemConfig::new(test_root.clone());
+        assert_eq!(config.current_shell_name(), "current".to_string());
+
+        clean_up(&test_root);
+    }
+
+    #[test]
+    fn can_set_the_current_shell_name() {
+        let test_root = set_up("set-current-shell-name", "default");
+        let mut config = FilesystemConfig::new(test_root.clone());
+        config.set_current_shell_name("current");
+        assert_eq!(config.current_shell_name(), "current".to_string());
+
+        clean_up(&test_root);
+    }
+
     // TODO: Actually implement the rest of the test methods.
-    //
-    // #[test]
-    // fn returns_the_current_shell_name() {
-    // }
-    //
-    // #[test]
-    // fn can_set_the_current_shell_name() {
-    // }
     //
     // #[test]
     // fn can_confirm_a_shell_exists() {
