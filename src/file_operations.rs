@@ -1,11 +1,19 @@
-use std::fs;
-use std::io;
+use std::{fs, io, result};
 use std::path::{Path, PathBuf};
+
+use git2;
 
 enum Op {
     MkDir(PathBuf),
     GitInit(PathBuf),
 }
+
+enum Error {
+    IoError(io::Error),
+    Git2Error(git2::Error),
+}
+
+type Result = result::Result<(), Error>;
 
 struct FileOperations {
     root: PathBuf,
@@ -28,7 +36,7 @@ impl FileOperations {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
 
-    pub fn commit(mut self) -> Vec<io::Result<()>> {
+    pub fn commit(mut self) -> Vec<Result> {
         let ops = self.operations;
         self.operations = vec![];
         self.operations.push(Op::MkDir(PathBuf::from(".")));
@@ -45,12 +53,12 @@ impl FileOperations {
 
     /// Private Methods
 
-    fn create_dir(&mut self, dir: PathBuf) -> io::Result<()> {
-        fs::create_dir(dir)
+    fn create_dir(&mut self, dir: PathBuf) -> Result {
+        fs::create_dir(dir).map_err(|e| Error::IoError(e))
     }
 
-    fn create_git_repo(&mut self, dir: PathBuf) -> io::Result<()> {
-        fs::create_dir(dir.join(".git"))
+    fn create_git_repo(&mut self, dir: PathBuf) -> Result {
+        git2::Repository::init(dir).map(|_| ()).map_err(|e| Error::Git2Error(e))
     }
 }
 
