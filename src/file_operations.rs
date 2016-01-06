@@ -13,22 +13,22 @@ struct FileOperations {
 }
 
 impl FileOperations {
-    fn rooted_at<P: AsRef<Path>>(path: P) -> FileOperations {
+    pub fn rooted_at<P: AsRef<Path>>(path: P) -> FileOperations {
         FileOperations {
             root: PathBuf::from(path.as_ref()),
             operations: vec![],
         }
     }
 
-    fn make_dir<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn make_dir<P: AsRef<Path>>(&mut self, name: P) {
         self.operations.push(Op::MkDir(self.root.join(name)))
     }
 
-    fn make_git_repo<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn make_git_repo<P: AsRef<Path>>(&mut self, name: P) {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
 
-    fn commit(mut self) -> Vec<io::Result<()>> {
+    pub fn commit(mut self) -> Vec<io::Result<()>> {
         let ops = self.operations;
         self.operations = vec![];
         self.operations.push(Op::MkDir(PathBuf::from(".")));
@@ -36,11 +36,21 @@ impl FileOperations {
         ops.into_iter()
            .map(|op| {
                match op {
-                   Op::MkDir(ref dir) => fs::create_dir(dir),
-                   Op::GitInit(ref dir) => fs::create_dir(dir.join(".git")),
+                   Op::MkDir(dir) => self.create_dir(dir),
+                   Op::GitInit(dir) => self.create_git_repo(dir),
                }
            })
            .collect::<Vec<_>>()
+    }
+
+    /// Private Methods
+
+    fn create_dir(&mut self, dir: PathBuf) -> io::Result<()> {
+        fs::create_dir(dir)
+    }
+
+    fn create_git_repo(&mut self, dir: PathBuf) -> io::Result<()> {
+        fs::create_dir(dir.join(".git"))
     }
 }
 
