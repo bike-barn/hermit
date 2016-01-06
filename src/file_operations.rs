@@ -2,19 +2,19 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-enum FileOp {
+enum Op {
     MkDir(PathBuf),
     GitInit(PathBuf),
 }
 
-struct FileSet {
+struct FileOperations {
     root: PathBuf,
-    operations: Vec<FileOp>,
+    operations: Vec<Op>,
 }
 
-impl FileSet {
-    fn rooted_at<P: AsRef<Path>>(path: P) -> FileSet {
-        FileSet {
+impl FileOperations {
+    fn rooted_at<P: AsRef<Path>>(path: P) -> FileOperations {
+        FileOperations {
             root: PathBuf::from(path.as_ref()),
             operations: vec![],
         }
@@ -22,37 +22,36 @@ impl FileSet {
 
     fn make_dir<P: AsRef<Path>>(&mut self, name: P) {
         let path = PathBuf::from(name.as_ref());
-        self.operations.push(FileOp::MkDir(path))
+        self.operations.push(Op::MkDir(path))
     }
 
     fn make_git_repo<P: AsRef<Path>>(&mut self, name: P) {
         let path = PathBuf::from(name.as_ref());
-        self.operations.push(FileOp::GitInit(path))
+        self.operations.push(Op::GitInit(path))
     }
 
     fn commit(mut self) -> Vec<io::Result<()>> {
         let ops = self.operations;
         self.operations = vec![];
-        self.operations.push(FileOp::MkDir(PathBuf::from(".")));
+        self.operations.push(Op::MkDir(PathBuf::from(".")));
 
         ops.into_iter()
            .map(|op| {
                match op {
-                   FileOp::MkDir(ref dir) => fs::create_dir(self.root.join(dir)),
-                   FileOp::GitInit(ref dir) => fs::create_dir(self.root.join(dir).join(".git")),
+                   Op::MkDir(ref dir) => fs::create_dir(self.root.join(dir)),
+                   Op::GitInit(ref dir) => fs::create_dir(self.root.join(dir).join(".git")),
                }
            })
            .collect::<Vec<_>>()
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use std::fs;
     use std::path::PathBuf;
 
-    use super::FileSet;
+    use super::FileOperations;
 
     fn clean_up(test_root: &PathBuf) {
         if test_root.exists() {
@@ -73,7 +72,7 @@ mod tests {
     #[test]
     fn can_create_a_directory() {
         let test_root = set_up("mkdir");
-        let mut file_set = FileSet::rooted_at(&test_root);
+        let mut file_set = FileOperations::rooted_at(&test_root);
 
         file_set.make_dir("test");
         assert!(!test_root.join("test").is_dir());
@@ -86,7 +85,7 @@ mod tests {
     #[test]
     fn can_init_a_git_repo() {
         let test_root = set_up("git");
-        let mut file_set = FileSet::rooted_at(&test_root);
+        let mut file_set = FileOperations::rooted_at(&test_root);
 
         file_set.make_git_repo(".");
         assert!(!test_root.join(".git").is_dir());

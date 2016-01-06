@@ -4,7 +4,7 @@ extern crate clap;
 mod config;
 mod hermit;
 mod shell;
-mod file_set;
+mod file_operations;
 
 fn main() {
 
