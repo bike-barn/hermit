@@ -21,13 +21,11 @@ impl FileOperations {
     }
 
     fn make_dir<P: AsRef<Path>>(&mut self, name: P) {
-        let path = PathBuf::from(name.as_ref());
-        self.operations.push(Op::MkDir(path))
+        self.operations.push(Op::MkDir(self.root.join(name)))
     }
 
     fn make_git_repo<P: AsRef<Path>>(&mut self, name: P) {
-        let path = PathBuf::from(name.as_ref());
-        self.operations.push(Op::GitInit(path))
+        self.operations.push(Op::GitInit(self.root.join(name)))
     }
 
     fn commit(mut self) -> Vec<io::Result<()>> {
@@ -38,8 +36,8 @@ impl FileOperations {
         ops.into_iter()
            .map(|op| {
                match op {
-                   Op::MkDir(ref dir) => fs::create_dir(self.root.join(dir)),
-                   Op::GitInit(ref dir) => fs::create_dir(self.root.join(dir).join(".git")),
+                   Op::MkDir(ref dir) => fs::create_dir(dir),
+                   Op::GitInit(ref dir) => fs::create_dir(dir.join(".git")),
                }
            })
            .collect::<Vec<_>>()
