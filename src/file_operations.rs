@@ -1,17 +1,56 @@
-use std::{fs, io, result};
+use std::{error, fmt, fs, io, result};
 use std::path::{Path, PathBuf};
 
 use git2;
 
+#[derive(Debug)]
 enum Op {
     MkDir(PathBuf),
     MkDirAll(PathBuf),
     GitInit(PathBuf),
 }
 
+#[derive(Debug)]
 enum Error {
     IoError(io::Error),
     Git2Error(git2::Error),
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::IoError(ref err) => write!(f, "IO error: {}", err),
+            Error::Git2Error(ref err) => write!(f, "Git2 error: {}", err),
+        }
+    }
+}
+
+impl error::Error for Error {
+    fn description(&self) -> &str {
+        match *self {
+            Error::IoError(ref err) => err.description(),
+            Error::Git2Error(ref err) => err.description(),
+        }
+    }
+
+    fn cause(&self) -> Option<&error::Error> {
+        match *self {
+            Error::IoError(ref err) => Some(err),
+            Error::Git2Error(ref err) => Some(err),
+        }
+    }
+}
+
+impl From<io::Error> for Error {
+    fn from(err: io::Error) -> Error {
+        Error::IoError(err)
+    }
+}
+
+impl From<git2::Error> for Error {
+    fn from(err: git2::Error) -> Error {
+        Error::Git2Error(err)
+    }
 }
 
 type Result = result::Result<(), Error>;
@@ -47,28 +86,19 @@ impl FileOperations {
         self.operations.push(Op::MkDir(PathBuf::new()));
 
         ops.into_iter()
-           .map(|op| {
-               match op {
-                   Op::MkDir(dir) => self.make_dir(dir),
-                   Op::MkDirAll(dir) => self.make_dir_all(dir),
-                   Op::GitInit(dir) => self.make_git_repo(dir),
-               }
-           })
+           .map(|op| self.do_op(op))
            .collect::<Vec<_>>()
     }
 
     /// Private Methods
 
-    fn make_dir(&mut self, dir: PathBuf) -> Result {
-        fs::create_dir(dir).map_err(|e| Error::IoError(e))
-    }
-
-    fn make_dir_all(&mut self, dir: PathBuf) -> Result {
-        fs::create_dir_all(dir).map_err(|e| Error::IoError(e))
-    }
-
-    fn make_git_repo(&mut self, dir: PathBuf) -> Result {
-        git2::Repository::init(dir).map(|_| ()).map_err(|e| Error::Git2Error(e))
+    fn do_op(&mut self, op: Op) -> Result {
+        match op {
+            Op::MkDir(dir) => try!(fs::create_dir(dir)),
+            Op::MkDirAll(dir) => try!(fs::create_dir_all(dir)),
+            Op::GitInit(dir) => try!(git2::Repository::init(dir).map(|_| ())),
+        };
+        Ok(())
     }
 }
 
