@@ -167,4 +167,21 @@ mod tests {
 
         clean_up(&test_root);
     }
+
+    #[test]
+    fn can_init_a_git_repo_at_a_nonexistent_path() {
+        let test_root = set_up("not-git");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+
+        let path = Path::new("test").join("sub").join("repo");
+        assert!(!test_root.join(&path).join(".git").is_dir());
+        file_set.create_git_repo(&path);
+        assert!(!test_root.join(&path).join(".git").is_dir());
+        let results = file_set.commit();
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
+        assert!(test_root.join(&path).join(".git").is_dir());
+
+        clean_up(&test_root);
+    }
 }
