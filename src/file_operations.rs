@@ -114,6 +114,23 @@ mod tests {
     }
 
     #[test]
+    fn cannot_create_a_directory_in_a_nonexistent_path() {
+        let test_root = set_up("not-mkdir");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+
+        assert!(!test_root.join("test").is_dir());
+        let path = Path::new("test").join("one").join("two").join("three");
+        file_set.create_dir(path);
+        assert!(!test_root.join("test").is_dir());
+        let results = file_set.commit();
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_err());
+        assert!(!test_root.join("test").is_dir());
+
+        clean_up(&test_root);
+    }
+
+    #[test]
     fn can_create_path_of_needed_directories() {
         let test_root = set_up("mkdir-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
