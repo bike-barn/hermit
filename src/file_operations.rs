@@ -133,9 +133,12 @@ mod tests {
         let test_root = set_up("git");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
+        assert!(!test_root.join(".git").is_dir());
         file_set.create_git_repo(".");
         assert!(!test_root.join(".git").is_dir());
-        file_set.commit();
+        let results = file_set.commit();
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
         assert!(test_root.join(".git").is_dir());
 
         clean_up(&test_root);
