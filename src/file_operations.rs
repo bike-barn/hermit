@@ -83,16 +83,21 @@ mod tests {
         if test_root.exists() && test_root.is_dir() {
             fs::remove_dir_all(test_root).expect("Recursive dir removal to succeed.");
         }
-        assert!(!test_root.exists());
+        assert!(!test_root.exists(),
+                format!("Test root {} should not exist after teardown",
+                        test_root.display()));
     }
 
     fn set_up(suffix: &str) -> PathBuf {
         let test_root = PathBuf::from("./target/file_set_tests".to_owned()).join(suffix);
         clean_up(&test_root);
+        assert!(!test_root.exists(),
+                format!("Test root {} should not exist before setup",
+                        test_root.display()));
         fs::create_dir_all(&test_root)
             .expect(format!("expected dir not to exist: {}", suffix).as_ref());
-        assert!(test_root.exists());
-        assert!(test_root.is_dir());
+        assert!(test_root.exists(),
+                format!("Test root {} should exist after setup", test_root.display()));
 
         test_root
     }
