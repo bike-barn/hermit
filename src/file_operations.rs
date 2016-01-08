@@ -80,16 +80,18 @@ mod tests {
     use super::FileOperations;
 
     fn clean_up(test_root: &PathBuf) {
-        if test_root.exists() {
-            fs::remove_dir_all(test_root).unwrap();
+        if test_root.exists() && test_root.is_dir() {
+            fs::remove_dir_all(test_root).expect("Recursive dir removal to succeed.");
         }
-        assert!(!test_root.is_dir());
+        assert!(!test_root.exists());
     }
 
     fn set_up(suffix: &str) -> PathBuf {
-        let test_root = PathBuf::from("./target/file_set_tests-".to_owned() + suffix);
+        let test_root = PathBuf::from("./target/file_set_tests".to_owned()).join(suffix);
         clean_up(&test_root);
-        fs::create_dir(&test_root).unwrap();
+        fs::create_dir_all(&test_root)
+            .expect(format!("expected dir not to exist: {}", suffix).as_ref());
+        assert!(test_root.exists());
         assert!(test_root.is_dir());
 
         test_root
