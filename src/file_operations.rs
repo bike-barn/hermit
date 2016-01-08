@@ -5,6 +5,7 @@ use git2;
 
 enum Op {
     MkDir(PathBuf),
+    MkDirAll(PathBuf),
     GitInit(PathBuf),
 }
 
@@ -32,6 +33,10 @@ impl FileOperations {
         self.operations.push(Op::MkDir(self.root.join(name)))
     }
 
+    pub fn make_dir_all<P: AsRef<Path>>(&mut self, name: P) {
+        self.operations.push(Op::MkDirAll(self.root.join(name)))
+    }
+
     pub fn make_git_repo<P: AsRef<Path>>(&mut self, name: P) {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
@@ -45,6 +50,7 @@ impl FileOperations {
            .map(|op| {
                match op {
                    Op::MkDir(dir) => self.create_dir(dir),
+                   Op::MkDirAll(dir) => self.create_dir_all(dir),
                    Op::GitInit(dir) => self.create_git_repo(dir),
                }
            })
@@ -57,6 +63,10 @@ impl FileOperations {
         fs::create_dir(dir).map_err(|e| Error::IoError(e))
     }
 
+    fn create_dir_all(&mut self, dir: PathBuf) -> Result {
+        fs::create_dir_all(dir).map_err(|e| Error::IoError(e))
+    }
+
     fn create_git_repo(&mut self, dir: PathBuf) -> Result {
         git2::Repository::init(dir).map(|_| ()).map_err(|e| Error::Git2Error(e))
     }
@@ -65,7 +75,7 @@ impl FileOperations {
 #[cfg(test)]
 mod tests {
     use std::fs;
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
 
     use super::FileOperations;
 
@@ -90,9 +100,29 @@ mod tests {
         let test_root = set_up("mkdir");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
+        assert!(!test_root.join("test").is_dir());
         file_set.make_dir("test");
         assert!(!test_root.join("test").is_dir());
-        file_set.commit();
+        let results = file_set.commit();
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
+        assert!(test_root.join("test").is_dir());
+
+        clean_up(&test_root);
+    }
+
+    #[test]
+    fn can_create_path_of_needed_directories() {
+        let test_root = set_up("mkdir-deep");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+
+        assert!(!test_root.join("test").is_dir());
+        let path = Path::new("test").join("one").join("two").join("three");
+        file_set.make_dir_all(path);
+        assert!(!test_root.join("test").is_dir());
+        let results = file_set.commit();
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
         assert!(test_root.join("test").is_dir());
 
         clean_up(&test_root);
