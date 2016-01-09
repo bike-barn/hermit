@@ -204,7 +204,7 @@ mod tests {
 
     #[test]
     fn can_init_a_git_repo_at_a_nonexistent_path() {
-        let test_root = set_up("not-git");
+        let test_root = set_up("git-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         let path = Path::new("test").join("sub").join("repo");
