@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::error::Error;
+use std::io;
 use std::io::prelude::*;
 use std::path::PathBuf;
 
@@ -8,46 +8,31 @@ pub trait Config {
 
     fn current_shell_name(&self) -> String;
 
-    // TODO: Consider making this trait return `Result<(), Error>`.
-    fn set_current_shell_name(&mut self, name: &str);
+    fn set_current_shell_name(&mut self, name: &str) -> Result<(), io::Error>;
 
     fn does_shell_exist(&self, name: &str) -> bool;
 }
 
+#[derive(Clone)]
 pub struct FilesystemConfig {
     pub root_path: PathBuf,
     pub current_shell: String,
 }
 
 impl FilesystemConfig {
-    // TODO: This should probably return a Result<Self, Error>.
-    fn new(root_path: PathBuf) -> Self {
+    fn new(root_path: PathBuf) -> Result<Self, io::Error> {
         let config_path = root_path.join("current_shell");
         let config_display = config_path.display();
 
-        let mut file = match File::open(&config_path) {
-            Ok(file) => file,
-            Err(e) => {
-                panic!("couldn't open {}: {}",
-                       config_display,
-                       Error::description(&e))
-            }
-        };
-
+        let mut file = try!(File::open(&config_path));
         let mut current_shell = String::new();
-        match file.read_to_string(&mut current_shell) {
-            Ok(_) => {}
-            Err(e) => {
-                panic!("error: couldn't read {}: {}",
-                       config_display,
-                       Error::description(&e))
-            }
-        }
 
-        FilesystemConfig {
+        try!(file.read_to_string(&mut current_shell));
+
+        Ok(FilesystemConfig {
             root_path: root_path,
             current_shell: current_shell,
-        }
+        })
     }
 }
 
@@ -61,29 +46,16 @@ impl Config for FilesystemConfig {
         self.current_shell.clone()
     }
 
-    fn set_current_shell_name(&mut self, name: &str) {
+    fn set_current_shell_name(&mut self, name: &str) -> Result<(), io::Error> {
         let config_path = self.root_path.join("current_shell");
         let config_display = config_path.display();
 
-        let mut file = match File::create(&config_path) {
-            Ok(file) => file,
-            Err(e) => {
-                panic!("couldn't open {}: {}",
-                       config_display,
-                       Error::description(&e))
-            }
-        };
+        let mut file = try!(File::create(&config_path));
 
-        match file.write_all(self.current_shell.as_bytes()) {
-            Ok(_) => {}
-            Err(e) => {
-                panic!("error: couldn't write to {}: {}",
-                       config_display,
-                       Error::description(&e))
-            }
-        }
+        try!(file.write_all(self.current_shell.as_bytes()));
 
         self.current_shell = name.to_string();
+        Ok(())
     }
 
     fn does_shell_exist(&self, name: &str) -> bool {
@@ -95,6 +67,7 @@ impl Config for FilesystemConfig {
 
 #[cfg(test)]
 pub mod mock {
+    use std::io;
     use std::path::PathBuf;
 
     use super::Config;
@@ -115,8 +88,9 @@ pub mod mock {
             self.current_shell.clone()
         }
 
-        fn set_current_shell_name(&mut self, name: &str) {
+        fn set_current_shell_name(&mut self, name: &str) -> Result<(), io::Error> {
             self.current_shell = name.to_string();
+            Ok(())
         }
 
         fn does_shell_exist(&self, name: &str) -> bool {
@@ -157,7 +131,7 @@ mod test {
     #[test]
     fn has_a_root_path() {
         let test_root = set_up("root-path", "default");
-        let config = FilesystemConfig::new(test_root.clone());
+        let config = FilesystemConfig::new(test_root.clone()).unwrap();
         assert_eq!(config.root_path(), &test_root);
 
         clean_up(&test_root);
@@ -166,7 +140,7 @@ mod test {
     #[test]
     fn returns_the_current_shell_name() {
         let test_root = set_up("current-shell-name", "current");
-        let config = FilesystemConfig::new(test_root.clone());
+        let config = FilesystemConfig::new(test_root.clone()).unwrap();
         assert_eq!(config.current_shell_name(), "current".to_string());
 
         clean_up(&test_root);
@@ -175,7 +149,7 @@ mod test {
     #[test]
     fn can_set_the_current_shell_name() {
         let test_root = set_up("set-current-shell-name", "default");
-        let mut config = FilesystemConfig::new(test_root.clone());
+        let mut config = FilesystemConfig::new(test_root.clone()).unwrap();
         config.set_current_shell_name("current");
         assert_eq!(config.current_shell_name(), "current".to_string());
 
