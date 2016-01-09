@@ -8,7 +8,7 @@ pub trait Config {
 
     fn current_shell_name(&self) -> String;
 
-    fn set_current_shell_name(&mut self, name: &str) -> Result<(), io::Error>;
+    fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
     fn does_shell_exist(&self, name: &str) -> bool;
 }
@@ -20,7 +20,7 @@ pub struct FsConfig {
 }
 
 impl FsConfig {
-    fn new(root_path: PathBuf) -> Result<Self, io::Error> {
+    fn new(root_path: PathBuf) -> io::Result<Self> {
         let config_path = root_path.join("current_shell");
         let config_display = config_path.display();
 
@@ -46,7 +46,7 @@ impl Config for FsConfig {
         self.current_shell.clone()
     }
 
-    fn set_current_shell_name(&mut self, name: &str) -> Result<(), io::Error> {
+    fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
         let config_path = self.root_path.join("current_shell");
         let config_display = config_path.display();
 
@@ -88,7 +88,7 @@ pub mod mock {
             self.current_shell.clone()
         }
 
-        fn set_current_shell_name(&mut self, name: &str) -> Result<(), io::Error> {
+        fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
             self.current_shell = name.to_string();
             Ok(())
         }
