@@ -14,12 +14,12 @@ pub trait Config {
 }
 
 #[derive(Clone)]
-pub struct FilesystemConfig {
+pub struct FsConfig {
     pub root_path: PathBuf,
     pub current_shell: String,
 }
 
-impl FilesystemConfig {
+impl FsConfig {
     fn new(root_path: PathBuf) -> Result<Self, io::Error> {
         let config_path = root_path.join("current_shell");
         let config_display = config_path.display();
@@ -29,14 +29,14 @@ impl FilesystemConfig {
 
         try!(file.read_to_string(&mut current_shell));
 
-        Ok(FilesystemConfig {
+        Ok(FsConfig {
             root_path: root_path,
             current_shell: current_shell,
         })
     }
 }
 
-impl Config for FilesystemConfig {
+impl Config for FsConfig {
     fn root_path(&self) -> &PathBuf {
         &self.root_path
     }
@@ -105,7 +105,7 @@ mod test {
     use std::fs::File;
     use std::path::PathBuf;
     use std::io::prelude::*;
-    use super::{Config, FilesystemConfig};
+    use super::{Config, FsConfig};
 
     fn clean_up(test_root: &PathBuf) {
         if test_root.exists() {
@@ -131,7 +131,7 @@ mod test {
     #[test]
     fn has_a_root_path() {
         let test_root = set_up("root-path", "default");
-        let config = FilesystemConfig::new(test_root.clone()).unwrap();
+        let config = FsConfig::new(test_root.clone()).unwrap();
         assert_eq!(config.root_path(), &test_root);
 
         clean_up(&test_root);
@@ -140,7 +140,7 @@ mod test {
     #[test]
     fn returns_the_current_shell_name() {
         let test_root = set_up("current-shell-name", "current");
-        let config = FilesystemConfig::new(test_root.clone()).unwrap();
+        let config = FsConfig::new(test_root.clone()).unwrap();
         assert_eq!(config.current_shell_name(), "current".to_string());
 
         clean_up(&test_root);
@@ -149,7 +149,7 @@ mod test {
     #[test]
     fn can_set_the_current_shell_name() {
         let test_root = set_up("set-current-shell-name", "default");
-        let mut config = FilesystemConfig::new(test_root.clone()).unwrap();
+        let mut config = FsConfig::new(test_root.clone()).unwrap();
         config.set_current_shell_name("current");
         assert_eq!(config.current_shell_name(), "current".to_string());
 
