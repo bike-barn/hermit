@@ -107,6 +107,8 @@ mod tests {
     use std::fs;
     use std::path::{Path, PathBuf};
 
+    use uuid::Uuid;
+
     use super::FileOperations;
 
     fn clean_up(test_root: &PathBuf) {
@@ -119,7 +121,9 @@ mod tests {
     }
 
     fn set_up(suffix: &str) -> PathBuf {
-        let test_root = PathBuf::from("./target/file_set_tests".to_owned()).join(suffix);
+        let random_uuid = Uuid::new_v4();
+        let suffix = format!("{}-{}", suffix, random_uuid);
+        let test_root = PathBuf::from("./target/file_set_tests".to_owned()).join(&suffix);
         clean_up(&test_root);
         assert!(!test_root.exists(),
                 format!("Test root {} should not exist before setup",

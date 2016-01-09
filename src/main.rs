@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate clap;
 extern crate git2;
+extern crate uuid;
 
 mod config;
 mod hermit;
