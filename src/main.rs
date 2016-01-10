@@ -1,10 +1,14 @@
 #![warn(missing_docs)]
 #[macro_use]
 extern crate clap;
+extern crate uuid;
 
 mod config;
 mod hermit;
 mod shell;
+
+#[cfg(test)]
+mod test;
 
 fn main() {
 
