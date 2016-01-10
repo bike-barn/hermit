@@ -123,7 +123,7 @@ mod tests {
     fn set_up(suffix: &str) -> PathBuf {
         let random_uuid = Uuid::new_v4();
         let suffix = format!("{}-{}", suffix, random_uuid);
-        let test_root = PathBuf::from("./target/file_set_tests".to_owned()).join(&suffix);
+        let test_root = PathBuf::from(&suffix);
         clean_up(&test_root);
         assert!(!test_root.exists(),
                 format!("Test root {} should not exist before setup",
