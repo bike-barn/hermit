@@ -22,6 +22,16 @@ before_script:
 script:
   - ./runtests.sh
 
+addons:
+  apt:
+    sources:
+      - kalakris-cmake
+    packages:
+      - cmake
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+
 notifications:
   slack:
     on_success: always

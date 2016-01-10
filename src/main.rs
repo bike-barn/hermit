@@ -1,11 +1,13 @@
 #![warn(missing_docs)]
 #[macro_use]
 extern crate clap;
+extern crate git2;
 extern crate uuid;
 
 mod config;
 mod hermit;
 mod shell;
+mod file_operations;
 
 #[cfg(test)]
 mod test;
