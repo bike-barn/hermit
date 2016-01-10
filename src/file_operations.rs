@@ -218,4 +218,16 @@ mod tests {
 
         clean_up(&test_root);
     }
+
+    #[test]
+    fn init_many_steps() {
+        let test_root = Path::new("test").join("path").join("deeply").join("nested");
+        fs::create_dir_all(&test_root).unwrap();
+    }
+
+    #[test]
+    fn init_many_steps2() {
+        let test_root = Path::new("test").join("path").join("deeply").join("nested");
+        fs::create_dir_all(&test_root).unwrap();
+    }
 }
