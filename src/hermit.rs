@@ -1,3 +1,4 @@
+use std::io;
 use config::Config;
 use shell::Shell;
 
@@ -12,15 +13,20 @@ pub enum Error {
     ShellDoesNotExist,
 }
 
+impl From<io::Error> for Error {
+    fn from(err: io::Error) -> Error {
+        Error::ShellDoesNotExist
+    }
+}
+
 impl<T: Config> Hermit<T> {
     fn current_shell(&self) -> Shell {
         Shell::new(self.config.current_shell_name(), self.config.root_path())
     }
 
     fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
-        if self.config.does_shell_exist(name) {
-            self.config.set_current_shell_name(name);
-            Ok(())
+        if try!(self.config.does_shell_exist(name)) {
+            self.config.set_current_shell_name(name).map_err(From::from)
         } else {
             Err(Error::ShellDoesNotExist)
         }

@@ -1,3 +1,4 @@
+use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
@@ -10,7 +11,7 @@ pub trait Config {
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
-    fn does_shell_exist(&self, name: &str) -> bool;
+    fn does_shell_exist(&self, name: &str) -> io::Result<bool>;
 }
 
 #[derive(Clone)]
@@ -58,10 +59,17 @@ impl Config for FsConfig {
         Ok(())
     }
 
-    fn does_shell_exist(&self, name: &str) -> bool {
+    fn does_shell_exist(&self, name: &str) -> io::Result<bool> {
         // TODO: Check to see if a dir by `name` exists in
         // self.root_path/shells. return true if exists, false otherwise.
-        true
+        let shell_root = self.root_path.join("shells");
+        Ok(try!(fs::read_dir(shell_root)).any(|entry| {
+            let entry = try!(entry);
+            entry.path().is_dir() && match entry.file_name().to_str() {
+                Some(n) => n == name,
+                None => false
+            }
+        }))
     }
 }
 
@@ -93,8 +101,8 @@ pub mod mock {
             Ok(())
         }
 
-        fn does_shell_exist(&self, name: &str) -> bool {
-            self.allowed_shell_names.contains(&name.to_string())
+        fn does_shell_exist(&self, name: &str) -> io::Result<bool> {
+            Ok(self.allowed_shell_names.contains(&name.to_string()))
         }
     }
 }
@@ -114,7 +122,7 @@ mod test {
         assert!(!test_root.is_dir());
     }
 
-    fn set_up(suffix: &str, contents: &str) -> PathBuf {
+    fn set_up(suffix: &str, current: &str, shells: Vec<&str>) -> PathBuf {
         let test_root = PathBuf::from("./target/fs-config-tests-".to_owned() + suffix);
 
         clean_up(&test_root);
@@ -123,14 +131,21 @@ mod test {
 
         let path = test_root.join("current_shell");
         let mut file = File::create(&path).unwrap();
-        file.write_all(contents.as_bytes()).unwrap();
+        file.write_all(current.as_bytes()).unwrap();
+
+        let shell_root = test_root.join("shells");
+        fs::create_dir(&shell_root).unwrap();
+        for shell in shells {
+            let new_shell = shell_root.join(PathBuf::from(shell));
+            fs::create_dir(&new_shell).unwrap();
+        }
 
         test_root
     }
 
     #[test]
     fn has_a_root_path() {
-        let test_root = set_up("root-path", "default");
+        let test_root = set_up("root-path", "default", vec!["default"]);
         let config = FsConfig::new(test_root.clone()).unwrap();
         assert_eq!(config.root_path(), &test_root);
 
@@ -139,7 +154,7 @@ mod test {
 
     #[test]
     fn returns_the_current_shell_name() {
-        let test_root = set_up("current-shell-name", "current");
+        let test_root = set_up("current-shell-name", "current", vec!["default"]);
         let config = FsConfig::new(test_root.clone()).unwrap();
         assert_eq!(config.current_shell_name(), "current".to_string());
 
@@ -148,7 +163,7 @@ mod test {
 
     #[test]
     fn can_set_the_current_shell_name() {
-        let test_root = set_up("set-current-shell-name", "default");
+        let test_root = set_up("set-current-shell-name", "default", vec!["default"]);
         let mut config = FsConfig::new(test_root.clone()).unwrap();
         config.set_current_shell_name("current");
         assert_eq!(config.current_shell_name(), "current".to_string());
@@ -156,11 +171,21 @@ mod test {
         clean_up(&test_root);
     }
 
+    #[test]
+    fn can_confirm_a_shell_exists() {
+        let test_root = set_up("confirm-shell-existence",
+                               "default",
+                               vec!["default", "other"]);
+        let mut config = FsConfig::new(test_root.clone()).unwrap();
+
+        let shell_exists = config.does_shell_exist("other");
+        assert!(shell_exists.is_ok());
+        assert!(shell_exists.unwrap());
+
+        clean_up(&test_root);
+    }
+
     // TODO: Actually implement the rest of the test methods.
-    //
-    // #[test]
-    // fn can_confirm_a_shell_exists() {
-    // }
     //
     // #[test]
     // fn can_confirm_a_shell_does_not_exist() {
