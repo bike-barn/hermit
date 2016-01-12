@@ -9,8 +9,8 @@ matrix:
     - rust: nightly
 cache:
   directories:
-    - target/debug/deps
-    - target/debug/native
+    - $HOME/.cargo
+    - target
 
 before_script:
   - curl -o /tmp/urchin https://raw.githubusercontent.com/scraperwiki/urchin/master/urchin && chmod +x /tmp/urchin
