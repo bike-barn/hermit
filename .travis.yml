@@ -7,6 +7,10 @@ rust:
 matrix:
   allow_failures:
     - rust: nightly
+cache:
+  directories:
+    - target/debug/deps
+    - target/debug/native
 
 before_script:
   - curl -o /tmp/urchin https://raw.githubusercontent.com/scraperwiki/urchin/master/urchin && chmod +x /tmp/urchin
