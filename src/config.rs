@@ -1,4 +1,3 @@
-use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
@@ -11,7 +10,7 @@ pub trait Config {
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
-    fn does_shell_exist(&self, name: &str) -> io::Result<bool>;
+    fn does_shell_exist(&self, name: &str) -> bool;
 }
 
 #[derive(Clone)]
@@ -23,7 +22,6 @@ pub struct FsConfig {
 impl FsConfig {
     fn new(root_path: PathBuf) -> io::Result<Self> {
         let config_path = root_path.join("current_shell");
-        let config_display = config_path.display();
 
         let mut file = try!(File::open(&config_path));
         let mut current_shell = String::new();
@@ -34,6 +32,10 @@ impl FsConfig {
             root_path: root_path,
             current_shell: current_shell,
         })
+    }
+
+    fn config_path(&self) -> PathBuf {
+        self.root_path.join("current_shell")
     }
 }
 
@@ -47,10 +49,7 @@ impl Config for FsConfig {
     }
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
-        let config_path = self.root_path.join("current_shell");
-        let config_display = config_path.display();
-
-        let mut file = try!(File::create(&config_path));
+        let mut file = try!(File::create(&self.config_path()));
 
         try!(file.write_all(name.as_bytes()));
 
@@ -59,9 +58,9 @@ impl Config for FsConfig {
         Ok(())
     }
 
-    fn does_shell_exist(&self, name: &str) -> io::Result<bool> {
+    fn does_shell_exist(&self, name: &str) -> bool {
         let shell_path = self.root_path.join("shells").join(name);
-        Ok(shell_path.is_dir())
+        shell_path.is_dir()
     }
 }
 
@@ -93,8 +92,8 @@ pub mod mock {
             Ok(())
         }
 
-        fn does_shell_exist(&self, name: &str) -> io::Result<bool> {
-            Ok(self.allowed_shell_names.contains(&name.to_string()))
+        fn does_shell_exist(&self, name: &str) -> bool {
+            self.allowed_shell_names.contains(&name.to_string())
         }
     }
 }
@@ -157,7 +156,7 @@ mod test {
     fn can_set_the_current_shell_name() {
         let test_root = set_up("set-current-shell-name", "default", vec!["default"]);
         let mut config = FsConfig::new(test_root.clone()).unwrap();
-        config.set_current_shell_name("current");
+        config.set_current_shell_name("current").unwrap();
 
         let mut config_file = File::open(&test_root.join("current_shell")).unwrap();
         let mut name_on_disk = String::new();
@@ -175,11 +174,9 @@ mod test {
         let test_root = set_up("confirm-shell-existence",
                                "default",
                                vec!["default", "other"]);
-        let mut config = FsConfig::new(test_root.clone()).unwrap();
+        let config = FsConfig::new(test_root.clone()).unwrap();
 
-        let shell_exists = config.does_shell_exist("other");
-        assert!(shell_exists.is_ok());
-        assert!(shell_exists.unwrap());
+        assert!(config.does_shell_exist("other"));
 
         clean_up(&test_root);
     }
@@ -189,11 +186,9 @@ mod test {
         let test_root = set_up("confirm-shell-non-existence",
                                "default",
                                vec!["default", "other"]);
-        let mut config = FsConfig::new(test_root.clone()).unwrap();
+        let config = FsConfig::new(test_root.clone()).unwrap();
 
-        let shell_exists = config.does_shell_exist("another");
-        assert!(shell_exists.is_ok());
-        assert!(!shell_exists.unwrap());
+        assert!(!config.does_shell_exist("another"));
 
         clean_up(&test_root);
     }

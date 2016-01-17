@@ -25,7 +25,7 @@ impl<T: Config> Hermit<T> {
     }
 
     fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
-        if try!(self.config.does_shell_exist(name)) {
+        if self.config.does_shell_exist(name) {
             self.config.set_current_shell_name(name).map_err(From::from)
         } else {
             Err(Error::ShellDoesNotExist)
