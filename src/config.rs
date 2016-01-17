@@ -42,7 +42,6 @@ impl Config for FsConfig {
         &self.root_path
     }
 
-    // TODO: Does this actually need to read from the filesystem as well?
     fn current_shell_name(&self) -> String {
         self.current_shell.clone()
     }
@@ -60,16 +59,8 @@ impl Config for FsConfig {
     }
 
     fn does_shell_exist(&self, name: &str) -> io::Result<bool> {
-        // TODO: Check to see if a dir by `name` exists in
-        // self.root_path/shells. return true if exists, false otherwise.
-        let shell_root = self.root_path.join("shells");
-        Ok(try!(fs::read_dir(shell_root)).any(|entry| {
-            let entry = try!(entry);
-            entry.path().is_dir() && match entry.file_name().to_str() {
-                Some(n) => n == name,
-                None => false
-            }
-        }))
+        let shell_path = self.root_path.join("shells").join(name);
+        Ok(shell_path.is_dir())
     }
 }
 
@@ -185,11 +176,19 @@ mod test {
         clean_up(&test_root);
     }
 
-    // TODO: Actually implement the rest of the test methods.
-    //
-    // #[test]
-    // fn can_confirm_a_shell_does_not_exist() {
-    // }
-    //
+    #[test]
+    fn can_confirm_a_shell_does_not_exist() {
+        let test_root = set_up("confirm-shell-non-existence",
+                               "default",
+                               vec!["default", "other"]);
+        let mut config = FsConfig::new(test_root.clone()).unwrap();
+
+        let shell_exists = config.does_shell_exist("another");
+        assert!(shell_exists.is_ok());
+        assert!(!shell_exists.unwrap());
+
+        clean_up(&test_root);
+    }
+
 
 }
