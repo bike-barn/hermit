@@ -52,9 +52,10 @@ impl Config for FsConfig {
 
         let mut file = try!(File::create(&config_path));
 
-        try!(file.write_all(self.current_shell.as_bytes()));
+        try!(file.write_all(name.as_bytes()));
 
         self.current_shell = name.to_string();
+
         Ok(())
     }
 
@@ -157,7 +158,14 @@ mod test {
         let test_root = set_up("set-current-shell-name", "default", vec!["default"]);
         let mut config = FsConfig::new(test_root.clone()).unwrap();
         config.set_current_shell_name("current");
-        assert_eq!(config.current_shell_name(), "current".to_string());
+
+        let mut config_file = File::open(&test_root.join("current_shell")).unwrap();
+        let mut name_on_disk = String::new();
+        config_file.read_to_string(&mut name_on_disk).unwrap();
+
+        let current = "current".to_string();
+        assert_eq!(config.current_shell_name(), current);
+        assert_eq!(name_on_disk, current);
 
         clean_up(&test_root);
     }
