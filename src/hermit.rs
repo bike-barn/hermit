@@ -25,8 +25,10 @@ impl<T: Config> Hermit<T> {
         Hermit { config: config }
     }
 
-    pub fn current_shell(&self) -> Shell {
-        Shell::new(self.config.current_shell_name(), self.config.root_path())
+    pub fn current_shell(&self) -> Option<Shell> {
+        self.config
+            .current_shell_name()
+            .map(|shell_name| Shell::new(shell_name, self.config.root_path()))
     }
 
     pub fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
@@ -71,7 +73,7 @@ mod tests {
         let config = mock_config();
         let hermit = hermit(&config);
 
-        let shell = hermit.current_shell();
+        let shell = hermit.current_shell().unwrap();
         assert_eq!(shell.name, "default");
         assert_eq!(shell.root_path, config.root_path());
     }
@@ -82,9 +84,9 @@ mod tests {
         config.current_shell = "current".to_owned();
         let mut hermit = hermit(&config);
 
-        assert_eq!(hermit.current_shell().name, "current");
+        assert_eq!(hermit.current_shell().unwrap().name, "current");
         assert!(hermit.set_current_shell("default").is_ok());
-        assert_eq!(hermit.current_shell().name, "default");
+        assert_eq!(hermit.current_shell().unwrap().name, "default");
     }
 
     #[test]
@@ -92,7 +94,7 @@ mod tests {
         let config = mock_config();
         let mut hermit = hermit(&config);
 
-        assert_eq!(hermit.current_shell().name, "default");
+        assert_eq!(hermit.current_shell().unwrap().name, "default");
         let res = hermit.set_current_shell("non-existent");
         assert!(res.is_err());
         assert_eq!(res.err().unwrap(), Error::ShellDoesNotExist);
