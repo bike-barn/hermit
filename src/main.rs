@@ -9,14 +9,15 @@ mod hermit;
 mod shell;
 mod file_operations;
 
+use clap::App;
+
 #[cfg(test)]
 mod test;
 
-fn main() {
-
+fn make_app_config<'a, 'b, 'c, 'd, 'e, 'f>() -> App<'a, 'b, 'c, 'd, 'e, 'f> {
     let version = env!("CARGO_PKG_VERSION");
 
-    let app = clap_app!(myapp =>
+    clap_app!(myapp =>
         (version: version)
         (author: "Bike Barn <https://github.com/bike-barn/hermit>")
         (about: "A home directory configuration management assistant.")
@@ -46,7 +47,11 @@ fn main() {
         (@subcommand use =>
             (about: "Switch to using a different hermit shell")
             (usage: "hermit use [shell-name]"))
-    );
+    )
+}
+
+fn main() {
+    let app = make_app_config();
     let app_matches = app.get_matches();
 
     match app_matches.subcommand() {
