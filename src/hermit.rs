@@ -21,6 +21,10 @@ pub struct Hermit<T: Config> {
 }
 
 impl<T: Config> Hermit<T> {
+    pub fn new(config: T) -> Hermit<T> {
+        Hermit { config: config }
+    }
+
     pub fn current_shell(&self) -> Shell {
         Shell::new(self.config.current_shell_name(), self.config.root_path())
     }

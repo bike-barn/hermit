@@ -22,7 +22,7 @@ pub struct FsConfig {
 }
 
 impl FsConfig {
-    fn new<P: AsRef<Path>>(root_path: P) -> io::Result<Self> {
+    pub fn new<P: AsRef<Path>>(root_path: P) -> io::Result<Self> {
         let root_path = PathBuf::from(root_path.as_ref());
         let config_path = root_path.join("current_shell");
 

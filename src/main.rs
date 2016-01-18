@@ -9,7 +9,14 @@ mod hermit;
 mod shell;
 mod file_operations;
 
+use std::env;
+use std::path::PathBuf;
+
 use clap::App;
+
+use config::FsConfig;
+use hermit::Hermit;
+use file_operations::FileOperations;
 
 #[cfg(test)]
 mod test;
@@ -54,6 +61,13 @@ fn main() {
     let app = make_app_config();
     let app_matches = app.get_matches();
 
+    let hermit_root = get_hermit_dir().expect("Could not determine hermit root location.");
+    let fs_config = FsConfig::new(hermit_root).expect("Could not read the hermit configuration.");
+    let hermit = Hermit::new(fs_config);
+
+    let home_dir = env::home_dir().expect("Could not determine home directory.");
+    let mut file_operations = FileOperations::rooted_at(home_dir);
+
     match app_matches.subcommand() {
         ("add", Some(_matches)) => {
             println!("hermit add is not yet implemented");
@@ -67,8 +81,9 @@ fn main() {
         ("git", Some(_matches)) => {
             println!("hermit git is not yet implemented");
         }
-        ("init", Some(_matches)) => {
-            println!("hermit init is not yet implemented");
+        ("init", Some(matches)) => {
+            let shell_name = matches.value_of("").unwrap_or("default");
+            hermit.init_shell(&mut file_operations, shell_name);
         }
         ("nuke", Some(_matches)) => {
             println!("hermit nuke is not yet implemented");
@@ -80,5 +95,18 @@ fn main() {
             println!("hermit use is not yet implemented");
         }
         _ => {}
-    }
+    };
+
+    file_operations.commit();
+}
+
+fn get_hermit_dir() -> Option<PathBuf> {
+    env::var("HERMIT_ROOT")
+        .map(PathBuf::from)
+        .ok()
+        .or_else(default_hermit_dir)
+}
+
+fn default_hermit_dir() -> Option<PathBuf> {
+    env::home_dir().map(|home| home.join(".config/hermit"))
 }
