@@ -103,12 +103,23 @@ fn main() {
 }
 
 fn report_errors(results: Vec<file_operations::Result>) {
+    let app_name = get_program_name();
+
     for result in results {
         match result {
             Ok(()) => (),
-            Err(e) => println!("hermit: error: {}", e.description()),
+            Err(e) => println!("{}: error: {}", app_name, e.description()),
         }
     }
+}
+
+fn get_program_name() -> String {
+    env::args()
+        .nth(0)
+        .map(PathBuf::from)
+        .and_then(|path| path.file_name().map(|name| name.to_owned()))
+        .and_then(|file_name| file_name.to_str().map(|name| name.to_owned()))
+        .unwrap_or("hermit".to_owned())
 }
 
 fn get_hermit_dir() -> Option<PathBuf> {
