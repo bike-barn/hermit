@@ -16,52 +16,36 @@ use std::env;
 use std::error::Error;
 use std::path::PathBuf;
 
-use clap::{App, Arg, AppSettings, SubCommand};
+use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
-use config::FsConfig;
+use config::{Config, FsConfig};
 use hermit::Hermit;
 use file_operations::FileOperations;
 
 #[cfg(test)]
 mod test;
 
+#[cfg_attr(rustfmt, rustfmt_skip)]
 fn main() {
     let app = make_app_config();
     let app_matches = app.get_matches();
 
     let hermit_root = get_hermit_dir().expect("Could not determine hermit root location.");
     let fs_config = FsConfig::new(hermit_root);
-    let hermit = Hermit::new(fs_config);
+    let mut hermit = Hermit::new(fs_config);
 
     let home_dir = env::home_dir().expect("Could not determine home directory.");
     let mut file_operations = FileOperations::rooted_at(home_dir);
 
     match app_matches.subcommand() {
-        ("add", Some(_matches)) => {
-            println!("hermit add is not yet implemented");
-        }
-        ("clone", Some(_matches)) => {
-            println!("hermit clone is not yet implemented");
-        }
-        ("doctor", Some(_matches)) => {
-            println!("hermit doctor is not yet implemented");
-        }
-        ("git", Some(_matches)) => {
-            println!("hermit git is not yet implemented");
-        }
-        ("init", Some(matches)) => {
-            let shell_name = matches.value_of("SHELL_NAME").unwrap_or("default");
-            hermit.init_shell(&mut file_operations, shell_name);
-        }
-        ("nuke", Some(_matches)) => {
-            println!("hermit nuke is not yet implemented");
-        }
-        ("status", Some(_matches)) => {
-            println!("hermit status is not yet implemented");
-        }
-        ("use", Some(_matches)) => {
-            println!("hermit use is not yet implemented");
-        }
+        ("add",    Some(matches)) => handle_add    (matches, &mut hermit, &mut file_operations),
+        ("clone",  Some(matches)) => handle_clone  (matches, &mut hermit, &mut file_operations),
+        ("doctor", Some(matches)) => handle_doctor (matches, &mut hermit, &mut file_operations),
+        ("git",    Some(matches)) => handle_git    (matches, &mut hermit, &mut file_operations),
+        ("init",   Some(matches)) => handle_init   (matches, &mut hermit, &mut file_operations),
+        ("nuke",   Some(matches)) => handle_nuke   (matches, &mut hermit, &mut file_operations),
+        ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
+        ("use",    Some(matches)) => handle_use    (matches, &mut hermit, &mut file_operations),
         _ => {}
     };
 
@@ -121,37 +105,97 @@ fn make_app_config<'a, 'b, 'c, 'd, 'e, 'f>() -> App<'a, 'b, 'c, 'd, 'e, 'f> {
     app
 }
 
+
+// **************************************************
+// Subcommand configuration and implementation
+// **************************************************
+
 configure_subcommand!(add, configure_add {
    about("Add files to your hermit shell")
 });
+
+fn handle_add<C: Config>(_matches: &ArgMatches,
+                         _hermit: &mut Hermit<C>,
+                         _file_operations: &mut FileOperations) {
+    println!("hermit add is not yet implemented");
+}
+
 
 configure_subcommand!(clone, configure_clone {
     about("Create a local shell from an existing remote shell")
 });
 
+fn handle_clone<C: Config>(_matches: &ArgMatches,
+                           _hermit: &mut Hermit<C>,
+                           _file_operations: &mut FileOperations) {
+    println!("hermit clone is not implemented yet.")
+}
+
+
 configure_subcommand!(doctor, configure_doctor {
     about("Make sure your hermit setup is sane")
 });
+
+fn handle_doctor<C: Config>(_matches: &ArgMatches,
+                            _hermit: &mut Hermit<C>,
+                            _file_operations: &mut FileOperations) {
+    println!("hermit doctor is not implemented yet.")
+}
+
 
 configure_subcommand!(git, configure_git {
     about("Run git operations on the current shell")
 });
 
+fn handle_git<C: Config>(_matches: &ArgMatches,
+                         _hermit: &mut Hermit<C>,
+                         _file_operations: &mut FileOperations) {
+    println!("hermit git is not implemented yet.")
+}
+
+
 configure_subcommand!(init, configure_init {
     about("Create a new hermit shell called SHELL_NAME. If no shell name \
            is given, \"default\" is used.");
-    arg(Arg::with_name("SHELL_NAME")
-        .help("The name of the shell to be created."))
+    arg(Arg::with_name("SHELL_NAME").help("The name of the shell to be created."))
 });
+
+fn handle_init<C: Config>(matches: &ArgMatches,
+                          hermit: &mut Hermit<C>,
+                          file_operations: &mut FileOperations) {
+    let shell_name = matches.value_of("SHELL_NAME").unwrap_or("default");
+    hermit.init_shell(file_operations, shell_name);
+}
+
 
 configure_subcommand!(nuke, configure_nuke {
     about("Permanently remove a hermit shell")
 });
 
+fn handle_nuke<C: Config>(_matches: &ArgMatches,
+                          _hermit: &mut Hermit<C>,
+                          _file_operations: &mut FileOperations) {
+    println!("hermit nuke is not implemented yet.")
+}
+
+
 configure_subcommand!(status, configure_status {
     about("Display the status of your hermit shell")
 });
 
+fn handle_status<C: Config>(_matches: &ArgMatches,
+                            _hermit: &mut Hermit<C>,
+                            _file_operations: &mut FileOperations) {
+    println!("hermit status is not implemented yet.")
+}
+
+
 configure_subcommand!(use, configure_use {
     about("Switch to using a different hermit shell")
 });
+
+fn handle_use<C: Config>(_matches: &ArgMatches,
+                         _hermit: &mut Hermit<C>,
+                         _file_operations: &mut FileOperations) {
+    println!("hermit use is not implemented yet.")
+}
