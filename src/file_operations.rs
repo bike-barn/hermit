@@ -54,7 +54,7 @@ impl From<git2::Error> for Error {
     }
 }
 
-type Result = result::Result<(), Error>;
+pub type Result = result::Result<(), Error>;
 
 pub struct FileOperations {
     pub root: PathBuf,

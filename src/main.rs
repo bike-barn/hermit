@@ -10,6 +10,7 @@ mod shell;
 mod file_operations;
 
 use std::env;
+use std::error::Error;
 use std::path::PathBuf;
 
 use clap::App;
@@ -98,7 +99,16 @@ fn main() {
         _ => {}
     };
 
-    file_operations.commit();
+    report_errors(file_operations.commit());
+}
+
+fn report_errors(results: Vec<file_operations::Result>) {
+    for result in results {
+        match result {
+            Ok(()) => (),
+            Err(e) => println!("hermit: error: {}", e.description()),
+        }
+    }
 }
 
 fn get_hermit_dir() -> Option<PathBuf> {
