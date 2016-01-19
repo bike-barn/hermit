@@ -31,29 +31,30 @@ fn make_app_config<'a, 'b, 'c, 'd, 'e, 'f>() -> App<'a, 'b, 'c, 'd, 'e, 'f> {
         (@setting SubcommandRequiredElseHelp)
         (@setting VersionlessSubcommands)
         (@subcommand add =>
-            (about: "Add files to your hermit shell")
-            (usage: "hermit add [<filepattern>…]"))
+            (usage: "hermit add [<filepattern>…]")
+            (about: "Add files to your hermit shell"))
         (@subcommand clone =>
-            (about: "Create a local shell from an existing remote shell")
-            (usage: "hermit clone <repository> [shell-name]"))
+            (usage: "hermit clone <repository> [shell-name]")
+            (about: "Create a local shell from an existing remote shell"))
         (@subcommand doctor =>
-            (about: "Make sure your hermit setup is sane")
-            (usage: "hermit doctor"))
+            (usage: "hermit doctor")
+            (about: "Make sure your hermit setup is sane"))
         (@subcommand git =>
-            (about: "Run git operations on the current shell")
-            (usage: "hermit git <git arguments>"))
+            (usage: "hermit git <git arguments>")
+            (about: "Run git operations on the current shell"))
         (@subcommand init =>
-            (about: "Create a new hermit shell")
-            (usage: "hermit init [shell-name]"))
+            (usage: "hermit init [SHELL_NAME]")
+            (about: "Create a new hermit shell called SHELL_NAME. If no shell name is given, \"default\" is used.")
+            (@arg SHELL_NAME: "The name of the shell to be created."))
         (@subcommand nuke =>
-            (about: "Permanently remove a hermit shell")
-            (usage: "hermit nuke <shell-name>"))
+            (usage: "hermit nuke <shell-name>")
+            (about: "Permanently remove a hermit shell"))
         (@subcommand status =>
-            (about: "Display the status of your hermit shell")
-            (usage: "hermit status"))
+            (usage: "hermit status")
+            (about: "Display the status of your hermit shell"))
         (@subcommand use =>
-            (about: "Switch to using a different hermit shell")
-            (usage: "hermit use [shell-name]"))
+            (usage: "hermit use [shell-name]")
+            (about: "Switch to using a different hermit shell"))
     )
 }
 
@@ -82,7 +83,7 @@ fn main() {
             println!("hermit git is not yet implemented");
         }
         ("init", Some(matches)) => {
-            let shell_name = matches.value_of("").unwrap_or("default");
+            let shell_name = matches.value_of("SHELL_NAME").unwrap_or("default");
             hermit.init_shell(&mut file_operations, shell_name);
         }
         ("nuke", Some(_matches)) => {
