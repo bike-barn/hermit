@@ -1,4 +1,4 @@
-macro_rules! configure_subcommand {
+macro_rules! subcommand {
     (
         $name:ident, $fn_name:ident {
             $(
