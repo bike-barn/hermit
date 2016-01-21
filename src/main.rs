@@ -5,6 +5,7 @@ extern crate git2;
 extern crate uuid;
 
 mod config;
+mod env;
 mod hermit;
 mod shell;
 mod file_operations;
@@ -12,9 +13,7 @@ mod file_operations;
 #[macro_use]
 mod macros;
 
-use std::env;
 use std::error::Error;
-use std::path::PathBuf;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
@@ -30,7 +29,7 @@ fn main() {
     let app = make_app_config();
     let app_matches = app.get_matches();
 
-    let hermit_root = get_hermit_dir().expect("Could not determine hermit root location.");
+    let hermit_root = env::get_hermit_dir().expect("Could not determine hermit root location.");
     let fs_config = FsConfig::new(hermit_root);
     let mut hermit = Hermit::new(fs_config);
 
@@ -53,7 +52,7 @@ fn main() {
 }
 
 fn report_errors(results: Vec<file_operations::Result>) {
-    let app_name = get_program_name();
+    let app_name = env::get_program_name();
 
     for result in results {
         match result {
@@ -61,26 +60,6 @@ fn report_errors(results: Vec<file_operations::Result>) {
             Err(e) => println!("{}: error: {}", app_name, e.description()),
         }
     }
-}
-
-fn get_program_name() -> String {
-    env::args()
-        .nth(0)
-        .map(PathBuf::from)
-        .and_then(|path| path.file_name().map(|name| name.to_owned()))
-        .and_then(|file_name| file_name.to_str().map(|name| name.to_owned()))
-        .unwrap_or("hermit".to_owned())
-}
-
-fn get_hermit_dir() -> Option<PathBuf> {
-    env::var("HERMIT_ROOT")
-        .map(PathBuf::from)
-        .ok()
-        .or_else(default_hermit_dir)
-}
-
-fn default_hermit_dir() -> Option<PathBuf> {
-    env::home_dir().map(|home| home.join(".config/hermit"))
 }
 
 fn make_app_config<'a, 'b, 'c, 'd, 'e, 'f>() -> App<'a, 'b, 'c, 'd, 'e, 'f> {
