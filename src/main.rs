@@ -7,6 +7,7 @@ extern crate uuid;
 mod config;
 mod env;
 mod hermit;
+mod message;
 mod shell;
 mod file_operations;
 
@@ -45,19 +46,17 @@ fn main() {
         ("nuke",   Some(matches)) => handle_nuke   (matches, &mut hermit, &mut file_operations),
         ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
         ("use",    Some(matches)) => handle_use    (matches, &mut hermit, &mut file_operations),
-        _ => {}
+        _ => unreachable!(message::error("unknown subcommand passed"))
     };
 
     report_errors(file_operations.commit());
 }
 
 fn report_errors(results: Vec<file_operations::Result>) {
-    let app_name = env::get_program_name();
-
     for result in results {
         match result {
             Ok(()) => (),
-            Err(e) => println!("{}: error: {}", app_name, e.description()),
+            Err(e) => println!("{}", message::error(e.description())),
         }
     }
 }
