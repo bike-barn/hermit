@@ -23,7 +23,7 @@ use hermit::Hermit;
 use file_operations::FileOperations;
 
 #[cfg(test)]
-mod test;
+mod test_helpers;
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
 fn main() {

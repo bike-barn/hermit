@@ -121,7 +121,7 @@ mod tests {
     use std::path::Path;
 
     use super::FileOperations;
-    use test::filesystem::{set_up, clean_up};
+    use test_helpers::filesystem::{set_up, clean_up};
 
     #[test]
     fn can_create_a_directory() {
