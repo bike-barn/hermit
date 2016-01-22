@@ -169,11 +169,16 @@ fn handle_status<C: Config>(_matches: &ArgMatches,
 
 
 subcommand!(inhabit, add_inhabit_subcommand {
-    about("Switch to using a different hermit shell")
+    about("Switch to inhabiting a different hermit shell");
+    arg(Arg::with_name("SHELL_NAME").help("The name of the shell to inhabit"))
 });
 
-fn handle_inhabit<C: Config>(_matches: &ArgMatches,
-                         _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit inhabit is not implemented yet.")
+fn handle_inhabit<C: Config>(matches: &ArgMatches,
+                         hermit: &mut Hermit<C>,
+                         file_operations: &mut FileOperations) {
+    let shell_name = matches.value_of("SHELL_NAME").unwrap_or("");
+    //hermit.init_shell(file_operations, shell_name);
+    hermit.inhabit_shell(file_operations, shell_name);
+    let shell = hermit.current_shell().unwrap();
+    println!("{}", shell.name);
 }

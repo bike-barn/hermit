@@ -43,6 +43,11 @@ impl<T: Config> Hermit<T> {
         let path = self.config.shell_root_path().join(name);
         file_ops.create_git_repo(path);
     }
+
+    pub fn inhabit_shell(&mut self, file_ops: &mut FileOperations, name: &str) {
+        println!("{}", name);
+        self.set_current_shell(name);
+    }
 }
 
 #[cfg(test)]
@@ -113,6 +118,23 @@ mod tests {
         hermit.init_shell(&mut file_ops, "new-one");
         let first_op = &file_ops.operations[0];
         assert_eq!(*first_op,
+
+
                    Op::GitInit(PathBuf::from("/home/geoff/.hermit-config/shells/new-one")));
+    }
+
+    #[test]
+    fn can_inhabit_existing_shell() {
+        let config = MockConfig {
+            root_path: PathBuf::from(".config"),
+            allowed_shell_names: vec!["default".to_owned(), 
+                "new-one".to_owned()],
+            current_shell: "default".to_owned(),
+        };
+        let mut hermit = hermit(&config);
+        let mut file_ops = FileOperations::rooted_at("/home/houngj"); 
+        hermit.inhabit_shell(&mut file_ops, "new-one");
+        let shell = hermit.current_shell().unwrap();
+        assert_eq!(shell.name, "new-one"); 
     }
 }
