@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io;
+use std::{io, fs};
 use std::io::prelude::*;
 use std::path::{Path, PathBuf};
 
@@ -15,6 +15,8 @@ pub trait Config {
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
     fn does_shell_exist(&self, name: &str) -> bool;
+
+    fn get_shell_list(&self) -> Vec<String>;
 }
 
 #[derive(Clone)]
@@ -82,6 +84,18 @@ impl Config for FsConfig {
         let shell_path = self.root_path.join("shells").join(name);
         shell_path.is_dir()
     }
+
+    fn get_shell_list(&self) -> Vec<String> {
+        let mut shell_names = Vec::new();
+        let paths = fs::read_dir(self.shell_root_path().to_owned()).unwrap();
+        for path in paths {
+            let shell_path = path.unwrap().path();
+            let shell_name = shell_path.file_name().unwrap().to_str().unwrap().to_owned();
+            shell_names.push(shell_name);
+        }
+        shell_names.sort();
+        return shell_names;
+    }
 }
 
 #[cfg(test)]
@@ -122,6 +136,12 @@ pub mod mock {
 
         fn does_shell_exist(&self, name: &str) -> bool {
             self.allowed_shell_names.contains(&name.to_owned())
+        }
+
+        fn get_shell_list(&self) -> Vec<String> {
+            let mut shell_names = self.allowed_shell_names.to_owned();
+            shell_names.sort();
+            return shell_names;
         }
     }
 }
@@ -223,5 +243,18 @@ mod test {
         clean_up(&test_root);
     }
 
-
+    #[test]
+    fn can_get_inhabitable_shells() {
+        let mut test_root = set_up("inhabit-shells", 
+                                   "default", 
+                                   vec!["default", "bcd", "abc", "cde"]);
+        let config = FsConfig::new(test_root.clone());
+        let res = config.get_shell_list(); 
+        
+        assert_eq!(res[0], "abc");
+        assert_eq!(res[1], "bcd");
+        assert_eq!(res[2], "cde");
+        assert_eq!(res[3], "default");
+        clean_up(&test_root);
+    }
 }

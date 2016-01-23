@@ -89,17 +89,6 @@ impl FileOperations {
     pub fn create_git_repo<P: AsRef<Path>>(&mut self, name: P) {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
-    
-    pub fn get_shell_list(&self) -> Vec<String> {
-        let mut shell_names = Vec::new();
-        let paths = fs::read_dir(&self.root).unwrap();
-        for path in paths {
-            let shell_path = path.unwrap().path();
-            let shell_name = shell_path.file_name().unwrap().to_str().unwrap().to_owned();
-            shell_names.push(shell_name);
-        }
-        return shell_names;
-    }
 
     pub fn commit(mut self) -> Vec<Result> {
         let ops = self.operations;
@@ -229,21 +218,5 @@ mod tests {
         assert_eq!(results.len(), 2);
         assert!(results[0].is_ok());
         assert!(results[1].is_err());
-    }
-
-    #[test]
-    fn can_get_shell_list() {
-        let test_root = set_up("get-shell-names");
-        let mut file_set = FileOperations::rooted_at(&test_root);
-        let path1 = Path::new("test1");
-        let path2 = Path::new("test2");
-        file_set.create_dir_all(path1);
-        file_set.create_dir_all(path2);
-        file_set.commit();
-        file_set = FileOperations::rooted_at(&test_root);
-        let shell_names = file_set.get_shell_list();
-        assert_eq!(shell_names[0], "test1");
-        assert_eq!(shell_names[1], "test2");
-        clean_up(&test_root);
     }
 }

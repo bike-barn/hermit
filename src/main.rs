@@ -38,14 +38,14 @@ fn main() {
     let mut file_operations = FileOperations::rooted_at(home_dir);
 
     match app_matches.subcommand() {
-        ("add",    Some(matches)) => handle_add    (matches, &mut hermit, &mut file_operations),
-        ("clone",  Some(matches)) => handle_clone  (matches, &mut hermit, &mut file_operations),
-        ("doctor", Some(matches)) => handle_doctor (matches, &mut hermit, &mut file_operations),
-        ("git",    Some(matches)) => handle_git    (matches, &mut hermit, &mut file_operations),
-        ("init",   Some(matches)) => handle_init   (matches, &mut hermit, &mut file_operations),
-        ("nuke",   Some(matches)) => handle_nuke   (matches, &mut hermit, &mut file_operations),
-        ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
-        ("inhabit",    Some(matches)) => handle_inhabit    (matches, &mut hermit, &mut file_operations),
+        ("add",     Some(matches)) => handle_add     (matches, &mut hermit, &mut file_operations),
+        ("clone",   Some(matches)) => handle_clone   (matches, &mut hermit, &mut file_operations),
+        ("doctor",  Some(matches)) => handle_doctor  (matches, &mut hermit, &mut file_operations),
+        ("git",     Some(matches)) => handle_git     (matches, &mut hermit, &mut file_operations),
+        ("init",    Some(matches)) => handle_init    (matches, &mut hermit, &mut file_operations),
+        ("nuke",    Some(matches)) => handle_nuke    (matches, &mut hermit, &mut file_operations),
+        ("status",  Some(matches)) => handle_status  (matches, &mut hermit, &mut file_operations),
+        ("inhabit", Some(matches)) => handle_inhabit (matches, &mut hermit, &mut file_operations),
         _ => unreachable!(message::error("unknown subcommand passed"))
     };
 
@@ -177,8 +177,12 @@ fn handle_inhabit<C: Config>(matches: &ArgMatches,
                          hermit: &mut Hermit<C>,
                          file_operations: &mut FileOperations) {
     let shell_name = matches.value_of("SHELL_NAME").unwrap_or("");
-    //hermit.init_shell(file_operations, shell_name);
     hermit.inhabit_shell(file_operations, shell_name);
-    let shell = hermit.current_shell().unwrap();
-    println!("{}", shell.name);
+    let mut shell_names = Vec::new();
+    if shell_name == "" {
+        shell_names = hermit.shell_list();
+        for x in &shell_names {
+            println!("{}", x);
+        }
+    }
 }

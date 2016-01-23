@@ -45,8 +45,21 @@ impl<T: Config> Hermit<T> {
     }
 
     pub fn inhabit_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<(), Error> {
-        println!("{}", name);
-        self.set_current_shell(name);
+        //let mut shell_names = Vec::new();
+        //let mut res = Ok(());
+        //if name == "" {
+        //    shell_names = self.get_shell_list();
+        //} else {
+        let res = self.set_current_shell(name);
+        //}
+        match res {
+            Ok(v) => Ok(v),
+            Err(e) => Err(Error::ShellDoesNotExist),
+        }
+    }
+    
+    pub fn shell_list(&mut self) -> Vec<String> {
+        return self.config.get_shell_list();
     }
 }
 
@@ -142,28 +155,11 @@ mod tests {
             root_path: PathBuf::from(".config"),
             allowed_shell_names: vec!["default".to_owned()],
             current_shell: "default".to_owned(),
-        }
-    
+        };
         let mut hermit = hermit(&config);
         let mut file_ops = FileOperations::rooted_at("/home/houngj");
         let res = hermit.inhabit_shell(&mut file_ops, "not-a-shell");
         assert!(res.is_err());
         assert_eq!(res.err().unwrap(), Error::ShellDoesNotExist);
-    };
-    
-    #[test]
-    fn can_get_inhabitable_shells() {
-        let config = MockConfig {
-            root_path: PathBuf::from(".config"),
-            allowed_shell_names: vec!["default".to_owned(), "abc".to_owned(), "bcd".to_owned()],
-            current_shell: "default".to_owned(),
-        }
-        
-        let mut hermit = hermit(&config);
-        let mut file_ops = FileOperations::rooted_at("/home/houngj");
-        let res = hermit.inhabit_shell(&mut file_ops, "");
-        assert_eq!(res[0], "abc");
-        assert_eq!(res[1], "bcd");
-        assert_eq!(res[2], "default");
     }
 }
