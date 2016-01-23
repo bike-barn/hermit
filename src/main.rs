@@ -174,13 +174,19 @@ subcommand!(inhabit, add_inhabit_subcommand {
 });
 
 fn handle_inhabit<C: Config>(matches: &ArgMatches,
-                         hermit: &mut Hermit<C>,
-                         file_operations: &mut FileOperations) {
+                             hermit: &mut Hermit<C>,
+                             file_operations: &mut FileOperations) {
     let shell_name = matches.value_of("SHELL_NAME").unwrap_or("");
-    hermit.inhabit_shell(file_operations, shell_name);
-    let mut shell_names = Vec::new();
+    let res = hermit.inhabit_shell(file_operations, shell_name);
+    match res {
+        Ok(v) => v,
+        Err(err) => {
+            let mes = format!("{} is a non-existant shell", shell_name);
+            println!("{}", message::error(&mes));
+        }
+    }
     if shell_name == "" {
-        shell_names = hermit.shell_list();
+        let shell_names = hermit.shell_list();
         for x in &shell_names {
             println!("{}", x);
         }

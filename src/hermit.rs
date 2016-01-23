@@ -44,7 +44,9 @@ impl<T: Config> Hermit<T> {
         file_ops.create_git_repo(path);
     }
 
-    pub fn inhabit_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<(), Error> {
+    pub fn inhabit_shell(&mut self, 
+                         file_ops: &mut FileOperations, 
+                         name: &str) -> Result<(), Error> {
         return self.set_current_shell(name);;
     }
     
