@@ -257,4 +257,16 @@ mod test {
         assert_eq!(res[3], "default");
         clean_up(&test_root);
     }
+
+    #[test]
+    fn can_get_zero_inhabitable_shells() {
+        let mut test_root = set_up("inhabit-shells",
+                                   "default",
+                                   Vec::new());
+        let config = FsConfig::new(test_root.clone());
+        let res = config.get_shell_list();
+
+        assert_eq!(res.len(), 0);
+        clean_up(&test_root);
+    }
 }
