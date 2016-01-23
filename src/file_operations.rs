@@ -1,5 +1,6 @@
 use std::{error, fmt, fs, io, result};
 use std::path::{Path, PathBuf};
+use std::os;
 
 use git2;
 
@@ -9,6 +10,8 @@ pub enum Op {
     MkDir(PathBuf),
     MkDirAll(PathBuf),
     GitInit(PathBuf),
+    Link(PathBuf, PathBuf),
+    Unlink(PathBuf),
 }
 
 #[derive(Debug)]
@@ -86,6 +89,14 @@ impl FileOperations {
         self.operations.push(Op::MkDirAll(self.root.join(name)))
     }
 
+    pub fn link<P: AsRef<Path>>(&mut self, source: P, dest: P) {
+        self.operations.push(Op::Link(self.root.join(source), self.root.join(dest)))
+    }
+
+    pub fn unlink<P: AsRef<Path>>(&mut self, name: P) {
+        self.operations.push(Op::Unlink(self.root.join(name)))
+    }
+
     pub fn create_git_repo<P: AsRef<Path>>(&mut self, name: P) {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
@@ -107,6 +118,8 @@ impl FileOperations {
             Op::MkDir(dir) => try!(fs::create_dir(dir)),
             Op::MkDirAll(dir) => try!(fs::create_dir_all(dir)),
             Op::GitInit(dir) => try!(self.git_init(dir)),
+            Op::Link(src, dst) => try!(os::unix::fs::symlink(src, dst)),
+            Op::Unlink(file) => try!(fs::remove_file(file)),
         };
         Ok(())
     }
@@ -119,6 +132,7 @@ impl FileOperations {
 #[cfg(test)]
 mod tests {
     use std::path::Path;
+    use std::fs;
 
     use super::FileOperations;
     use test_helpers::filesystem::{set_up, clean_up};
@@ -135,6 +149,42 @@ mod tests {
         assert_eq!(results.len(), 1);
         assert!(results[0].is_ok());
         assert!(test_root.join("test").is_dir());
+
+        clean_up(&test_root);
+    }
+
+    #[test]
+    fn can_link_file() {
+        let test_root = set_up("link");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+
+        let mut f = fs::File::create(test_root.join("file_a")).unwrap();
+        
+        file_set.link("file_a", "file_b");
+        let results = file_set.commit();
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
+
+        let attr = fs::symlink_metadata(test_root.join("file_b")).unwrap();
+        assert!(attr.file_type().is_symlink());
+
+        clean_up(&test_root);
+    }
+
+    #[test]
+    fn can_unlink_file() {
+        let test_root = set_up("unlink");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+
+        // Create symbolic link to remove
+        let mut f = fs::File::create(test_root.join("file_a")).unwrap();
+        file_set.link("file_a", "file_b");
+        file_set.unlink("file_b");
+        let results = file_set.commit();
+
+        assert_eq!(results.len(), 2);
+        assert!(results[1].is_ok());
+        assert!(!test_root.join("file_b").exists());
 
         clean_up(&test_root);
     }
