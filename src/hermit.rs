@@ -45,17 +45,7 @@ impl<T: Config> Hermit<T> {
     }
 
     pub fn inhabit_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<(), Error> {
-        //let mut shell_names = Vec::new();
-        //let mut res = Ok(());
-        //if name == "" {
-        //    shell_names = self.get_shell_list();
-        //} else {
-        let res = self.set_current_shell(name);
-        //}
-        match res {
-            Ok(v) => Ok(v),
-            Err(e) => Err(Error::ShellDoesNotExist),
-        }
+        return self.set_current_shell(name);;
     }
     
     pub fn shell_list(&mut self) -> Vec<String> {
@@ -115,7 +105,7 @@ mod tests {
         assert_eq!(hermit.current_shell().unwrap().name, "default");
         let res = hermit.set_current_shell("non-existent");
         assert!(res.is_err());
-        assert_eq!(res.err().unwrap(), Error::ShellDoesNotExist);
+        assert_eq!(res, Err(Error::ShellDoesNotExist));
     }
 
     #[test]
@@ -145,7 +135,7 @@ mod tests {
         let mut hermit = hermit(&config);
         let mut file_ops = FileOperations::rooted_at("/home/houngj"); 
         hermit.inhabit_shell(&mut file_ops, "new-one");
-        let shell = hermit.current_shell().unwrap();
+        let shell = hermit.current_shell().expect("current shell does not exist. Check that 'hermit.inhabit_shell()' is functioning properly");
         assert_eq!(shell.name, "new-one"); 
     }
     
@@ -160,6 +150,6 @@ mod tests {
         let mut file_ops = FileOperations::rooted_at("/home/houngj");
         let res = hermit.inhabit_shell(&mut file_ops, "not-a-shell");
         assert!(res.is_err());
-        assert_eq!(res.err().unwrap(), Error::ShellDoesNotExist);
+        assert_eq!(res, Err(Error::ShellDoesNotExist));
     }
 }
