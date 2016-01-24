@@ -16,7 +16,7 @@ pub trait Config {
 
     fn does_shell_exist(&self, name: &str) -> bool;
 
-    fn get_shell_list(&self) -> Vec<String>;
+    fn get_shell_list(&self) -> io::Result<Vec<String>>;
 }
 
 #[derive(Clone)]
@@ -85,16 +85,22 @@ impl Config for FsConfig {
         shell_path.is_dir()
     }
 
-    fn get_shell_list(&self) -> Vec<String> {
+    fn get_shell_list(&self) -> io::Result<Vec<String>> {
         let mut shell_names = Vec::new();
-        let paths = fs::read_dir(self.shell_root_path().to_owned()).expect("read_dir failed in config get_shell_list function");
-        for path in paths {
-            let shell_path = path.unwrap().path();
-            let shell_name = shell_path.file_name().unwrap().to_str().unwrap().to_owned();
-            shell_names.push(shell_name);
+        let root_path = self.shell_root_path();
+        if try!(fs::metadata(&root_path)).is_dir() {
+            for entry in try!(fs::read_dir(&root_path)) {
+                let entry = try!(entry);
+                if try!(fs::metadata(entry.path())).is_dir() {
+                    match entry.file_name().into_string() {
+                        Ok(v) => shell_names.push(v),
+                        Err(_err) => (),
+                    }
+                }
+            }
         }
         shell_names.sort();
-        return shell_names;
+        return Ok(shell_names);
     }
 }
 
@@ -138,10 +144,10 @@ pub mod mock {
             self.allowed_shell_names.contains(&name.to_owned())
         }
 
-        fn get_shell_list(&self) -> Vec<String> {
+        fn get_shell_list(&self) -> io::Result<Vec<String>> {
             let mut shell_names = self.allowed_shell_names.to_owned();
             shell_names.sort();
-            return shell_names;
+            return Ok(shell_names);
         }
     }
 }
@@ -153,6 +159,8 @@ mod test {
     use std::path::PathBuf;
     use std::io::prelude::*;
     use super::{Config, FsConfig};
+    use std::os::unix::ffi::OsStringExt;
+    use std::ffi::OsString;
 
     fn clean_up(test_root: &PathBuf) {
         if test_root.exists() {
@@ -245,16 +253,13 @@ mod test {
 
     #[test]
     fn can_get_inhabitable_shells() {
-        let test_root = set_up("can_get_inhabitable-shells",
-                                   "default",
-                                   vec!["default", "bcd", "abc", "cde"]);
+        let test_root = set_up("can_get_inhabitable_shells",
+                               "default",
+                               vec!["default", "bcd", "abc", "cde"]);
         let config = FsConfig::new(test_root.clone());
-        let res = config.get_shell_list();
-
-        assert_eq!(res[0], "abc");
-        assert_eq!(res[1], "bcd");
-        assert_eq!(res[2], "cde");
-        assert_eq!(res[3], "default");
+        let res = config.get_shell_list().unwrap();
+        
+        assert_eq!(res, vec!["abc", "bcd", "cde", "default"]);
         clean_up(&test_root);
     }
 
@@ -264,7 +269,28 @@ mod test {
         let config = FsConfig::new(test_root.clone());
         let res = config.get_shell_list();
 
-        assert_eq!(res.len(), 0);
+        assert_eq!(res.unwrap().len(), 0);
+        clean_up(&test_root);
+    }
+
+    #[test]
+    fn cant_get_inhabitable_shells_for_nonexistant_shell_root() {
+        let config = FsConfig::new(PathBuf::from("not_a_path"));
+        let res = config.get_shell_list();
+        assert!(res.is_err());
+    }
+
+    #[test]
+    fn can_ignore_in_inhabitable_shells_non_unicode_char() {
+        let test_root = set_up("can_ignore_bad_characters",
+                               "default",
+                               vec!["default", "bcd", "abc", "cde"]);
+        let non_unicode = OsString::from_vec((vec![245, 246, 247, 245]));
+        let shell_root = test_root.join("shells").join(non_unicode);
+        fs::create_dir(&shell_root).unwrap();
+        let config = FsConfig::new(test_root.clone());
+        let res = config.get_shell_list().unwrap();
+        assert_eq!(res, vec!["abc", "bcd","cde","default"]);
         clean_up(&test_root);
     }
 }

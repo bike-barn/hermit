@@ -45,13 +45,13 @@ impl<T: Config> Hermit<T> {
     }
 
     pub fn inhabit_shell(&mut self,
-                         file_ops: &mut FileOperations,
+                         _file_ops: &mut FileOperations,
                          name: &str)
                          -> Result<(), Error> {
-        return self.set_current_shell(name);;
+        return self.set_current_shell(name);
     }
 
-    pub fn shell_list(&mut self) -> Vec<String> {
+    pub fn shell_list(&mut self) -> Result<Vec<String>, io::Error> {
         return self.config.get_shell_list();
     }
 }
