@@ -44,12 +44,13 @@ impl<T: Config> Hermit<T> {
         file_ops.create_git_repo(path);
     }
 
-    pub fn inhabit_shell(&mut self, 
-                         file_ops: &mut FileOperations, 
-                         name: &str) -> Result<(), Error> {
+    pub fn inhabit_shell(&mut self,
+                         file_ops: &mut FileOperations,
+                         name: &str)
+                         -> Result<(), Error> {
         return self.set_current_shell(name);;
     }
-    
+
     pub fn shell_list(&mut self) -> Vec<String> {
         return self.config.get_shell_list();
     }
@@ -130,17 +131,18 @@ mod tests {
     fn can_inhabit_existing_shell() {
         let config = MockConfig {
             root_path: PathBuf::from(".config"),
-            allowed_shell_names: vec!["default".to_owned(), 
-                "new-one".to_owned()],
+            allowed_shell_names: vec!["default".to_owned(), "new-one".to_owned()],
             current_shell: "default".to_owned(),
         };
         let mut hermit = hermit(&config);
-        let mut file_ops = FileOperations::rooted_at("/home/houngj"); 
+        let mut file_ops = FileOperations::rooted_at("/home/houngj");
         hermit.inhabit_shell(&mut file_ops, "new-one");
-        let shell = hermit.current_shell().expect("current shell does not exist. Check that 'hermit.inhabit_shell()' is functioning properly");
-        assert_eq!(shell.name, "new-one"); 
+        let shell = hermit.current_shell().expect("current shell does not exist. Check that \
+                                                   'hermit.inhabit_shell()' is functioning \
+                                                   properly");
+        assert_eq!(shell.name, "new-one");
     }
-    
+
     #[test]
     fn cant_inhabit_nonexisting_shell() {
         let config = MockConfig {

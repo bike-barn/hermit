@@ -218,5 +218,6 @@ mod tests {
         assert_eq!(results.len(), 2);
         assert!(results[0].is_ok());
         assert!(results[1].is_err());
+        clean_up(&test_root);
     }
 }

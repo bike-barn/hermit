@@ -87,7 +87,7 @@ impl Config for FsConfig {
 
     fn get_shell_list(&self) -> Vec<String> {
         let mut shell_names = Vec::new();
-        let paths = fs::read_dir(self.shell_root_path().to_owned()).unwrap();
+        let paths = fs::read_dir(self.shell_root_path().to_owned()).expect("read_dir failed in config get_shell_list function");
         for path in paths {
             let shell_path = path.unwrap().path();
             let shell_name = shell_path.file_name().unwrap().to_str().unwrap().to_owned();
@@ -245,12 +245,12 @@ mod test {
 
     #[test]
     fn can_get_inhabitable_shells() {
-        let mut test_root = set_up("inhabit-shells", 
-                                   "default", 
+        let test_root = set_up("can_get_inhabitable-shells",
+                                   "default",
                                    vec!["default", "bcd", "abc", "cde"]);
         let config = FsConfig::new(test_root.clone());
-        let res = config.get_shell_list(); 
-        
+        let res = config.get_shell_list();
+
         assert_eq!(res[0], "abc");
         assert_eq!(res[1], "bcd");
         assert_eq!(res[2], "cde");
@@ -260,9 +260,7 @@ mod test {
 
     #[test]
     fn can_get_zero_inhabitable_shells() {
-        let mut test_root = set_up("inhabit-shells",
-                                   "default",
-                                   Vec::new());
+        let test_root = set_up("can_get_zero_inhabitable-shells", "", Vec::new());
         let config = FsConfig::new(test_root.clone());
         let res = config.get_shell_list();
 

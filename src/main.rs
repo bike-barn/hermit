@@ -180,7 +180,7 @@ fn handle_inhabit<C: Config>(matches: &ArgMatches,
     let res = hermit.inhabit_shell(file_operations, shell_name);
     match res {
         Ok(v) => v,
-        Err(err) => {
+        Err(_err) => {
             let mes = format!("{} is a non-existant shell", shell_name);
             println!("{}", message::error(&mes));
         }
