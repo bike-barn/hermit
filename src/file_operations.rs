@@ -1,6 +1,7 @@
 use std::{error, fmt, fs, io, result};
 use std::path::{Path, PathBuf};
 use std::os;
+use std::env;
 
 use git2;
 
@@ -89,8 +90,8 @@ impl FileOperations {
         self.operations.push(Op::MkDirAll(self.root.join(name)))
     }
 
-    pub fn link<P: AsRef<Path>>(&mut self, source: P, dest: P) {
-        self.operations.push(Op::Link(self.root.join(source), self.root.join(dest)))
+    pub fn link<P: AsRef<Path>, Q: AsRef<Path>>(&mut self, source: P, dest: Q) {
+        self.operations.push(Op::Link(source.as_ref().to_path_buf(), self.root.join(dest)))
     }
 
     pub fn unlink<P: AsRef<Path>>(&mut self, name: P) {
