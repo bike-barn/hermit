@@ -128,6 +128,7 @@ subcommand!(git, add_git_subcommand {
 fn handle_git<C: Config>(_matches: &ArgMatches,
                          _hermit: &mut Hermit<C>,
                          _file_operations: &mut FileOperations) {
+    println!("{:?}", _matches);
     println!("hermit git is not implemented yet.")
 }
 
