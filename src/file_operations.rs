@@ -12,7 +12,7 @@ pub enum Op {
     MkDirAll(PathBuf),
     GitInit(PathBuf),
     Link(PathBuf, PathBuf),
-    Unlink(PathBuf),
+    Remove(PathBuf),
 }
 
 #[derive(Debug)]
@@ -94,8 +94,8 @@ impl FileOperations {
         self.operations.push(Op::Link(source.as_ref().to_path_buf(), self.root.join(dest)))
     }
 
-    pub fn unlink<P: AsRef<Path>>(&mut self, name: P) {
-        self.operations.push(Op::Unlink(self.root.join(name)))
+    pub fn remove<P: AsRef<Path>>(&mut self, name: P) {
+        self.operations.push(Op::Remove(self.root.join(name)))
     }
 
     pub fn create_git_repo<P: AsRef<Path>>(&mut self, name: P) {
@@ -120,7 +120,7 @@ impl FileOperations {
             Op::MkDirAll(dir) => try!(fs::create_dir_all(dir)),
             Op::GitInit(dir) => try!(self.git_init(dir)),
             Op::Link(src, dst) => try!(os::unix::fs::symlink(src, dst)),
-            Op::Unlink(file) => try!(fs::remove_file(file)),
+            Op::Remove(file) => try!(fs::remove_file(file)),
         };
         Ok(())
     }
@@ -180,7 +180,7 @@ mod tests {
         // Create symbolic link to remove
         let mut f = fs::File::create(test_root.join("file_a")).unwrap();
         file_set.link("file_a", "file_b");
-        file_set.unlink("file_b");
+        file_set.remove("file_b");
         let results = file_set.commit();
 
         assert_eq!(results.len(), 2);
