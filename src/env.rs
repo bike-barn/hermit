@@ -34,6 +34,7 @@ mod tests {
 
     #[test]
     fn hermit_dir_defaults_to_dot_config() {
+        env::remove_var("HERMIT_ROOT");
         assert_eq!(default_hermit_dir(), get_hermit_dir());
     }
 
