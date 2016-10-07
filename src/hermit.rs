@@ -57,7 +57,7 @@ mod tests {
     use super::{Error, Hermit};
 
     fn hermit(config: &MockConfig) -> Hermit<MockConfig> {
-        Hermit { config: config.clone() }
+        Hermit::new(config.clone())
     }
 
     fn mock_config() -> MockConfig {
