@@ -11,7 +11,7 @@ pub enum Error {
 }
 
 impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Error {
+    fn from(_err: io::Error) -> Error {
         Error::ShellDoesNotExist
     }
 }
