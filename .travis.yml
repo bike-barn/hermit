@@ -7,10 +7,7 @@ rust:
 matrix:
   allow_failures:
     - rust: nightly
-cache:
-  directories:
-    - $HOME/.cargo
-    - target
+cache: cargo
 
 before_script:
   - curl -o /tmp/urchin https://raw.githubusercontent.com/tlevine/urchin/v0.0.6/urchin && chmod +x /tmp/urchin
