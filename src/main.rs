@@ -4,6 +4,10 @@ extern crate clap;
 extern crate git2;
 extern crate uuid;
 
+#[cfg(test)]
+#[macro_use]
+extern crate lazy_static;
+
 mod config;
 mod env;
 mod hermit;
@@ -65,11 +69,11 @@ fn make_app_config<'a, 'b, 'c, 'd, 'e, 'f>() -> App<'a, 'b, 'c, 'd, 'e, 'f> {
     let version = env!("CARGO_PKG_VERSION");
 
     let app = App::new("hermit")
-                  .version(version)
-                  .author("Bike Barn <https://github.com/bike-barn/hermit>")
-                  .about("A home directory configuration management assistant.")
-                  .setting(AppSettings::SubcommandRequiredElseHelp)
-                  .setting(AppSettings::VersionlessSubcommands);
+        .version(version)
+        .author("Bike Barn <https://github.com/bike-barn/hermit>")
+        .about("A home directory configuration management assistant.")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .setting(AppSettings::VersionlessSubcommands);
 
     let app = add_add_subcommand(app);
     let app = add_clone_subcommand(app);

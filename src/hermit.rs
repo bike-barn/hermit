@@ -11,7 +11,7 @@ pub enum Error {
 }
 
 impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Error {
+    fn from(_err: io::Error) -> Error {
         Error::ShellDoesNotExist
     }
 }
@@ -57,7 +57,7 @@ mod tests {
     use super::{Error, Hermit};
 
     fn hermit(config: &MockConfig) -> Hermit<MockConfig> {
-        Hermit { config: config.clone() }
+        Hermit::new(config.clone())
     }
 
     fn mock_config() -> MockConfig {
