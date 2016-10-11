@@ -29,24 +29,39 @@ mod tests {
 
     use std::env;
     use std::thread;
+    use std::sync::Mutex;
     use std::time::Duration;
     use std::path::PathBuf;
 
+    lazy_static! {
+        // This mutex is solely for preventing these two tests from
+        // stomping on each other. While it doesn't happen often, it's
+        // still an issue we want to avoid for CI builds (spurious
+        // build failures are the worst).
+        static ref ROOT_ENV_LOCK: Mutex<()> = Mutex::new(());
+    }
+
     #[test]
     fn hermit_dir_defaults_to_dot_config() {
-        env::remove_var("HERMIT_ROOT");
-        assert_eq!(default_hermit_dir(), get_hermit_dir());
+        let hermit_dir: Option<PathBuf>;
+        {
+            let _lock = ROOT_ENV_LOCK.lock().unwrap();
+            env::remove_var("HERMIT_ROOT");
+            hermit_dir = get_hermit_dir();
+        }
+        assert_eq!(default_hermit_dir(), hermit_dir);
     }
 
     #[test]
     fn hermit_dir_can_be_set_by_environment_variable() {
-        // Sleep briefly so that this doesn't influence the default
-        // hermit dir test.
-        thread::sleep(Duration::from_millis(500));
+        let hermit_dir: Option<PathBuf>;
+        let test_hermit_dir = PathBuf::from("a/hermit/path");
+        {
+            let _lock = ROOT_ENV_LOCK.lock().unwrap();
+            env::set_var("HERMIT_ROOT", &test_hermit_dir);
+            hermit_dir = get_hermit_dir();
+        }
 
-        let hermit_dir = PathBuf::from("a/hermit/path");
-        env::set_var("HERMIT_ROOT", &hermit_dir);
-
-        assert_eq!(Some(hermit_dir), get_hermit_dir());
+        assert_eq!(Some(test_hermit_dir), hermit_dir);
     }
 }
