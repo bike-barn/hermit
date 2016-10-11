@@ -1,22 +1,25 @@
 use std::path::PathBuf;
+use std::rc::Rc;
 
-pub struct Shell<'a> {
+use config::Config;
+
+pub struct Shell<T: Config> {
     pub name: String,
-    pub root_path: &'a PathBuf,
+    pub config: Rc<T>,
 }
 
-impl<'a> Shell<'a> {
-    pub fn new<S>(name: S, root_path: &'a PathBuf) -> Shell<'a>
+impl<T: Config> Shell<T> {
+    pub fn new<S>(name: S, config: Rc<T>) -> Shell<T>
         where S: Into<String>
     {
         Shell {
             name: name.into(),
-            root_path: root_path,
+            config: config,
         }
     }
 
     pub fn root_path(&self) -> PathBuf {
-        self.root_path.join("shells").join(&self.name)
+        self.config.shell_root_path().join(&self.name)
     }
 
     pub fn path_for(&self, filename: &str) -> PathBuf {
@@ -28,54 +31,74 @@ impl<'a> Shell<'a> {
 mod tests {
 
     use std::path::PathBuf;
+    use std::rc::Rc;
+
+    use config::mock::MockConfig;
+
     use super::Shell;
 
     fn root_path(path_str: &str) -> PathBuf {
         PathBuf::from(path_str)
     }
 
+    fn std_mock_config() -> Rc<MockConfig> {
+        let root_path = PathBuf::from("/");
+        mock_config(root_path)
+    }
+
+    fn mock_config(root_path: PathBuf) -> Rc<MockConfig> {
+        Rc::new(MockConfig {
+            root_path: root_path,
+            allowed_shell_names: vec!["default".to_owned()],
+            current_shell: "default".to_owned(),
+        })
+    }
+
     #[test]
     fn has_a_name() {
-        let root_path = root_path("/");
-        let s = Shell::new("my_shell", &root_path);
+        let config = std_mock_config();
+        let s = Shell::new("my_shell", config);
         assert_eq!(s.name, "my_shell");
     }
 
     #[test]
     fn has_a_string_name() {
-        let root_path = root_path("/");
-        let s = Shell::new(String::from("my_shell"), &root_path);
+        let config = std_mock_config();
+        let s = Shell::new(String::from("my_shell"), config);
         assert_eq!(s.name, "my_shell");
     }
 
     #[test]
     fn can_resolve_its_path() {
         let root_path = root_path("/Users/geoff/.config/hermit");
-        let s = Shell::new("default", &root_path);
+        let config = mock_config(root_path.clone());
+        let s = Shell::new("default", config);
 
         let expected_path = root_path.join("shells")
-                                     .join("default");
+            .join("default");
         assert_eq!(s.root_path(), expected_path);
     }
 
     #[test]
     fn resolves_empty_string_to_root() {
         let root_path = root_path("/Users/geoff/.config/hermit");
-        let s = Shell::new("default", &root_path);
+        let config = mock_config(root_path.clone());
+        let s = Shell::new("default", config);
 
         let expected_path = root_path.join("shells")
-                                     .join("default");
+            .join("default");
         assert_eq!(s.path_for(""), expected_path);
     }
 
     #[test]
     fn can_resolve_paths() {
         let root_path = root_path("/Users/geoff/.config/hermit");
-        let s = Shell::new("default", &root_path);
+        let config = mock_config(root_path.clone());
+        let s = Shell::new("default", config);
 
         let expected_path = root_path.join("shells")
-                                     .join("default")
-                                     .join(".bashrc");
+            .join("default")
+            .join(".bashrc");
         assert_eq!(s.path_for(".bashrc"), expected_path);
     }
 }

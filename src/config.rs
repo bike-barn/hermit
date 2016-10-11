@@ -91,7 +91,7 @@ pub mod mock {
 
     use super::Config;
 
-    #[derive(Clone)]
+    #[derive(Clone,Debug,Eq,PartialEq)]
     pub struct MockConfig {
         pub root_path: PathBuf,
         pub current_shell: String,

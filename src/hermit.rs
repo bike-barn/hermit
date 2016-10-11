@@ -28,10 +28,10 @@ impl<T: Config> Hermit<T> {
         Hermit { config: Rc::new(config) }
     }
 
-    pub fn current_shell(&self) -> Option<Shell> {
+    pub fn current_shell(&self) -> Option<Shell<T>> {
         self.config
             .current_shell_name()
-            .map(|shell_name| Shell::new(shell_name, self.config.root_path()))
+            .map(|shell_name| Shell::new(shell_name, self.config.clone()))
     }
 
     pub fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
@@ -57,8 +57,8 @@ impl<T: Config> Hermit<T> {
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
+    use std::rc::Rc;
 
-    use config::Config;
     use config::mock::MockConfig;
     use file_operations::FileOperations;
     use file_operations::Op;
@@ -84,7 +84,7 @@ mod tests {
 
         let shell = hermit.current_shell().unwrap();
         assert_eq!(shell.name, "default");
-        assert_eq!(shell.root_path, config.root_path());
+        assert_eq!(shell.config, Rc::new(config));
     }
 
     #[test]
