@@ -49,7 +49,8 @@ impl<T: Config> Hermit<T> {
     }
 
     pub fn init_shell(&self, file_ops: &mut FileOperations, name: &str) {
-        let path = self.config.shell_root_path().join(name);
+        let new_shell = Shell::new(name, self.config.clone());
+        let path = new_shell.root_path();
         file_ops.create_git_repo(path);
     }
 }
