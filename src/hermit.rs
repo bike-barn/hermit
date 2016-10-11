@@ -1,6 +1,9 @@
 use std::io;
+use std::rc::Rc;
+
 use config::Config;
 use file_operations::FileOperations;
+use message;
 use shell::Shell;
 
 #[derive(Copy,Clone)]
@@ -17,12 +20,12 @@ impl From<io::Error> for Error {
 }
 
 pub struct Hermit<T: Config> {
-    config: T,
+    config: Rc<T>,
 }
 
 impl<T: Config> Hermit<T> {
     pub fn new(config: T) -> Hermit<T> {
-        Hermit { config: config }
+        Hermit { config: Rc::new(config) }
     }
 
     pub fn current_shell(&self) -> Option<Shell> {
@@ -33,7 +36,13 @@ impl<T: Config> Hermit<T> {
 
     pub fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
         if self.config.does_shell_exist(name) {
-            self.config.set_current_shell_name(name).map_err(From::from)
+            match Rc::get_mut(&mut self.config) {
+                Some(config) => config.set_current_shell_name(name).map_err(From::from),
+                None => {
+                    unreachable!(message::error("attempted to modify config while it was being \
+                                                 used."))
+                }
+            }
         } else {
             Err(Error::ShellDoesNotExist)
         }
