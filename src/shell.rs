@@ -30,7 +30,7 @@ impl<T: Config> Shell<T> {
 #[cfg(test)]
 mod tests {
 
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
     use std::rc::Rc;
 
     use config::mock::MockConfig;
@@ -41,14 +41,9 @@ mod tests {
         PathBuf::from(path_str)
     }
 
-    fn std_mock_config() -> Rc<MockConfig> {
-        let root_path = PathBuf::from("/");
-        mock_config(root_path)
-    }
-
-    fn mock_config(root_path: PathBuf) -> Rc<MockConfig> {
+    fn mock_config<P: AsRef<Path>>(root_path: P) -> Rc<MockConfig> {
         Rc::new(MockConfig {
-            root_path: root_path,
+            root_path: PathBuf::from(root_path.as_ref()),
             allowed_shell_names: vec!["default".to_owned()],
             current_shell: "default".to_owned(),
         })
@@ -56,26 +51,25 @@ mod tests {
 
     #[test]
     fn has_a_name() {
-        let config = std_mock_config();
+        let config = mock_config("/");
         let s = Shell::new("my_shell", config);
         assert_eq!(s.name, "my_shell");
     }
 
     #[test]
     fn has_a_string_name() {
-        let config = std_mock_config();
+        let config = mock_config("/");
         let s = Shell::new(String::from("my_shell"), config);
         assert_eq!(s.name, "my_shell");
     }
 
     #[test]
     fn can_resolve_its_path() {
-        let root_path = root_path("/Users/geoff/.config/hermit");
+        let root_path = root_path("/some/random/path");
         let config = mock_config(root_path.clone());
         let s = Shell::new("default", config);
 
-        let expected_path = root_path.join("shells")
-            .join("default");
+        let expected_path = root_path.join("shells").join("default");
         assert_eq!(s.root_path(), expected_path);
     }
 
@@ -85,8 +79,7 @@ mod tests {
         let config = mock_config(root_path.clone());
         let s = Shell::new("default", config);
 
-        let expected_path = root_path.join("shells")
-            .join("default");
+        let expected_path = root_path.join("shells").join("default");
         assert_eq!(s.path_for(""), expected_path);
     }
 
@@ -96,9 +89,7 @@ mod tests {
         let config = mock_config(root_path.clone());
         let s = Shell::new("default", config);
 
-        let expected_path = root_path.join("shells")
-            .join("default")
-            .join(".bashrc");
+        let expected_path = root_path.join("shells").join("default").join(".bashrc");
         assert_eq!(s.path_for(".bashrc"), expected_path);
     }
 }
