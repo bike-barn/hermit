@@ -28,9 +28,7 @@ mod tests {
     use super::*;
 
     use std::env;
-    use std::thread;
     use std::sync::Mutex;
-    use std::time::Duration;
     use std::path::PathBuf;
 
     lazy_static! {

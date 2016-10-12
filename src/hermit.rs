@@ -1,6 +1,9 @@
 use std::io;
+use std::rc::Rc;
+
 use config::Config;
 use file_operations::FileOperations;
+use message;
 use shell::Shell;
 
 #[derive(Copy,Clone)]
@@ -17,30 +20,37 @@ impl From<io::Error> for Error {
 }
 
 pub struct Hermit<T: Config> {
-    config: T,
+    config: Rc<T>,
 }
 
 impl<T: Config> Hermit<T> {
     pub fn new(config: T) -> Hermit<T> {
-        Hermit { config: config }
+        Hermit { config: Rc::new(config) }
     }
 
-    pub fn current_shell(&self) -> Option<Shell> {
+    pub fn current_shell(&self) -> Option<Shell<T>> {
         self.config
             .current_shell_name()
-            .map(|shell_name| Shell::new(shell_name, self.config.root_path()))
+            .map(|shell_name| Shell::new(shell_name, self.config.clone()))
     }
 
     pub fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
         if self.config.does_shell_exist(name) {
-            self.config.set_current_shell_name(name).map_err(From::from)
+            match Rc::get_mut(&mut self.config) {
+                Some(config) => config.set_current_shell_name(name).map_err(From::from),
+                None => {
+                    unreachable!(message::error("attempted to modify config while it was being \
+                                                 used."))
+                }
+            }
         } else {
             Err(Error::ShellDoesNotExist)
         }
     }
 
     pub fn init_shell(&self, file_ops: &mut FileOperations, name: &str) {
-        let path = self.config.shell_root_path().join(name);
+        let new_shell = Shell::new(name, self.config.clone());
+        let path = new_shell.root_path();
         file_ops.create_git_repo(path);
     }
 }
@@ -48,8 +58,8 @@ impl<T: Config> Hermit<T> {
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
+    use std::rc::Rc;
 
-    use config::Config;
     use config::mock::MockConfig;
     use file_operations::FileOperations;
     use file_operations::Op;
@@ -75,7 +85,7 @@ mod tests {
 
         let shell = hermit.current_shell().unwrap();
         assert_eq!(shell.name, "default");
-        assert_eq!(shell.root_path, config.root_path());
+        assert_eq!(shell.config, Rc::new(config));
     }
 
     #[test]
