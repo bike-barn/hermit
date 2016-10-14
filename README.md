@@ -149,15 +149,25 @@ what's going on in the project.
 Contributing
 ------------
 
+Please note that Hermit is released with
+a [Contributor Code of Conduct][covenant]. By participating in this
+project you agree to abide by its terms.
+
+If you believe someone is violating the code of conduct, we ask that
+you report it by emailing hermit@zephyrizing.net. For more details please
+see our [Reporting Guide].
+
 First, please take a look at our
-[CONTRIBUTING.md][contributing]. Next, probably check out our
-[Waffle.io][waffle] board, and look at the size 1 issues in the To-Do
-column. From there, the standard "[fork], [branch], code,
+[Contribution Guidelines][contributing].  Next, probably check out
+our [Waffle.io][waffle] board, and look at the size 1 issues in the
+To-Do column. From there, the standard "[fork], [branch], [code],
 [pull request]" workflow works well.
 
+[covenant]: https://github.com/bike-barn/hermit/blob/master/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/bike-barn/hermit/blob/master/CONTRIBUTING.md
 [fork]: https://help.github.com/articles/fork-a-repo/
 [branch]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
+[code]: http://stackoverflow.com/questions/tagged/rust
 [pull request]: https://help.github.com/articles/creating-a-pull-request/
 
 As a bonus, if you use the waffle.io

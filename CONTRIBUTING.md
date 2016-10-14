@@ -132,3 +132,15 @@ principles outlined there.
 [GitHub Flow]: https://guides.github.com/introduction/flow/
 [Nicolas Gallagher]: http://nicolasgallagher.com/
 [issue guidelines]: https://github.com/necolas/issue-guidelines
+
+## Code of Conduct
+
+As a contributor, you can help us keep the Hermit community open and
+inclusive. Please read and follow our [Code of Conduct].
+
+If you believe someone is violating the code of conduct, we ask that
+you report it by emailing hermit@zephyrizing.net. For more details
+please see our [Reporting Guide].
+
+[Code of Conduct]: /CODE_OF_CONDUCT.md
+[Reporting Guide]: /doc/conduct/reporting-guide.md
