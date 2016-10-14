@@ -93,7 +93,6 @@ impl FileOperations {
     pub fn commit(mut self) -> Vec<Result> {
         let ops = self.operations;
         self.operations = vec![];
-        self.operations.push(Op::MkDir(PathBuf::new()));
 
         ops.into_iter()
            .map(|op| self.do_op(op))
