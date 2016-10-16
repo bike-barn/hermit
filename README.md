@@ -169,7 +169,7 @@ it will automatically update our Waffle board.
 License
 -------
 
-Copyright 2014, Geoff Shannon
+Copyright 2014-2016, Geoff Shannon and contributors.
 
 This file is part of Hermit.
 
