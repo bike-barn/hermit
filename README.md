@@ -101,6 +101,20 @@ you have `git` [installed][install-git] and then install through `cargo`.
 [install-cargo]: http://doc.crates.io/
 [install-git]: https://git-scm.com/book/en/v1/Getting-Started-Installing-Git
 
+### Dependencies
+
+Additional dependencies can be installed with your package manager.
+
+#### Ubuntu & Debian
+    sudo apt-get install cmake
+
+#### Fedora
+    sudo dnf install cmake
+
+#### OS X
+    brew install cmake
+
+
 Uninstall
 ---------
 
