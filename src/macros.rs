@@ -1,14 +1,13 @@
 macro_rules! subcommand {
-    (
-        $name:ident, $fn_name:ident {
+    {
+        $fn_name:ident ( $name:expr ) {
             $(
-                $method:ident($($args:expr),*)
-            );*
+                $method:ident ( $($args:expr),* )
+            )*
         }
-    ) => {
-        fn $fn_name<'a, 'b>(app: App<'a, 'b>)
-                                                   -> App<'a, 'b> {
-            let subcommand = SubCommand::with_name(stringify!($name))
+    } => {
+        fn $fn_name<'a, 'b>(app: App<'a, 'b>) -> App<'a, 'b> {
+            let subcommand = SubCommand::with_name($name)
                 $(
                     .$method($($args),*)
                 )*;
