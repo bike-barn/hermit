@@ -68,7 +68,7 @@ fn report_errors(results: Vec<file_operations::Result>) {
 fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = App::new("hermit")
         .version(env!("CARGO_PKG_VERSION"))
-        .author("Bike Barn <https://github.com/bike-barn/hermit>")
+        .author("A product of the Bike Barn <https://github.com/bike-barn/hermit>")
         .about("A home directory configuration management assistant.")
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .setting(AppSettings::VersionlessSubcommands);
