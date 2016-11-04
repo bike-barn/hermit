@@ -68,6 +68,14 @@ It's a good idea to **ask** before undertaking any work on a significant pull
 request, otherwise you risk doing a lot of work for something the rest of the
 developers might not want to merge.
 
+Also, we use a [Waffle board][waffle-board] to track "In Progress"
+work. You can get Waffle to automatically move an issue/card into the
+"In Progress" column for you by following
+it's [branch naming conventions][waffle-branch-naming].
+
+[waffle-board]: https://waffle.io/bike-barn/hermit
+[waffle-branch-naming]: https://github.com/waffleio/waffle.io/wiki/Recommended-Workflow-Using-Pull-Requests-&-Automatic-Work-Tracking
+
 Be sure to follow the guidelines on [writing code](#writing-code) if you want
 your work considered for inclusion.
 
