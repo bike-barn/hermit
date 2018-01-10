@@ -74,7 +74,7 @@ work. You can get Waffle to automatically move an issue/card into the
 it's [branch naming conventions][waffle-branch-naming].
 
 [waffle-board]: https://waffle.io/bike-barn/hermit
-[waffle-branch-naming]: https://github.com/waffleio/waffle.io/wiki/Recommended-Workflow-Using-Pull-Requests-&-Automatic-Work-Tracking
+[waffle-branch-naming]: https://help.waffle.io/faq/waffle-workflow/why-are-my-issues-in-backlog-being-automatically-moved-to-in-progress
 
 Be sure to follow the guidelines on [writing code](#writing-code) if you want
 your work considered for inclusion.
