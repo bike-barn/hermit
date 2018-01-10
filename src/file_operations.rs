@@ -143,7 +143,6 @@ mod tests {
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         fs::File::create(test_root.join("file_a")).unwrap();
-        
         file_set.link("file_a", "file_b");
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
