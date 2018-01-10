@@ -6,8 +6,8 @@ macro_rules! subcommand {
             );*
         }
     ) => {
-        fn $fn_name<'a, 'b, 'c, 'd, 'e, 'f>(app: App<'a, 'b, 'c, 'd, 'e, 'f>)
-                                                   -> App<'a, 'b, 'c, 'd, 'e, 'f> {
+        fn $fn_name<'a, 'b>(app: App<'a, 'b>)
+                                                   -> App<'a, 'b> {
             let subcommand = SubCommand::with_name(stringify!($name))
                 $(
                     .$method($($args),*)

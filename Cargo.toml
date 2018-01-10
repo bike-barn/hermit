@@ -13,9 +13,9 @@ keywords = ["home", "directory", "configuration", "management", "dotfiles"]
 license = "GPL-3.0"
 
 [dependencies]
-clap = "1"
-git2 = "0.3"
-uuid = "0.1"
+clap = "2.29.0"
+git2 = "0.6"
+uuid = {version = "0.5.1", features = ["v4"]}
 
 [dev-dependencies]
-lazy_static = "0.1.*"
+lazy_static = "1.0.0"

@@ -65,7 +65,7 @@ fn report_errors(results: Vec<file_operations::Result>) {
     }
 }
 
-fn make_app_config<'a, 'b, 'c, 'd, 'e, 'f>() -> App<'a, 'b, 'c, 'd, 'e, 'f> {
+fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let version = env!("CARGO_PKG_VERSION");
 
     let app = App::new("hermit")
