@@ -158,19 +158,18 @@ mod tests {
     }
 
     #[test]
-    fn can_unlink_file() {
+    fn can_remove_file() {
         let test_root = set_up("unlink");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
-        // Create symbolic link to remove
+        // Create file to remove
         fs::File::create(test_root.join("file_a")).unwrap();
-        file_set.link("file_a", "file_b");
-        file_set.remove("file_b");
+        file_set.remove("file_a");
         let results = file_set.commit();
 
-        assert_eq!(results.len(), 2);
-        assert!(results[1].is_ok());
-        assert!(!test_root.join("file_b").exists());
+        assert_eq!(results.len(), 1);
+        assert!(results[0].is_ok());
+        assert!(!test_root.join("file_a").exists());
 
         clean_up(&test_root);
     }
