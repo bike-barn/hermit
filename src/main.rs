@@ -42,14 +42,14 @@ fn main() {
     let mut file_operations = FileOperations::rooted_at(home_dir);
 
     match app_matches.subcommand() {
-        ("add",    Some(matches)) => handle_add    (matches, &mut hermit, &mut file_operations),
-        ("clone",  Some(matches)) => handle_clone  (matches, &mut hermit, &mut file_operations),
-        ("doctor", Some(matches)) => handle_doctor (matches, &mut hermit, &mut file_operations),
-        ("git",    Some(matches)) => handle_git    (matches, &mut hermit, &mut file_operations),
-        ("init",   Some(matches)) => handle_init   (matches, &mut hermit, &mut file_operations),
-        ("nuke",   Some(matches)) => handle_nuke   (matches, &mut hermit, &mut file_operations),
-        ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
-        ("use",    Some(matches)) => handle_use    (matches, &mut hermit, &mut file_operations),
+        ("add",     Some(matches)) => handle_add     (matches, &mut hermit, &mut file_operations),
+        ("clone",   Some(matches)) => handle_clone   (matches, &mut hermit, &mut file_operations),
+        ("doctor",  Some(matches)) => handle_doctor  (matches, &mut hermit, &mut file_operations),
+        ("git",     Some(matches)) => handle_git     (matches, &mut hermit, &mut file_operations),
+        ("init",    Some(matches)) => handle_init    (matches, &mut hermit, &mut file_operations),
+        ("nuke",    Some(matches)) => handle_nuke    (matches, &mut hermit, &mut file_operations),
+        ("status",  Some(matches)) => handle_status  (matches, &mut hermit, &mut file_operations),
+        ("inhabit", Some(matches)) => handle_inhabit (matches, &mut hermit, &mut file_operations),
         _ => unreachable!(message::error("unknown subcommand passed"))
     };
 
@@ -82,7 +82,7 @@ fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = add_init_subcommand(app);
     let app = add_nuke_subcommand(app);
     let app = add_status_subcommand(app);
-    let app = add_use_subcommand(app);
+    let app = add_inhabit_subcommand(app);
 
     app
 }
@@ -172,12 +172,27 @@ fn handle_status<C: Config>(_matches: &ArgMatches,
 }
 
 
-subcommand!(use, add_use_subcommand {
-    about("Switch to using a different hermit shell")
+subcommand!(inhabit, add_inhabit_subcommand {
+    about("Switch to inhabiting a different hermit shell");
+    arg(Arg::with_name("SHELL_NAME").help("The name of the shell to inhabit"))
 });
 
-fn handle_use<C: Config>(_matches: &ArgMatches,
-                         _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit use is not implemented yet.")
+fn handle_inhabit<C: Config>(matches: &ArgMatches,
+                             hermit: &mut Hermit<C>,
+                             _file_operations: &mut FileOperations) {
+    let shell_name = matches.value_of("SHELL_NAME").unwrap_or("");
+    let res = hermit.inhabit_shell(_file_operations, shell_name);
+    match res {
+        Ok(v) => v,
+        Err(err) => {
+            let mes = format!("{} is a non-existent shell", shell_name);
+            println!("{}", message::error(&mes));
+        }
+    }
+    if shell_name == "" {
+        let shell_names = hermit.shell_list().unwrap_or(Vec::new());
+        for x in &shell_names {
+            println!("{}", x);
+        }
+    }
 }
