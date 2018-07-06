@@ -29,6 +29,10 @@ use file_operations::FileOperations;
 #[cfg(test)]
 mod test_helpers;
 
+
+const SHELL_NAME_ARG: &str = "SHELL_NAME";
+
+
 #[cfg_attr(rustfmt, rustfmt_skip)]
 fn main() -> Result {
     let app = make_app_config();
@@ -153,14 +157,14 @@ subcommand!{
   add_init_subcommand("init") {
     about("Create a new hermit shell called SHELL_NAME. If no shell name \
            is given, \"default\" is used.")
-    arg(Arg::with_name("SHELL_NAME").help("The name of the shell to be created."))
+    arg(shell_name_arg("The name of the shell to be created."))
   }
 }
 
 fn handle_init<C: Config>(matches: &ArgMatches,
                           hermit: &mut Hermit<C>,
                           file_operations: &mut FileOperations) -> Result {
-    let shell_name = matches.value_of("SHELL_NAME").unwrap_or("default");
+    let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
     hermit.init_shell(file_operations, shell_name);
     Ok(())
 }
@@ -205,4 +209,15 @@ fn handle_use<C: Config>(_matches: &ArgMatches,
                          _file_operations: &mut FileOperations) -> Result {
     println!("hermit use is not implemented yet.");
     Ok(())
+}
+
+
+// **************************************************
+// Clap arg utility functions
+// **************************************************
+
+fn shell_name_arg<'a, 'b>(message: &'static str) -> Arg<'a, 'b> {
+    Arg::with_name(SHELL_NAME_ARG)
+        .default_value("default")
+        .help(message)
 }
