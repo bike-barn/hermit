@@ -37,8 +37,8 @@ impl From<git2::Error> for Error {
 pub type Result = result::Result<(), Error>;
 
 pub struct FileOperations {
-    pub root: PathBuf,
-    pub operations: Vec<Op>,
+    root: PathBuf,
+    operations: Vec<Op>,
     git_init_opts: git2::RepositoryInitOptions,
 }
 
@@ -56,6 +56,10 @@ impl FileOperations {
         opts.no_reinit(true);
 
         opts
+    }
+
+    pub fn operations(&self) -> &Vec<Op> {
+        &self.operations
     }
 
     pub fn create_dir<P: AsRef<Path>>(&mut self, name: P) {

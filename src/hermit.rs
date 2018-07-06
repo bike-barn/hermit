@@ -120,7 +120,7 @@ mod tests {
         let mut file_ops = FileOperations::rooted_at("/home/geoff");
 
         hermit.init_shell(&mut file_ops, "new-one");
-        let first_op = &file_ops.operations[0];
+        let first_op = &file_ops.operations()[0];
         assert_eq!(*first_op,
                    Op::GitInit(PathBuf::from("/home/geoff/.hermit-config/shells/new-one")));
     }
