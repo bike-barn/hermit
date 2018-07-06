@@ -7,7 +7,6 @@ use git2;
 #[derive(Debug, PartialEq, Eq)]
 pub enum Op {
     MkDir(PathBuf),
-    MkDirAll(PathBuf),
     GitInit(PathBuf),
     Link { path: PathBuf, target: PathBuf },
     Remove(PathBuf),
@@ -66,10 +65,6 @@ impl FileOperations {
         self.operations.push(Op::MkDir(self.root.join(name)))
     }
 
-    pub fn create_dir_all(&mut self, name: impl AsRef<Path>) {
-        self.operations.push(Op::MkDirAll(self.root.join(name)))
-    }
-
     pub fn link(&mut self, path: impl AsRef<Path>, target: impl AsRef<Path>) {
         self.operations.push(Op::Link{
             path: self.root.join(path),
@@ -95,8 +90,7 @@ impl FileOperations {
 
     fn do_op(&mut self, op: Op) -> Result {
         match op {
-            Op::MkDir(dir) => fs::create_dir(dir)?,
-            Op::MkDirAll(dir) => fs::create_dir_all(dir)?,
+            Op::MkDir(dir) => fs::create_dir_all(dir)?,
             Op::GitInit(dir) => git_init(dir, &self.git_init_opts)?,
             Op::Link { path, target } => unix::fs::symlink(target, path)?,
             Op::Remove(file) => fs::remove_file(file)?,
@@ -205,26 +199,12 @@ mod tests {
     }
 
     #[test]
-    fn cannot_create_a_directory_in_a_nonexistent_path() {
-        let test_root = set_up("not-mkdir");
-        let mut file_set = FileOperations::rooted_at(&test_root);
-
-        let path = Path::new("test").join("one").join("two").join("three");
-        file_set.create_dir(path);
-
-        let results = file_set.commit();
-        assert_eq!(results.len(), 1);
-        results[0].as_ref().expect_err("Op unexpectedly succeeded");
-        assert!(!test_root.join("test").is_dir());
-    }
-
-    #[test]
     fn can_create_path_of_needed_directories() {
         let test_root = set_up("mkdir-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         let path = Path::new("test").join("one").join("two").join("three");
-        file_set.create_dir_all(path);
+        file_set.create_dir(path);
 
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
