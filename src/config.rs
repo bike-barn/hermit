@@ -33,9 +33,7 @@ impl FsConfig {
     }
 
     fn read_current_shell(&self) -> io::Result<String> {
-        let config_path = self.root_path.join("current_shell");
-
-        let mut file = File::open(&config_path)?;
+        let mut file = File::open(&self.config_path())?;
         let mut current_shell = String::new();
 
         file.read_to_string(&mut current_shell)?;
