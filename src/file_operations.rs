@@ -94,16 +94,16 @@ impl FileOperations {
         match op {
             Op::MkDir(dir) => fs::create_dir(dir)?,
             Op::MkDirAll(dir) => fs::create_dir_all(dir)?,
-            Op::GitInit(dir) => self.git_init(dir)?,
+            Op::GitInit(dir) => git_init(dir, &self.git_init_opts)?,
             Op::Link(src, dest) => unix::fs::symlink(src, dest)?,
             Op::Remove(file) => fs::remove_file(file)?,
         };
         Ok(())
     }
+}
 
-    fn git_init(&self, dir: PathBuf) -> result::Result<(), git2::Error> {
-        git2::Repository::init_opts(dir, &self.git_init_opts).map(|_| ())
-    }
+fn git_init(dir: PathBuf, options: &git2::RepositoryInitOptions) -> result::Result<(), git2::Error> {
+    git2::Repository::init_opts(dir, options).map(|_| ())
 }
 
 #[cfg(test)]
