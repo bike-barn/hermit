@@ -138,8 +138,6 @@ mod tests {
             Ok(val) => assert!(val.file_type().is_symlink()),
             Err(_err) => panic!("{:?} does not exist", link_path),
         };
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -155,8 +153,6 @@ mod tests {
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
         assert!(!test_root.join("file_a").exists());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -171,8 +167,6 @@ mod tests {
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
         assert!(test_root.join("test").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -188,8 +182,6 @@ mod tests {
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect_err("Op unexpectedly succeeded");
         assert!(!test_root.join("test").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -205,8 +197,6 @@ mod tests {
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
         assert!(test_root.join("test").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -221,8 +211,6 @@ mod tests {
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
         assert!(test_root.join(".git").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -238,8 +226,6 @@ mod tests {
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
         assert!(test_root.join(&path).join(".git").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
