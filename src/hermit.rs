@@ -83,11 +83,11 @@ mod tests {
     #[test]
     fn can_set_the_current_shell() {
         let mut config = MockConfig::new();
-        config.set_current_shell_name("current");
+        config.set_current_shell_name("current").expect("Setting shell name failed");
         let mut hermit = hermit(&config);
 
         assert_eq!(hermit.current_shell().unwrap().name, "current");
-        assert!(hermit.set_current_shell("default").is_ok());
+        hermit.set_current_shell("default").expect("Setting shell name failed");
         assert_eq!(hermit.current_shell().unwrap().name, "default");
     }
 
@@ -98,8 +98,8 @@ mod tests {
 
         assert_eq!(hermit.current_shell().unwrap().name, "default");
         let res = hermit.set_current_shell("non-existent");
-        assert!(res.is_err());
-        assert_eq!(res.err().unwrap(), Error::ShellDoesNotExist);
+        let err = res.expect_err("Shell should not exist");
+        assert_eq!(err, Error::ShellDoesNotExist);
     }
 
     #[test]

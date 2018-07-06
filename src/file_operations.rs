@@ -132,8 +132,7 @@ mod tests {
         let results = file_set.commit();
 
         assert_eq!(results.len(), 1);
-        println!("{:?}", results[0]);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
 
         match fs::symlink_metadata(&link_path) {
             Ok(val) => assert!(val.file_type().is_symlink()),
@@ -154,7 +153,7 @@ mod tests {
         let results = file_set.commit();
 
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(!test_root.join("file_a").exists());
 
         clean_up(&test_root);
@@ -170,7 +169,7 @@ mod tests {
         assert!(!test_root.join("test").is_dir());
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join("test").is_dir());
 
         clean_up(&test_root);
@@ -187,7 +186,7 @@ mod tests {
         assert!(!test_root.join("test").is_dir());
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_err());
+        results[0].as_ref().expect_err("Op unexpectedly succeeded");
         assert!(!test_root.join("test").is_dir());
 
         clean_up(&test_root);
@@ -204,7 +203,7 @@ mod tests {
         assert!(!test_root.join("test").is_dir());
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join("test").is_dir());
 
         clean_up(&test_root);
@@ -220,7 +219,7 @@ mod tests {
         assert!(!test_root.join(".git").is_dir());
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join(".git").is_dir());
 
         clean_up(&test_root);
@@ -237,7 +236,7 @@ mod tests {
         assert!(!test_root.join(&path).join(".git").is_dir());
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join(&path).join(".git").is_dir());
 
         clean_up(&test_root);
@@ -253,7 +252,7 @@ mod tests {
 
         let results = file_set.commit();
         assert_eq!(results.len(), 2);
-        assert!(results[0].is_ok());
-        assert!(results[1].is_err());
+        results[0].as_ref().expect("Op failed");
+        results[1].as_ref().expect_err("Op unexpectedly succeeded");
     }
 }
