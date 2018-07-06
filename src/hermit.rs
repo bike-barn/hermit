@@ -6,8 +6,12 @@ use file_operations::FileOperations;
 use message;
 use shell::Shell;
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Fail, PartialEq, Eq)]
 pub enum Error {
+    #[fail(display = "`hermit {}` is not implemented yet", _0)]
+    SubcommandNotImplemented(&'static str),
+
+    #[fail(display = "That is not the name of a shell")]
     ShellDoesNotExist,
 }
 
