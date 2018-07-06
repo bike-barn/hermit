@@ -185,8 +185,6 @@ mod test {
         let test_root = set_up("root-path", "default", vec!["default"]);
         let config = FsConfig::new(test_root.clone());
         assert_eq!(config.root_path(), &test_root);
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -196,8 +194,6 @@ mod test {
         config.initialize().expect("Reading shell_name config file");
 
         assert_eq!(config.current_shell_name().unwrap(), "current".to_string());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -213,8 +209,6 @@ mod test {
         let current = "current".to_string();
         assert_eq!(config.current_shell_name().unwrap(), current);
         assert_eq!(name_on_disk, current);
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -225,8 +219,6 @@ mod test {
         let config = FsConfig::new(test_root.clone());
 
         assert!(config.shell_exists("other"));
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -237,7 +229,5 @@ mod test {
         let config = FsConfig::new(test_root.clone());
 
         assert!(!config.shell_exists("another"));
-
-        clean_up(&test_root);
     }
 }
