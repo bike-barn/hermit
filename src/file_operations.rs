@@ -111,11 +111,11 @@ fn git_init(dir: PathBuf, options: &git2::RepositoryInitOptions) -> result::Resu
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
+    use std::path::{Path, PathBuf};
     use std::fs;
 
     use super::FileOperations;
-    use test_helpers::filesystem::{set_up, clean_up};
+    use test_helpers::filesystem::set_up;
 
     #[test]
     fn can_link_file() {
@@ -141,6 +141,18 @@ mod tests {
     }
 
     #[test]
+    fn does_not_link_file_without_commit() {
+        let test_root = PathBuf::from("no-link");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let target_path = test_root.join("target_file");
+        let link_path = test_root.join("link");
+
+        assert!(! link_path.exists());
+        file_set.link("link", &target_path);
+        assert!(! link_path.exists());
+    }
+
+    #[test]
     fn can_remove_file() {
         let test_root = set_up("unlink");
         let mut file_set = FileOperations::rooted_at(&test_root);
@@ -156,13 +168,26 @@ mod tests {
     }
 
     #[test]
+    fn does_not_remove_file_without_commit() {
+        let test_root = set_up("no-unlink");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let file_path = test_root.join("file_a");
+        // Create file to remove
+        fs::File::create(&file_path).unwrap();
+
+        assert!(file_path.exists());
+        file_set.remove("file_a");
+        assert!(file_path.exists());
+    }
+
+    #[test]
     fn can_create_a_directory() {
         let test_root = set_up("mkdir");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         assert!(!test_root.join("test").is_dir());
         file_set.create_dir("test");
-        assert!(!test_root.join("test").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
@@ -170,14 +195,23 @@ mod tests {
     }
 
     #[test]
+    fn does_not_create_a_directory_without_commit() {
+        let test_root = set_up("no-mkdir");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+
+        assert!(!test_root.join("test").is_dir());
+        file_set.create_dir("test");
+        assert!(!test_root.join("test").is_dir());
+    }
+
+    #[test]
     fn cannot_create_a_directory_in_a_nonexistent_path() {
         let test_root = set_up("not-mkdir");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
-        assert!(!test_root.join("test").is_dir());
         let path = Path::new("test").join("one").join("two").join("three");
         file_set.create_dir(path);
-        assert!(!test_root.join("test").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect_err("Op unexpectedly succeeded");
@@ -189,10 +223,9 @@ mod tests {
         let test_root = set_up("mkdir-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
-        assert!(!test_root.join("test").is_dir());
         let path = Path::new("test").join("one").join("two").join("three");
         file_set.create_dir_all(path);
-        assert!(!test_root.join("test").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
@@ -201,12 +234,11 @@ mod tests {
 
     #[test]
     fn can_init_a_git_repo() {
-        let test_root = set_up("git");
+        let test_root = set_up("git-init");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
-        assert!(!test_root.join(".git").is_dir());
         file_set.create_git_repo(".");
-        assert!(!test_root.join(".git").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
@@ -214,14 +246,25 @@ mod tests {
     }
 
     #[test]
+    fn does_not_init_without_commit() {
+        let test_root = set_up("no-git-init");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let path = Path::new("test").join("repo");
+        let git_dir_path = path.join(".git");
+
+        assert!(! git_dir_path.is_dir());
+        file_set.create_git_repo(&path);
+        assert!(! git_dir_path.is_dir());
+    }
+
+    #[test]
     fn can_init_a_git_repo_at_a_nonexistent_path() {
         let test_root = set_up("git-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
-
         let path = Path::new("test").join("sub").join("repo");
-        assert!(!test_root.join(&path).join(".git").is_dir());
+
         file_set.create_git_repo(&path);
-        assert!(!test_root.join(&path).join(".git").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
         results[0].as_ref().expect("Op failed");
