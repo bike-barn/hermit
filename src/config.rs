@@ -87,15 +87,33 @@ impl Config for FsConfig {
 #[cfg(test)]
 pub mod mock {
     use std::io;
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
 
     use super::Config;
 
     #[derive(Clone,Debug,Eq,PartialEq)]
     pub struct MockConfig {
-        pub root_path: PathBuf,
-        pub current_shell: String,
-        pub allowed_shell_names: Vec<String>,
+        root_path: PathBuf,
+        current_shell: String,
+        allowed_shell_names: Vec<String>,
+    }
+
+    impl MockConfig {
+        pub fn new() -> MockConfig {
+            MockConfig {
+                root_path: PathBuf::from("/"),
+                allowed_shell_names: vec!["default".to_owned()],
+                current_shell: "default".to_owned(),
+            }
+        }
+
+        pub fn with_root(root: impl AsRef<Path>) -> MockConfig {
+            MockConfig {
+                root_path: PathBuf::from(root.as_ref()),
+                allowed_shell_names: vec!["default".to_owned()],
+                current_shell: "default".to_owned(),
+            }
+        }
     }
 
     impl Config for MockConfig {

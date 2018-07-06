@@ -59,6 +59,7 @@ mod tests {
     use std::path::PathBuf;
     use std::rc::Rc;
 
+    use config::Config;
     use config::mock::MockConfig;
     use file_operations::FileOperations;
     use file_operations::Op;
@@ -69,17 +70,9 @@ mod tests {
         Hermit::new(config.clone())
     }
 
-    fn mock_config() -> MockConfig {
-        MockConfig {
-            root_path: PathBuf::from("/"),
-            allowed_shell_names: vec!["default".to_owned()],
-            current_shell: "default".to_owned(),
-        }
-    }
-
     #[test]
     fn returns_the_current_shell() {
-        let config = mock_config();
+        let config = MockConfig::new();
         let hermit = hermit(&config);
 
         let shell = hermit.current_shell().unwrap();
@@ -89,8 +82,8 @@ mod tests {
 
     #[test]
     fn can_set_the_current_shell() {
-        let mut config = mock_config();
-        config.current_shell = "current".to_owned();
+        let mut config = MockConfig::new();
+        config.set_current_shell_name("current");
         let mut hermit = hermit(&config);
 
         assert_eq!(hermit.current_shell().unwrap().name, "current");
@@ -100,7 +93,7 @@ mod tests {
 
     #[test]
     fn cant_set_the_current_shell_to_a_nonexistent_shell() {
-        let config = mock_config();
+        let config = MockConfig::new();
         let mut hermit = hermit(&config);
 
         assert_eq!(hermit.current_shell().unwrap().name, "default");
@@ -111,11 +104,7 @@ mod tests {
 
     #[test]
     fn can_initialize_a_new_shell() {
-        let config = MockConfig {
-            root_path: PathBuf::from(".hermit-config"),
-            allowed_shell_names: vec!["default".to_owned()],
-            current_shell: "default".to_owned(),
-        };
+        let config = MockConfig::with_root(".hermit-config", );
         let hermit = hermit(&config);
         let mut file_ops = FileOperations::rooted_at("/home/geoff");
 

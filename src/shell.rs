@@ -42,11 +42,7 @@ mod tests {
     }
 
     fn mock_config<P: AsRef<Path>>(root_path: P) -> Rc<MockConfig> {
-        Rc::new(MockConfig {
-            root_path: PathBuf::from(root_path.as_ref()),
-            allowed_shell_names: vec!["default".to_owned()],
-            current_shell: "default".to_owned(),
-        })
+        Rc::new(MockConfig::with_root(root_path))
     }
 
     #[test]
