@@ -43,7 +43,7 @@ pub struct FileOperations {
 }
 
 impl FileOperations {
-    pub fn rooted_at<P: AsRef<Path>>(path: P) -> FileOperations {
+    pub fn rooted_at(path: impl AsRef<Path>) -> FileOperations {
         FileOperations {
             root: PathBuf::from(path.as_ref()),
             operations: vec![],
@@ -62,11 +62,11 @@ impl FileOperations {
         &self.operations
     }
 
-    pub fn create_dir<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn create_dir(&mut self, name: impl AsRef<Path>) {
         self.operations.push(Op::MkDir(self.root.join(name)))
     }
 
-    pub fn create_dir_all<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn create_dir_all(&mut self, name: impl AsRef<Path>) {
         self.operations.push(Op::MkDirAll(self.root.join(name)))
     }
 
@@ -74,11 +74,11 @@ impl FileOperations {
         self.operations.push(Op::Link(source.as_ref().to_path_buf(), self.root.join(dest)));
     }
 
-    pub fn remove<P: AsRef<Path>>(&mut self, file: P) {
+    pub fn remove(&mut self, file: impl AsRef<Path>) {
         self.operations.push(Op::Remove(self.root.join(file)));
     }
 
-    pub fn create_git_repo<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn create_git_repo(&mut self, name: impl AsRef<Path>) {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
 

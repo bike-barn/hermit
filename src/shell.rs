@@ -9,9 +9,7 @@ pub struct Shell<T: Config> {
 }
 
 impl<T: Config> Shell<T> {
-    pub fn new<S>(name: S, config: Rc<T>) -> Shell<T>
-        where S: Into<String>
-    {
+    pub fn new(name: impl Into<String>, config: Rc<T>) -> Shell<T> {
         Shell {
             name: name.into(),
             config: config,

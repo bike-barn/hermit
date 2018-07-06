@@ -24,7 +24,7 @@ pub struct FsConfig {
 }
 
 impl FsConfig {
-    pub fn new<P: AsRef<Path>>(root_path: P) -> Self {
+    pub fn new(root_path: impl AsRef<Path>) -> Self {
         let root_path = PathBuf::from(root_path.as_ref());
         FsConfig {
             root_path: root_path,
