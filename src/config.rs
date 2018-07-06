@@ -1,6 +1,7 @@
-use std::fs::File;
 use std::io;
 use std::io::prelude::*;
+use std::borrow::Borrow;
+use std::fs::File;
 use std::path::{Path, PathBuf};
 
 pub trait Config {
@@ -10,7 +11,7 @@ pub trait Config {
         self.root_path().join("shells")
     }
 
-    fn current_shell_name(&self) -> Option<String>;
+    fn current_shell_name(&self) -> Option<&str>;
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
@@ -55,8 +56,10 @@ impl Config for FsConfig {
         &self.root_path
     }
 
-    fn current_shell_name(&self) -> Option<String> {
-        self.current_shell.clone()
+    fn current_shell_name(&self) -> Option<&str> {
+        self.current_shell
+            .as_ref()
+            .map(|s| s.borrow())
     }
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
@@ -77,10 +80,11 @@ impl Config for FsConfig {
 
 #[cfg(test)]
 pub mod mock {
-    use std::io;
-    use std::path::{Path, PathBuf};
-
     use super::Config;
+
+    use std::io;
+    use std::borrow::Borrow;
+    use std::path::{Path, PathBuf};
 
     #[derive(Clone,Debug,Eq,PartialEq)]
     pub struct MockConfig {
@@ -112,8 +116,8 @@ pub mod mock {
             &self.root_path
         }
 
-        fn current_shell_name(&self) -> Option<String> {
-            Some(self.current_shell.clone())
+        fn current_shell_name(&self) -> Option<&str> {
+            Some(&self.current_shell).map(|shell_name| shell_name.borrow())
         }
 
         fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
@@ -129,11 +133,12 @@ pub mod mock {
 
 #[cfg(test)]
 mod test {
+    use super::{Config, FsConfig};
+
     use std::fs;
     use std::fs::File;
     use std::path::PathBuf;
     use std::io::prelude::*;
-    use super::{Config, FsConfig};
 
     fn clean_up(test_root: &PathBuf) {
         if test_root.exists() {
@@ -175,7 +180,7 @@ mod test {
         let test_root = set_up("current-shell-name", "current", vec!["current"]);
         let config = FsConfig::new(&test_root);
 
-        assert_eq!(config.current_shell_name().unwrap(), "current".to_string());
+        assert_eq!(*config.current_shell_name().unwrap(), "current".to_string());
     }
 
     #[test]
@@ -189,7 +194,7 @@ mod test {
         config_file.read_to_string(&mut name_on_disk).unwrap();
 
         let current = "current".to_string();
-        assert_eq!(config.current_shell_name().unwrap(), current);
+        assert_eq!(*config.current_shell_name().unwrap(), current);
         assert_eq!(name_on_disk, current);
     }
 
