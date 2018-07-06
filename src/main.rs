@@ -1,5 +1,8 @@
 #![warn(missing_docs)]
 extern crate clap;
+extern crate failure;
+#[macro_use]
+extern crate failure_derive;
 extern crate git2;
 extern crate uuid;
 
@@ -16,8 +19,6 @@ mod file_operations;
 
 #[macro_use]
 mod macros;
-
-use std::error::Error;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
@@ -49,7 +50,7 @@ fn main() {
         ("nuke",   Some(matches)) => handle_nuke   (matches, &mut hermit, &mut file_operations),
         ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
         ("use",    Some(matches)) => handle_use    (matches, &mut hermit, &mut file_operations),
-        _ => unreachable!(message::error("unknown subcommand passed"))
+        _ => unreachable!(message::error_str("unknown subcommand passed"))
     };
 
     report_errors(file_operations.commit());
@@ -59,7 +60,7 @@ fn report_errors(results: Vec<file_operations::Result>) {
     for result in results {
         match result {
             Ok(()) => (),
-            Err(e) => println!("{}", message::error(e.description())),
+            Err(e) => println!("{}", message::error(e)),
         }
     }
 }

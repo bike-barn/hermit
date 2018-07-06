@@ -1,11 +1,10 @@
-use std::{error, fmt, fs, io, result};
+use std::{fs, io, result};
 use std::os::unix;
 use std::path::{Path, PathBuf};
 
 use git2;
 
-#[derive(PartialEq,Eq)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Op {
     MkDir(PathBuf),
     MkDirAll(PathBuf),
@@ -14,35 +13,13 @@ pub enum Op {
     Remove(PathBuf),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Fail)]
 pub enum Error {
-    IoError(io::Error),
-    Git2Error(git2::Error),
-}
+    #[fail(display = "IO error: {}", _0)]
+    IoError(#[cause] io::Error),
 
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            Error::IoError(ref err) => write!(f, "IO error: {}", err),
-            Error::Git2Error(ref err) => write!(f, "Git2 error: {}", err),
-        }
-    }
-}
-
-impl error::Error for Error {
-    fn description(&self) -> &str {
-        match *self {
-            Error::IoError(ref err) => err.description(),
-            Error::Git2Error(ref err) => err.description(),
-        }
-    }
-
-    fn cause(&self) -> Option<&error::Error> {
-        match *self {
-            Error::IoError(ref err) => Some(err),
-            Error::Git2Error(ref err) => Some(err),
-        }
-    }
+    #[fail(display = "Git2 error: {}", _0)]
+    Git2Error(#[cause] git2::Error),
 }
 
 impl From<io::Error> for Error {
