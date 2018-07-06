@@ -6,7 +6,9 @@ use std::path::{Path, PathBuf};
 pub trait Config {
     fn root_path(&self) -> &PathBuf;
 
-    fn shell_root_path(&self) -> PathBuf;
+    fn shell_root_path(&self) -> PathBuf {
+        self.root_path().join("shells")
+    }
 
     fn current_shell_name(&self) -> Option<String>;
 
@@ -56,10 +58,6 @@ impl FsConfig {
 impl Config for FsConfig {
     fn root_path(&self) -> &PathBuf {
         &self.root_path
-    }
-
-    fn shell_root_path(&self) -> PathBuf {
-        self.root_path.join("shells")
     }
 
     fn current_shell_name(&self) -> Option<String> {
@@ -117,10 +115,6 @@ pub mod mock {
     impl Config for MockConfig {
         fn root_path(&self) -> &PathBuf {
             &self.root_path
-        }
-
-        fn shell_root_path(&self) -> PathBuf {
-            self.root_path.join("shells")
         }
 
         fn current_shell_name(&self) -> Option<String> {
