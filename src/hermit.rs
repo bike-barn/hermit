@@ -1,4 +1,4 @@
-use std::io;
+use std::{io, result};
 use std::rc::Rc;
 
 use config::Config;
@@ -6,9 +6,7 @@ use file_operations::FileOperations;
 use message;
 use shell::Shell;
 
-#[derive(Copy,Clone)]
-#[derive(PartialEq,Eq)]
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Error {
     ShellDoesNotExist,
 }
@@ -18,6 +16,8 @@ impl From<io::Error> for Error {
         Error::ShellDoesNotExist
     }
 }
+
+pub type Result = result::Result<(), Error>;
 
 pub struct Hermit<T: Config> {
     config: Rc<T>,
@@ -34,7 +34,7 @@ impl<T: Config> Hermit<T> {
             .map(|shell_name| Shell::new(shell_name, self.config.clone()))
     }
 
-    pub fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
+    pub fn set_current_shell(&mut self, name: &str) -> Result {
         if self.config.shell_exists(name) {
             match Rc::get_mut(&mut self.config) {
                 Some(config) => config.set_current_shell_name(name).map_err(Error::from),
