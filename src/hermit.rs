@@ -37,7 +37,7 @@ impl<T: Config> Hermit<T> {
     pub fn set_current_shell(&mut self, name: &str) -> Result<(), Error> {
         if self.config.shell_exists(name) {
             match Rc::get_mut(&mut self.config) {
-                Some(config) => config.set_current_shell_name(name).map_err(From::from),
+                Some(config) => config.set_current_shell_name(name).map_err(Error::from),
                 None => {
                     unreachable!(message::error_str("attempted to modify config while it was being used."))
                 }
