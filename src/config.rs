@@ -35,10 +35,10 @@ impl FsConfig {
     fn read_current_shell(&self) -> io::Result<String> {
         let config_path = self.root_path.join("current_shell");
 
-        let mut file = try!(File::open(&config_path));
+        let mut file = File::open(&config_path)?;
         let mut current_shell = String::new();
 
-        try!(file.read_to_string(&mut current_shell));
+        file.read_to_string(&mut current_shell)?;
 
         Ok(current_shell)
     }
@@ -50,7 +50,7 @@ impl FsConfig {
 
 impl Config for FsConfig {
     fn initialize(&mut self) -> io::Result<()> {
-        let current_shell = try!(self.read_current_shell());
+        let current_shell = self.read_current_shell()?;
         self.current_shell = Some(current_shell);
 
         Ok(())
@@ -69,9 +69,9 @@ impl Config for FsConfig {
     }
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
-        let mut file = try!(File::create(&self.config_path()));
+        let mut file = File::create(&self.config_path())?;
 
-        try!(file.write_all(name.as_bytes()));
+        file.write_all(name.as_bytes())?;
 
         self.current_shell = Some(name.to_string());
 
