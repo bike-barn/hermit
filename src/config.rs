@@ -23,35 +23,30 @@ pub struct FsConfig {
     current_shell: Option<String>,
 }
 
+fn read_shell_from_path(path: &PathBuf) -> io::Result<String> {
+    let mut file = File::open(path)?;
+    let mut current_shell = String::new();
+
+    file.read_to_string(&mut current_shell)?;
+
+    Ok(current_shell)
+}
+
+fn config_path(root_path: &PathBuf) -> PathBuf {
+    root_path.join("current_shell")
+}
+
 impl FsConfig {
-    pub fn new(root_path: impl AsRef<Path>) -> Result<Self, io::Error> {
+    pub fn new(root_path: impl AsRef<Path>) -> FsConfig {
         let root_path = PathBuf::from(root_path.as_ref());
-        let mut fs_config = FsConfig {
-            root_path: root_path,
-            current_shell: None,
-        };
-        fs_config.initialize()?;
-        Ok(fs_config)
-    }
+        let config_path = config_path(&root_path);
+        let current_shell = read_shell_from_path(&config_path).ok();
 
-    fn initialize(&mut self) -> io::Result<()> {
-        let current_shell = self.read_current_shell()?;
-        self.current_shell = Some(current_shell);
-
-        Ok(())
-    }
-
-    fn read_current_shell(&self) -> io::Result<String> {
-        let mut file = File::open(&self.config_path())?;
-        let mut current_shell = String::new();
-
-        file.read_to_string(&mut current_shell)?;
-
-        Ok(current_shell)
+        FsConfig { root_path, current_shell }
     }
 
     fn config_path(&self) -> PathBuf {
-        self.root_path.join("current_shell")
+        config_path(&self.root_path())
     }
 }
 
@@ -171,15 +166,14 @@ mod test {
     #[test]
     fn has_a_root_path() {
         let test_root = set_up("root-path", "default", vec!["default"]);
-        let config = FsConfig::new(test_root.clone()).expect("Failed to init FsConfig");
+        let config = FsConfig::new(&test_root);
         assert_eq!(config.root_path(), &test_root);
     }
 
     #[test]
     fn returns_the_current_shell_name() {
-        let test_root = set_up("current-shell-name", "current", vec!["default"]);
-        let mut config = FsConfig::new(test_root.clone()).expect("Failed to init FsConfig");
-        config.initialize().expect("Reading shell_name config file");
+        let test_root = set_up("current-shell-name", "current", vec!["current"]);
+        let config = FsConfig::new(&test_root);
 
         assert_eq!(config.current_shell_name().unwrap(), "current".to_string());
     }
@@ -187,7 +181,7 @@ mod test {
     #[test]
     fn can_set_the_current_shell_name() {
         let test_root = set_up("set-current-shell-name", "default", vec!["default"]);
-        let mut config = FsConfig::new(test_root.clone()).expect("Failed to init FsConfig");
+        let mut config = FsConfig::new(&test_root);
         config.set_current_shell_name("current").unwrap();
 
         let mut config_file = File::open(&test_root.join("current_shell")).unwrap();
@@ -204,7 +198,7 @@ mod test {
         let test_root = set_up("confirm-shell-existence",
                                "default",
                                vec!["default", "other"]);
-        let config = FsConfig::new(test_root.clone()).expect("Failed to init FsConfig");
+        let config = FsConfig::new(&test_root);
 
         assert!(config.shell_exists("other"));
     }
@@ -214,7 +208,7 @@ mod test {
         let test_root = set_up("confirm-shell-non-existence",
                                "default",
                                vec!["default", "other"]);
-        let config = FsConfig::new(test_root.clone()).expect("Failed to init FsConfig");
+        let config = FsConfig::new(&test_root);
 
         assert!(!config.shell_exists("another"));
     }
