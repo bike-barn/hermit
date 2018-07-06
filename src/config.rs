@@ -19,8 +19,8 @@ pub trait Config {
 
 #[derive(Clone)]
 pub struct FsConfig {
-    pub root_path: PathBuf,
-    pub current_shell: Option<String>,
+    root_path: PathBuf,
+    current_shell: Option<String>,
 }
 
 impl FsConfig {
