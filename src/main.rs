@@ -29,13 +29,15 @@ use file_operations::FileOperations;
 #[cfg(test)]
 mod test_helpers;
 
+use std::io;
+
 #[cfg_attr(rustfmt, rustfmt_skip)]
-fn main() {
+fn main() -> io::Result<()> {
     let app = make_app_config();
     let app_matches = app.get_matches();
 
     let hermit_root = env::get_hermit_dir().expect("Could not determine hermit root location.");
-    let fs_config = FsConfig::new(hermit_root);
+    let fs_config = FsConfig::new(hermit_root)?;
     let mut hermit = Hermit::new(fs_config);
 
     let home_dir = env::home_dir().expect("Could not determine home directory.");
@@ -54,6 +56,8 @@ fn main() {
     };
 
     report_errors(file_operations.commit());
+
+    Ok(())
 }
 
 fn report_errors(results: Vec<file_operations::Result>) {
