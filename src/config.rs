@@ -14,7 +14,7 @@ pub trait Config {
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
-    fn does_shell_exist(&self, name: &str) -> bool;
+    fn shell_exists(&self, name: &str) -> bool;
 }
 
 #[derive(Clone)]
@@ -78,7 +78,7 @@ impl Config for FsConfig {
         Ok(())
     }
 
-    fn does_shell_exist(&self, name: &str) -> bool {
+    fn shell_exists(&self, name: &str) -> bool {
         let shell_path = self.root_path.join("shells").join(name);
         shell_path.is_dir()
     }
@@ -138,7 +138,7 @@ pub mod mock {
             Ok(())
         }
 
-        fn does_shell_exist(&self, name: &str) -> bool {
+        fn shell_exists(&self, name: &str) -> bool {
             self.allowed_shell_names.contains(&name.to_owned())
         }
     }
@@ -224,7 +224,7 @@ mod test {
                                vec!["default", "other"]);
         let config = FsConfig::new(test_root.clone());
 
-        assert!(config.does_shell_exist("other"));
+        assert!(config.shell_exists("other"));
 
         clean_up(&test_root);
     }
@@ -236,10 +236,8 @@ mod test {
                                vec!["default", "other"]);
         let config = FsConfig::new(test_root.clone());
 
-        assert!(!config.does_shell_exist("another"));
+        assert!(!config.shell_exists("another"));
 
         clean_up(&test_root);
     }
-
-
 }
