@@ -9,7 +9,7 @@ pub enum Op {
     MkDir(PathBuf),
     MkDirAll(PathBuf),
     GitInit(PathBuf),
-    Link(PathBuf, PathBuf),
+    Link { path: PathBuf, target: PathBuf },
     Remove(PathBuf),
 }
 
@@ -70,8 +70,11 @@ impl FileOperations {
         self.operations.push(Op::MkDirAll(self.root.join(name)))
     }
 
-    pub fn link<P: AsRef<Path>, Q: AsRef<Path>>(&mut self, source: P, dest: Q) {
-        self.operations.push(Op::Link(source.as_ref().to_path_buf(), self.root.join(dest)));
+    pub fn link(&mut self, path: impl AsRef<Path>, target: impl AsRef<Path>) {
+        self.operations.push(Op::Link{
+            path: self.root.join(path),
+            target: target.as_ref().to_path_buf(),
+        });
     }
 
     pub fn remove(&mut self, file: impl AsRef<Path>) {
@@ -95,7 +98,7 @@ impl FileOperations {
             Op::MkDir(dir) => fs::create_dir(dir)?,
             Op::MkDirAll(dir) => fs::create_dir_all(dir)?,
             Op::GitInit(dir) => git_init(dir, &self.git_init_opts)?,
-            Op::Link(src, dest) => unix::fs::symlink(src, dest)?,
+            Op::Link { path, target } => unix::fs::symlink(target, path)?,
             Op::Remove(file) => fs::remove_file(file)?,
         };
         Ok(())
@@ -117,17 +120,24 @@ mod tests {
     #[test]
     fn can_link_file() {
         let test_root = set_up("link");
-        let mut file_set = FileOperations::rooted_at(&test_root);
+        let target_root = set_up("link-target");
 
-        fs::File::create(test_root.join("file_a")).unwrap();
-        file_set.link("file_a", "file_b");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let target_path = target_root.join("target_file");
+        let link_path = test_root.join("link");
+
+        fs::File::create(&target_path).unwrap();
+
+        file_set.link("link", &target_path);
         let results = file_set.commit();
+
         assert_eq!(results.len(), 1);
+        println!("{:?}", results[0]);
         assert!(results[0].is_ok());
 
-        match fs::symlink_metadata(test_root.join("file_b")) {
+        match fs::symlink_metadata(&link_path) {
             Ok(val) => assert!(val.file_type().is_symlink()),
-            Err(_err) => panic!("{:?} does not exist", test_root.join("file_b")),
+            Err(_err) => panic!("{:?} does not exist", link_path),
         };
 
         clean_up(&test_root);
