@@ -8,7 +8,7 @@ use shell::Shell;
 
 #[derive(Clone, Debug, Fail, PartialEq, Eq)]
 pub enum Error {
-    #[fail(display = "`hermit {}` is not implemented yet", _0)]
+    #[fail(display = "{} subcommand has not been implemented yet", _0)]
     SubcommandNotImplemented(&'static str),
 
     #[fail(display = "That is not the name of a shell")]
