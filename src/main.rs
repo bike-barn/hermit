@@ -23,16 +23,14 @@ mod macros;
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
 use config::{Config, FsConfig};
-use hermit::Hermit;
+use hermit::{Hermit, Result};
 use file_operations::FileOperations;
 
 #[cfg(test)]
 mod test_helpers;
 
-use std::io;
-
 #[cfg_attr(rustfmt, rustfmt_skip)]
-fn main() -> io::Result<()> {
+fn main() -> Result {
     let app = make_app_config();
     let app_matches = app.get_matches();
 
@@ -53,7 +51,7 @@ fn main() -> io::Result<()> {
         ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
         ("use",    Some(matches)) => handle_use    (matches, &mut hermit, &mut file_operations),
         _ => unreachable!(message::error_str("unknown subcommand passed"))
-    };
+    }?;
 
     report_errors(file_operations.commit());
 
@@ -102,8 +100,9 @@ subcommand!{
 
 fn handle_add<C: Config>(_matches: &ArgMatches,
                          _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
+                         _file_operations: &mut FileOperations) -> Result {
     println!("hermit add is not yet implemented");
+    Ok(())
 }
 
 
@@ -115,8 +114,9 @@ subcommand!{
 
 fn handle_clone<C: Config>(_matches: &ArgMatches,
                            _hermit: &mut Hermit<C>,
-                           _file_operations: &mut FileOperations) {
-    println!("hermit clone is not implemented yet.")
+                           _file_operations: &mut FileOperations) -> Result {
+    println!("hermit clone is not implemented yet.");
+    Ok(())
 }
 
 
@@ -128,8 +128,9 @@ subcommand!{
 
 fn handle_doctor<C: Config>(_matches: &ArgMatches,
                             _hermit: &mut Hermit<C>,
-                            _file_operations: &mut FileOperations) {
-    println!("hermit doctor is not implemented yet.")
+                            _file_operations: &mut FileOperations) -> Result {
+    println!("hermit doctor is not implemented yet.");
+    Ok(())
 }
 
 
@@ -142,8 +143,9 @@ subcommand!{
 
 fn handle_git<C: Config>(_matches: &ArgMatches,
                          _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit git is not implemented yet.")
+                         _file_operations: &mut FileOperations) -> Result {
+    println!("hermit git is not implemented yet.");
+    Ok(())
 }
 
 
@@ -157,9 +159,10 @@ subcommand!{
 
 fn handle_init<C: Config>(matches: &ArgMatches,
                           hermit: &mut Hermit<C>,
-                          file_operations: &mut FileOperations) {
+                          file_operations: &mut FileOperations) -> Result {
     let shell_name = matches.value_of("SHELL_NAME").unwrap_or("default");
     hermit.init_shell(file_operations, shell_name);
+    Ok(())
 }
 
 
@@ -171,8 +174,9 @@ subcommand!{
 
 fn handle_nuke<C: Config>(_matches: &ArgMatches,
                           _hermit: &mut Hermit<C>,
-                          _file_operations: &mut FileOperations) {
-    println!("hermit nuke is not implemented yet.")
+                          _file_operations: &mut FileOperations) -> Result {
+    println!("hermit nuke is not implemented yet.");
+    Ok(())
 }
 
 
@@ -184,8 +188,9 @@ subcommand!{
 
 fn handle_status<C: Config>(_matches: &ArgMatches,
                             _hermit: &mut Hermit<C>,
-                            _file_operations: &mut FileOperations) {
-    println!("hermit status is not implemented yet.")
+                            _file_operations: &mut FileOperations) -> Result {
+    println!("hermit status is not implemented yet.");
+    Ok(())
 }
 
 
@@ -197,6 +202,7 @@ subcommand!{
 
 fn handle_use<C: Config>(_matches: &ArgMatches,
                          _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit use is not implemented yet.")
+                         _file_operations: &mut FileOperations) -> Result {
+    println!("hermit use is not implemented yet.");
+    Ok(())
 }
