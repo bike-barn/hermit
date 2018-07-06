@@ -1,4 +1,4 @@
-use std::{fs, io, result};
+use std::{fs, io, mem, result};
 use std::os::unix;
 use std::path::{Path, PathBuf};
 
@@ -83,12 +83,9 @@ impl FileOperations {
     }
 
     pub fn commit(mut self) -> Vec<Result> {
-        let ops = self.operations;
-        self.operations = vec![];
-
-        ops.into_iter()
-           .map(|op| self.do_op(op))
-           .collect::<Vec<_>>()
+        mem::replace(&mut self.operations, vec![]).into_iter()
+            .map(|op| self.do_op(op))
+            .collect::<Vec<_>>()
     }
 
     /// Private Methods
