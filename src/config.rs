@@ -4,7 +4,11 @@ use std::borrow::Borrow;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 
+use walkdir::{self, WalkDir};
+
 pub trait Config {
+    type IntoIterator: IntoIterator<Item = PathBuf>;
+
     fn root_path(&self) -> &PathBuf;
 
     fn shell_root_path(&self) -> PathBuf {
@@ -21,6 +25,8 @@ pub trait Config {
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
     fn shell_exists(&self, name: &str) -> bool;
+
+    fn shell_files(&self, name: &str) -> Self::IntoIterator;
 }
 
 #[derive(Clone)]
@@ -57,6 +63,8 @@ impl FsConfig {
 }
 
 impl Config for FsConfig {
+    type IntoIterator = Files;
+
     fn root_path(&self) -> &PathBuf {
         &self.root_path
     }
@@ -81,6 +89,80 @@ impl Config for FsConfig {
         let shell_path = self.shell_root_path().join(name);
         shell_path.is_dir()
     }
+
+    fn shell_files(&self, _name: &str) -> Self::IntoIterator {
+        Files::new(self.current_shell_path())
+    }
+}
+
+/// A wrapper on a DirEntry iterator.
+///
+/// This type can only be constructed by the `Files` wrapper, and it
+/// handles cleaning up the iterator of `DirEntry`s into an iterator
+/// of `PathBuf` to the files in that stream, and stripping them of
+/// the walk root path prefix.
+pub struct FilesIter<T>(Option<(T, PathBuf)>);
+
+impl<T> Iterator for FilesIter<T>
+where T: Iterator<Item = Result<walkdir::DirEntry, walkdir::Error>>,
+{
+    type Item = PathBuf;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some((ref mut iter, ref prefix_path)) = self.0 {
+            loop {
+                match iter.next() {
+                    Some(Ok(entry)) => {
+                        let file_path = entry.path().to_path_buf();
+                        let shell_relative_path = file_path
+                            .strip_prefix(prefix_path)
+                            .unwrap()       // this unwrap is safe because
+                            .to_path_buf(); // of the Files::new constructor
+                        return Some(shell_relative_path);
+                    },
+                    Some(Err(_)) => continue,
+                    None => return None,
+                };
+            }
+        } else {
+            None
+        }
+    }
+}
+
+/// A wrapper on WalkDir that handles nullability and bundles the walk
+/// root path.
+///
+/// In particular, this pair of values is used to generate `PathBuf`s
+/// relative to the specified root directory with
+/// `PathBuf::strip_prefix`, and since the `WalkDir` was created with
+/// the same path as `FilesIter` will use to strip the prefix, it is
+/// always safe to just unwrap the result returned by `strip_prefix`.
+pub struct Files(Option<(WalkDir, PathBuf)>);
+
+impl Files {
+    /// Constructs a new `Files` from a directory path.
+    pub fn new(shell_path: Option<impl AsRef<Path>>) -> Files {
+        let walker =
+            shell_path.map(|path| {
+                (WalkDir::new(&path)
+                 .min_depth(1)
+                 .follow_links(false),
+                 PathBuf::from(path.as_ref()))
+            });
+        Files(walker)
+    }
+}
+
+impl IntoIterator for Files {
+    type Item = PathBuf;
+    type IntoIter = FilesIter<walkdir::IntoIter>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        let Files(opt) = self;
+        let iter_opt = opt.map(|(walker, path)| (walker.into_iter(), path));
+        FilesIter(iter_opt)
+    }
 }
 
 #[cfg(test)]
@@ -96,6 +178,7 @@ pub mod mock {
         root_path: PathBuf,
         current_shell: String,
         allowed_shell_names: Vec<String>,
+        files: Vec<PathBuf>,
     }
 
     impl MockConfig {
@@ -104,6 +187,7 @@ pub mod mock {
                 root_path: PathBuf::from("/"),
                 allowed_shell_names: vec!["default".to_owned()],
                 current_shell: "default".to_owned(),
+                files: vec![],
             }
         }
 
@@ -112,11 +196,14 @@ pub mod mock {
                 root_path: PathBuf::from(root.as_ref()),
                 allowed_shell_names: vec!["default".to_owned()],
                 current_shell: "default".to_owned(),
+                files: vec![],
             }
         }
     }
 
     impl Config for MockConfig {
+        type IntoIterator = Vec<PathBuf>;
+
         fn root_path(&self) -> &PathBuf {
             &self.root_path
         }
@@ -133,6 +220,10 @@ pub mod mock {
         fn shell_exists(&self, name: &str) -> bool {
             self.allowed_shell_names.contains(&name.to_owned())
         }
+
+        fn shell_files(&self, _name: &str) -> Self::IntoIterator {
+            self.files.clone()
+        }
     }
 }
 
@@ -140,9 +231,8 @@ pub mod mock {
 mod test {
     use super::{Config, FsConfig};
 
-    use std::fs;
-    use std::fs::File;
-    use std::path::PathBuf;
+    use std::fs::{self, File};
+    use std::path::{Path, PathBuf};
     use std::io::prelude::*;
 
     fn clean_up(test_root: &PathBuf) {
@@ -221,5 +311,21 @@ mod test {
         let config = FsConfig::new(&test_root);
 
         assert!(!config.shell_exists("another"));
+    }
+
+    #[test]
+    fn can_walk_a_directory() {
+        let test_root = set_up("walk-directory",
+                               "default",
+                               vec!["default"]);
+        let mut config = FsConfig::new(&test_root);
+        let shell_root = config.shell_root_path().join("default");
+        fs::File::create(&shell_root.join("file1")).expect("Failed to create test file");
+
+        let files = config.shell_files("default")
+            .into_iter()
+            .map(|f| f.to_string_lossy().to_string())
+            .collect::<Vec<_>>();
+        assert_eq!(files, vec!["file1"]);
     }
 }
