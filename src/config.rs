@@ -202,6 +202,10 @@ pub mod mock {
                 files: vec![],
             }
         }
+
+        pub fn set_paths(&mut self, paths: Vec<impl AsRef<Path>>) {
+            self.files = paths.into_iter().map(|p| PathBuf::from(p.as_ref())).collect();
+        }
     }
 
     impl Config for MockConfig {
