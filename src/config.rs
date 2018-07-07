@@ -113,6 +113,9 @@ where T: Iterator<Item = Result<walkdir::DirEntry, walkdir::Error>>,
             loop {
                 match iter.next() {
                     Some(Ok(entry)) => {
+                        let file_type = entry.file_type();
+                        if file_type.is_dir() { continue }
+
                         let file_path = entry.path().to_path_buf();
                         let shell_relative_path = file_path
                             .strip_prefix(prefix_path)
@@ -318,14 +321,40 @@ mod test {
         let test_root = set_up("walk-directory",
                                "default",
                                vec!["default"]);
-        let mut config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root);
         let shell_root = config.shell_root_path().join("default");
-        fs::File::create(&shell_root.join("file1")).expect("Failed to create test file");
+        File::create(&shell_root.join("file1")).expect("Failed to create test file");
 
         let files = config.shell_files("default")
             .into_iter()
             .map(|f| f.to_string_lossy().to_string())
             .collect::<Vec<_>>();
         assert_eq!(files, vec!["file1"]);
+    }
+
+    fn create_paths(root_path: impl AsRef<Path>, paths: impl IntoIterator<Item = impl AsRef<Path>>) {
+        let root_path = PathBuf::from(root_path.as_ref());
+        for path in paths {
+            let full_path = root_path.join(path.as_ref());
+            let dir_path = full_path.parent().expect("Path had no parent");
+            fs::create_dir_all(&dir_path).expect("Failed to create dir path");
+            File::create(&full_path).expect("Could not create file");
+        }
+    }
+
+    #[test]
+    fn can_walk_a_directory_skipping_subdirectory_entries() {
+        let test_root = set_up("walk-directory-skipping-subdirs",
+                               "default",
+                               vec!["default"]);
+        let config = FsConfig::new(&test_root);
+        let shell_root = config.shell_root_path().join("default");
+        create_paths(shell_root, vec!["file1", "subdir/file2"]);
+
+        let files = config.shell_files("default")
+            .into_iter()
+            .map(|f| f.to_string_lossy().to_string())
+            .collect::<Vec<_>>();
+        assert_eq!(files, vec!["file1", "subdir/file2"]);
     }
 }
