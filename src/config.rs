@@ -13,6 +13,11 @@ pub trait Config {
 
     fn current_shell_name(&self) -> Option<&str>;
 
+    fn current_shell_path(&self) -> Option<PathBuf> {
+        self.current_shell_name()
+            .map(|name| self.shell_root_path().join(name))
+    }
+
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()>;
 
     fn shell_exists(&self, name: &str) -> bool;
@@ -73,7 +78,7 @@ impl Config for FsConfig {
     }
 
     fn shell_exists(&self, name: &str) -> bool {
-        let shell_path = self.root_path.join("shells").join(name);
+        let shell_path = self.shell_root_path().join(name);
         shell_path.is_dir()
     }
 }
