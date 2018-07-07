@@ -13,11 +13,11 @@ keywords = ["home", "directory", "configuration", "management", "dotfiles"]
 license = "GPL-3.0"
 
 [dependencies]
-clap = "2.32"
-failure = "0.1"
-failure_derive = "0.1"
-git2 = "0.7"
+clap = "~2.32.0"
+failure = "~0.1.1"
+failure_derive = "~0.1.1"
+git2 = "~0.7.2"
 
 [dev-dependencies]
-lazy_static = "1.0"
+lazy_static = "~1.0.0"
 
