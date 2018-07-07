@@ -4,9 +4,11 @@ rust:
   - stable
   - beta
   - nightly
+
 matrix:
   allow_failures:
     - rust: nightly
+
 cache: cargo
 
 before_script:
@@ -19,6 +21,13 @@ before_script:
 script:
   - ./runtests.sh
 
+after_success: |
+  if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
+    `RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin`
+    # Uncomment the following line for coveralls.io
+    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+  fi
+
 addons:
   apt:
     sources:
@@ -28,6 +37,7 @@ addons:
       - libcurl4-openssl-dev
       - libelf-dev
       - libdw-dev
+      - libssl-dev
 
 notifications:
   slack:
