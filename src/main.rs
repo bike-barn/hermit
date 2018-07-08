@@ -4,7 +4,6 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 extern crate git2;
-extern crate uuid;
 
 #[cfg(test)]
 #[macro_use]
