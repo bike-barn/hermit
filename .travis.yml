@@ -12,6 +12,7 @@ matrix:
 cache: cargo
 
 before_script:
+  - cargo +nightly clippy --version || ( rustup install nightly && cargo +nightly install clippy )
   - cargo tarpaulin --version || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
   - curl -o /tmp/urchin https://raw.githubusercontent.com/tlevine/urchin/v0.0.6/urchin && chmod +x /tmp/urchin
   - git fetch --unshallow
@@ -20,6 +21,7 @@ before_script:
   - git checkout master
   - git checkout -
 script:
+  - cargo +nightly clippy
   - ./runtests.sh
 
 after_success: |
