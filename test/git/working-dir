@@ -2,11 +2,11 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
 
-DIR="$($HOME/.hermit/bin/hermit git rev-parse --show-toplevel | tail -n 1)"
+DIR="$($HERMIT_ROOT/bin/hermit git rev-parse --show-toplevel | tail -n 1)"
 
-if [ "$DIR" = $HOME/.hermit/profiles/$TEST_PROFILE_NAME ]; then
+if [ "$DIR" = $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME ]; then
   exit 0
 else
   exit 1

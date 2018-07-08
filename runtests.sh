@@ -9,6 +9,9 @@ cargo build --verbose
 cargo test  --verbose
 
 export TESTDIR=".test-place"
+
+# Integration test shell hermit
+export PROFILE_DIR_NAME=profiles
 export TEST_PROFILE_NAME=default
 
 printf '\n\033[0;33m%s\033[0m\n' "Running tests in test"

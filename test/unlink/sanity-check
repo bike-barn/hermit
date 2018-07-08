@@ -2,13 +2,13 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init
+$HERMIT_ROOT/bin/hermit init
 
 FILE=.testfile
 
 touch $HOME/$FILE
 
-$HOME/.hermit/bin/hermit add $HOME/$FILE
+$HERMIT_ROOT/bin/hermit add $HOME/$FILE
 
-$HOME/.hermit/bin/hermit link
-$HOME/.hermit/bin/hermit unlink
+$HERMIT_ROOT/bin/hermit link
+$HERMIT_ROOT/bin/hermit unlink
