@@ -210,10 +210,12 @@ subcommand!{
   }
 }
 
-fn handle_inhabit<C: Config>(_matches: &ArgMatches,
-                             _hermit: &mut Hermit<C>,
-                             _file_operations: &mut FileOperations) -> Result {
-    not_implemented("inhabit")
+fn handle_inhabit<C: Config>(matches: &ArgMatches,
+                             hermit: &mut Hermit<C>,
+                             file_operations: &mut FileOperations) -> Result {
+    let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
+    hermit.inhabit(file_operations, shell_name)?;
+    Ok(())
 }
 
 
