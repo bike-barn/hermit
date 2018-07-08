@@ -40,6 +40,7 @@ impl<T: Config> Shell<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use test_helpers::ops::*;
 
     use std::path::{Path, PathBuf};
     use std::rc::Rc;
@@ -97,10 +98,6 @@ mod tests {
 
         let expected_path = root_path.join("shells").join("default").join(".bashrc");
         assert_eq!(s.path_for(".bashrc"), expected_path);
-    }
-
-    fn link_op_for(root_path: &PathBuf, op_root: &PathBuf, filename: &str) -> Op {
-        Op::Link { target: root_path.join(filename), path: op_root.join(filename) }
     }
 
     #[test]

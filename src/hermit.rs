@@ -56,10 +56,30 @@ impl<T: Config> Hermit<T> {
         let path = new_shell.root_path();
         file_ops.create_git_repo(path);
     }
+
+    pub fn inhabit(&mut self, file_ops: &mut FileOperations, name: &str) -> Result {
+        if self.config.shell_exists(name) {
+            if let Some(shell) = self.current_shell() {
+                shell.unlink(file_ops)
+            }
+
+            self.set_current_shell(name)?;
+
+            if let Some(shell) = self.current_shell() {
+                shell.link(file_ops)
+            }
+            Ok(())
+        } else {
+            Err(Error::ShellDoesNotExist)
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use test_helpers::ops::*;
+
     use std::path::PathBuf;
     use std::rc::Rc;
 
@@ -67,8 +87,6 @@ mod tests {
     use config::mock::MockConfig;
     use file_operations::FileOperations;
     use file_operations::Op;
-
-    use super::{Error, Hermit};
 
     fn hermit(config: &MockConfig) -> Hermit<MockConfig> {
         Hermit::new(config.clone())
@@ -116,5 +134,24 @@ mod tests {
         let first_op = &file_ops.operations()[0];
         assert_eq!(*first_op,
                    Op::GitInit(PathBuf::from("/home/geoff/.hermit-config/shells/new-one")));
+    }
+
+    #[test]
+    fn can_inhabit_and_change_shells() {
+        let hermit_root = PathBuf::from(".hermit-config");
+        let mut config = MockConfig::with_root(&hermit_root);
+        config.set_paths(vec![".bashrc", ".boot/profile.boot"]);
+        let mut hermit = hermit(&config);
+        let op_root_path = PathBuf::from("/home/geoff");
+        let mut file_ops = FileOperations::rooted_at(&op_root_path);
+
+        hermit.inhabit(&mut file_ops, "default").expect("Inhabit failed");
+
+        let new_shell_root = hermit_root.join("shells/default");
+        assert_eq!(file_ops.operations(),
+                   &vec![Op::Remove(op_root_path.join(".bashrc")),
+                         Op::Remove(op_root_path.join(".boot/profile.boot")),
+                         link_op_for(&new_shell_root, &op_root_path, ".bashrc"),
+                         link_op_for(&new_shell_root, &op_root_path, ".boot/profile.boot"),]);
     }
 }
