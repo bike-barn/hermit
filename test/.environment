@@ -1,6 +1,10 @@
 # Make home the full path to TESTDIR
 export HOME=${PWD}/${TESTDIR}
 
+# Override the potential user setting of HERMIT_ROOT for test
+# correctness
+export HERMIT_ROOT="$HOME/.hermit"
+
 if [ ! -d "${HOME}" ]
 then
   echo "The faked home directory '$HOME' does not exist."
@@ -23,12 +27,9 @@ then
 fi
 
 # Install hermit into testing environment via git clone
-git clone ../../ $HOME/.hermit
+git clone ../../ $HERMIT_ROOT
 
-# Override the potential user setting of HERMIT_ROOT for test
-# correctness
-export HERMIT_ROOT="$HOME/.hermit"
+SOURCE_STR="export PATH=\"\$HERMIT_ROOT/bin:\$PATH\" # This loads Hermit"
 
-SOURCE_STR="export PATH=\"\$HOME/.hermit/bin:\$PATH\" # This loads Hermit"
 echo "" >> $PROFILE
 echo $SOURCE_STR >> $PROFILE
