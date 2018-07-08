@@ -82,6 +82,7 @@ fn report_errors(results: Vec<file_operations::Result>) {
     }
 }
 
+#[cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
 fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = App::new("hermit")
         .version(env!("CARGO_PKG_VERSION"))

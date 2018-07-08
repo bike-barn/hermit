@@ -9,7 +9,7 @@ pub fn get_program_name() -> String {
         .map(PathBuf::from)
         .and_then(|path| path.file_name().map(|name| name.to_owned()))
         .and_then(|file_name| file_name.to_str().map(|name| name.to_owned()))
-        .unwrap_or("hermit".to_owned())
+        .unwrap_or_else(|| "hermit".to_owned())
 }
 
 pub fn get_hermit_dir() -> Option<PathBuf> {

@@ -10,10 +10,8 @@ pub struct Shell<T: Config> {
 
 impl<T: Config> Shell<T> {
     pub fn new(name: impl Into<String>, config: Rc<T>) -> Shell<T> {
-        Shell {
-            name: name.into(),
-            config: config,
-        }
+        let name = name.into();
+        Shell { name, config }
     }
 
     pub fn root_path(&self) -> PathBuf {
