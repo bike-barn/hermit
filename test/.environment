@@ -19,17 +19,22 @@ touch $PROFILE
 git config --global user.name "Foo Bar"
 git config --global user.email "baz@foo.bar"
 
-# On Travis, hermit is a shallow clone, so it can't officially be cloned from
-# So we remove the shallow marker if it's there
-if [ -f ../../.git/shallow ]
+if [ "${USE_HERMIT_RS}" != "true" ]
 then
-    rm ../../.git/shallow
+    # On Travis, hermit is a shallow clone, so it can't officially be cloned from
+    # So we remove the shallow marker if it's there
+    if [ -f ../../.git/shallow ]
+    then
+        rm ../../.git/shallow
+    fi
+
+    # Install hermit into testing environment via git clone
+    git clone ../../ $HERMIT_ROOT
+else
+    mkdir -p $HERMIT_ROOT/bin
+    cp ../../target/debug/hermit $HERMIT_ROOT/bin
 fi
 
-# Install hermit into testing environment via git clone
-git clone ../../ $HERMIT_ROOT
-
 SOURCE_STR="export PATH=\"\$HERMIT_ROOT/bin:\$PATH\" # This loads Hermit"
-
 echo "" >> $PROFILE
 echo $SOURCE_STR >> $PROFILE
