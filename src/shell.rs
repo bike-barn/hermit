@@ -29,6 +29,12 @@ impl<T: Config> Shell<T> {
             file_operations.link(&path, shell_root.join(&path))
         }
     }
+
+    pub fn unlink(&self, file_operations: &mut FileOperations) {
+        for path in self.config.shell_files(&self.name) {
+            file_operations.remove(&path)
+        }
+    }
 }
 
 #[cfg(test)]
@@ -112,5 +118,21 @@ mod tests {
         assert_eq!(file_ops.operations(),
                    &vec![link_op_for(&shell_root, &op_root, ".bashrc"),
                          link_op_for(&shell_root, &op_root, ".boot/profile.boot")]);
+    }
+
+    #[test]
+    fn can_unlink_all_paths() {
+        let root_path = root_path("/Users/geoff/.config/hermit");
+        let mut config = MockConfig::with_root(&root_path);
+        config.set_paths(vec![".bashrc", ".boot/profile.boot"]);
+        let s = Shell::new("default", Rc::new(config));
+        let op_root = PathBuf::from("op_root");
+        let mut file_ops = FileOperations::rooted_at(&op_root);
+
+        s.unlink(&mut file_ops);
+
+        assert_eq!(file_ops.operations(),
+                   &vec![Op::Remove(op_root.join(".bashrc")),
+                         Op::Remove(op_root.join(".boot/profile.boot"))]);
     }
 }
