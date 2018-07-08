@@ -175,7 +175,7 @@ fn handle_init<C: Config>(matches: &ArgMatches,
                           hermit: &mut Hermit<C>,
                           file_operations: &mut FileOperations) -> Result {
     let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
-    hermit.init_shell(file_operations, shell_name);
+    hermit.init_shell(file_operations, shell_name)?;
     Ok(())
 }
 
