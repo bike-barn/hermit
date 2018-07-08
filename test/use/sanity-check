@@ -10,7 +10,4 @@ touch $HOME/$FILE
 
 $HERMIT_ROOT/bin/hermit add $HOME/$FILE
 
-$HERMIT_ROOT/bin/hermit link # This is wrong. The flow should *not*
-                              # be that you init, add, and then need
-                              # to explicitly link your profile
-$HERMIT_ROOT/bin/hermit use default
+$HERMIT_ROOT/bin/hermit ${USE_COMMAND} default

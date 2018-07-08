@@ -30,7 +30,7 @@ then
     exit 1
 fi
 
-NEW_PROFILE=$($HERMIT_ROOT/bin/hermit profile)
+NEW_PROFILE=$($HERMIT_ROOT/bin/hermit ${PROFILE_DIR_NAME%s})
 
 if [ "$CHECK_PROFILE" \!= "$NEW_PROFILE" ]
 then
