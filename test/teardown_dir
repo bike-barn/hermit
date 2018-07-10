@@ -2,5 +2,5 @@
 
 fixtures=$(cat .clean-tests)
 
-rm $fixtures
+rm $fixtures 2> /dev/null
 rm .clean-tests
