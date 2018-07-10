@@ -19,6 +19,7 @@ impl<T: Config> Shell<T> {
         self.config.shell_root_path().join(&self.name)
     }
 
+    #[allow(dead_code)]
     pub fn path_for(&self, filename: &str) -> PathBuf {
         self.root_path().join(filename)
     }

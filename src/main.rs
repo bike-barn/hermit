@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 extern crate clap;
 extern crate failure;
 #[macro_use]

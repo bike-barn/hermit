@@ -57,10 +57,12 @@ impl FileOperations {
         opts
     }
 
+    #[allow(dead_code)]
     pub fn operations(&self) -> &Vec<Op> {
         &self.operations
     }
 
+    #[allow(dead_code)]
     pub fn create_dir(&mut self, name: impl AsRef<Path>) {
         self.operations.push(Op::MkDir(self.root.join(name)))
     }
