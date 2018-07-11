@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+source ../.environment
+
+mkdir -p $TESTDIR/.config/hermit
+mv $HERMIT_ROOT/* $TESTDIR/.config/hermit
+export PATH=$TESTDIR/.config/hermit/bin:$PATH
+
+# Delete the profiles directory
+rm -rf $HERMIT_ROOT
+unset HERMIT_ROOT
+
+exec ./.do-init

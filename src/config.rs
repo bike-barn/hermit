@@ -1,4 +1,4 @@
-use std::io;
+use std::{fs, io};
 use std::io::prelude::*;
 use std::borrow::Borrow;
 use std::fs::File;
@@ -51,6 +51,7 @@ fn config_path(root_path: &PathBuf) -> PathBuf {
 impl FsConfig {
     pub fn new(root_path: impl AsRef<Path>) -> FsConfig {
         let root_path = PathBuf::from(root_path.as_ref());
+        fs::create_dir_all(&root_path);
         let config_path = config_path(&root_path);
         let current_shell = read_shell_from_path(&config_path).ok();
 
@@ -275,6 +276,16 @@ mod test {
         let test_root = set_up("root-path", "default", vec!["default"]);
         let config = FsConfig::new(&test_root);
         assert_eq!(config.root_path(), &test_root);
+    }
+
+    #[test]
+    fn creating_a_config_creates_its_root_dir() {
+        let test_root = set_up("root-path-create", "default", vec!["default"]);
+        let config_root = test_root.join(".hermit");
+
+        assert!(! config_root.exists());
+        FsConfig::new(&config_root);
+        assert!(config_root.exists());
     }
 
     #[test]

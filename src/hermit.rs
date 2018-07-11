@@ -51,7 +51,9 @@ impl<T: Config> Hermit<T> {
         self.set_current_shell(name)?;
         if let Some(new_shell) = self.current_shell() {
             let path = new_shell.root_path();
-            file_ops.create_git_repo(path);
+            let parent = path.parent().expect("Shell root path was too short");
+            file_ops.create_dir(parent);
+            file_ops.create_git_repo(&path);
         }
         Ok(())
     }
@@ -121,6 +123,8 @@ mod tests {
         hermit.init_shell(&mut file_ops, "new-one").expect("Init shell failed");
         let first_op = &file_ops.operations()[0];
         assert_eq!(*first_op,
+                   Op::MkDir(PathBuf::from("/home/geoff/.hermit-config/shells")));        let second_op = &file_ops.operations()[1];
+        assert_eq!(*second_op,
                    Op::GitInit(PathBuf::from("/home/geoff/.hermit-config/shells/new-one")));
     }
 

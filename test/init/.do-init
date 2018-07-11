@@ -12,6 +12,11 @@ else
     CHECK_PROFILE=$NAMED_PROFILE
 fi
 
+if [ -z "$HERMIT_ROOT" ]
+then
+    HERMIT_ROOT=$TESTDIR/.config/hermit
+fi
+
 if [ $RET -ne 0 ]
 then
     echo "Init script exited with status: $RET."

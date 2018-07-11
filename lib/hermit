@@ -52,7 +52,7 @@ abs_dirname() {
 export HERMIT_CURRENT_KEY="hermit.current"
 
 if [ -z "${HERMIT_ROOT}" ]; then
-  HERMIT_ROOT="${HOME}/.hermit"
+  HERMIT_ROOT=$(dirname $(dirname $(readlink -f "${BASH_SOURCE[0]}")))
 else
   HERMIT_ROOT="${HERMIT_ROOT%/}"
 fi
