@@ -2,7 +2,7 @@
 
 source ../.environment
 
-$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
+hermit init $TEST_PROFILE_NAME
 
 SUBDIR=.interior-dir
 FILE=.testfile
@@ -21,7 +21,7 @@ EOF
 
 pushd $HOME/$SUBDIR >/dev/null 2>&1
 
-$HERMIT_ROOT/bin/hermit add $FILE
+hermit add $FILE
 
 RET=$?
 

@@ -2,12 +2,12 @@
 
 source ../.environment
 
-$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
+hermit init $TEST_PROFILE_NAME
 
 FILE=.testfile
 ln -s nowhere $HOME/$FILE
 
-$HERMIT_ROOT/bin/hermit add $HOME/$FILE
+hermit add $HOME/$FILE
 
 RET=$?
 

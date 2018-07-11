@@ -35,6 +35,7 @@ else
     cp ../../target/debug/hermit $HERMIT_ROOT/bin
 fi
 
+export PATH=$HERMIT_ROOT/bin:$PATH
 SOURCE_STR="export PATH=\"\$HERMIT_ROOT/bin:\$PATH\" # This loads Hermit"
 echo "" >> $PROFILE
 echo $SOURCE_STR >> $PROFILE
