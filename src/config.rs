@@ -359,6 +359,8 @@ mod test {
             .into_iter()
             .map(|f| f.to_string_lossy().to_string())
             .collect::<Vec<_>>();
-        assert_eq!(files, vec!["file1", "subdir/file2"]);
+        assert!(files.contains(&"file1".into()));
+        assert!(files.contains(&"subdir/file2".into()));
+        assert!(! files.contains(&"subdir".into()));
     }
 }
