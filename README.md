@@ -35,11 +35,13 @@ number of tests, but there may (will!) be bugs._
 
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
 [![Build Status][badge-build]](https://travis-ci.org/bike-barn/hermit)
+[![Coverage Status][badge-coverage]](https://coveralls.io/github/bike-barn/hermit)
 [![Stories Ready to Work On][badge-todo]](https://waffle.io/bike-barn/hermit)
 [![Crabs harmed][badge-crabs]](http://shields.io/)
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
 [badge-build]: https://travis-ci.org/bike-barn/hermit.svg?branch=master
+[badge-coverage]: https://coveralls.io/repos/github/bike-barn/hermit/badge.svg
 [badge-todo]: https://badge.waffle.io/bike-barn/hermit.svg?label=to-do&title=To-Do
 [badge-crabs]: http://img.shields.io/badge/crabs_harmed-0-blue.svg
 

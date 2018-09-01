@@ -1,15 +1,19 @@
-sudo: false
+sudo: required
 language: rust
 rust:
   - stable
   - beta
   - nightly
+
 matrix:
   allow_failures:
     - rust: nightly
+
 cache: cargo
 
 before_script:
+  - cargo +nightly clippy --version || ( rustup install nightly && cargo +nightly install clippy )
+  - cargo tarpaulin --version || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
   - curl -o /tmp/urchin https://raw.githubusercontent.com/tlevine/urchin/v0.0.6/urchin && chmod +x /tmp/urchin
   - git fetch --unshallow
   - git config remote.$(git remote | head -n1).fetch "+refs/heads/*:refs/remotes/$(git remote | head -n1)/*"
@@ -17,7 +21,13 @@ before_script:
   - git checkout master
   - git checkout -
 script:
+  - cargo +nightly clippy
   - ./runtests.sh
+
+after_success: |
+  if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
+    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+  fi
 
 addons:
   apt:
@@ -28,6 +38,7 @@ addons:
       - libcurl4-openssl-dev
       - libelf-dev
       - libdw-dev
+      - libssl-dev
 
 notifications:
   slack:
