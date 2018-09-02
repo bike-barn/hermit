@@ -1,48 +1,24 @@
-use std::{error, fmt, fs, io, result};
+use std::{fs, io, mem, result};
 use std::os::unix;
 use std::path::{Path, PathBuf};
 
 use git2;
 
-#[derive(PartialEq,Eq)]
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Op {
     MkDir(PathBuf),
-    MkDirAll(PathBuf),
     GitInit(PathBuf),
-    Link(PathBuf, PathBuf),
+    Link { path: PathBuf, target: PathBuf },
     Remove(PathBuf),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Fail)]
 pub enum Error {
-    IoError(io::Error),
-    Git2Error(git2::Error),
-}
+    #[fail(display = "IO error: {}", _0)]
+    IoError(#[cause] io::Error),
 
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            Error::IoError(ref err) => write!(f, "IO error: {}", err),
-            Error::Git2Error(ref err) => write!(f, "Git2 error: {}", err),
-        }
-    }
-}
-
-impl error::Error for Error {
-    fn description(&self) -> &str {
-        match *self {
-            Error::IoError(ref err) => err.description(),
-            Error::Git2Error(ref err) => err.description(),
-        }
-    }
-
-    fn cause(&self) -> Option<&error::Error> {
-        match *self {
-            Error::IoError(ref err) => Some(err),
-            Error::Git2Error(ref err) => Some(err),
-        }
-    }
+    #[fail(display = "Git2 error: {}", _0)]
+    Git2Error(#[cause] git2::Error),
 }
 
 impl From<io::Error> for Error {
@@ -60,13 +36,13 @@ impl From<git2::Error> for Error {
 pub type Result = result::Result<(), Error>;
 
 pub struct FileOperations {
-    pub root: PathBuf,
-    pub operations: Vec<Op>,
+    root: PathBuf,
+    operations: Vec<Op>,
     git_init_opts: git2::RepositoryInitOptions,
 }
 
 impl FileOperations {
-    pub fn rooted_at<P: AsRef<Path>>(path: P) -> FileOperations {
+    pub fn rooted_at(path: impl AsRef<Path>) -> FileOperations {
         FileOperations {
             root: PathBuf::from(path.as_ref()),
             operations: vec![],
@@ -81,79 +57,93 @@ impl FileOperations {
         opts
     }
 
-    pub fn create_dir<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn operations(&self) -> &Vec<Op> {
+        &self.operations
+    }
+
+    pub fn create_dir(&mut self, name: impl AsRef<Path>) {
         self.operations.push(Op::MkDir(self.root.join(name)))
     }
 
-    pub fn create_dir_all<P: AsRef<Path>>(&mut self, name: P) {
-        self.operations.push(Op::MkDirAll(self.root.join(name)))
+    pub fn link(&mut self, path: impl AsRef<Path>, target: impl AsRef<Path>) {
+        self.operations.push(Op::Link{
+            path: self.root.join(path),
+            target: target.as_ref().to_path_buf(),
+        });
     }
 
-    pub fn link<P: AsRef<Path>, Q: AsRef<Path>>(&mut self, source: P, dest: Q) {
-        self.operations.push(Op::Link(source.as_ref().to_path_buf(), self.root.join(dest)));
-    }
-
-    pub fn remove<P: AsRef<Path>>(&mut self, file: P) {
+    pub fn remove(&mut self, file: impl AsRef<Path>) {
         self.operations.push(Op::Remove(self.root.join(file)));
     }
 
-    pub fn create_git_repo<P: AsRef<Path>>(&mut self, name: P) {
+    pub fn create_git_repo(&mut self, name: impl AsRef<Path>) {
         self.operations.push(Op::GitInit(self.root.join(name)))
     }
 
     pub fn commit(mut self) -> Vec<Result> {
-        let ops = self.operations;
-        self.operations = vec![];
-        self.operations.push(Op::MkDir(PathBuf::new()));
-
-        ops.into_iter()
-           .map(|op| self.do_op(op))
-           .collect::<Vec<_>>()
+        mem::replace(&mut self.operations, vec![]).into_iter()
+            .map(|op| self.do_op(op))
+            .collect::<Vec<_>>()
     }
 
     /// Private Methods
 
     fn do_op(&mut self, op: Op) -> Result {
         match op {
-            Op::MkDir(dir) => fs::create_dir(dir)?,
-            Op::MkDirAll(dir) => fs::create_dir_all(dir)?,
-            Op::GitInit(dir) => self.git_init(dir)?,
-            Op::Link(src, dest) => unix::fs::symlink(src, dest)?,
+            Op::MkDir(dir) => fs::create_dir_all(dir)?,
+            Op::GitInit(dir) => git_init(dir, &self.git_init_opts)?,
+            Op::Link { path, target } => unix::fs::symlink(target, path)?,
             Op::Remove(file) => fs::remove_file(file)?,
         };
         Ok(())
     }
+}
 
-    fn git_init(&self, dir: PathBuf) -> result::Result<(), git2::Error> {
-        git2::Repository::init_opts(dir, &self.git_init_opts).map(|_| ())
-    }
+fn git_init(dir: PathBuf, options: &git2::RepositoryInitOptions) -> result::Result<(), git2::Error> {
+    git2::Repository::init_opts(dir, options).map(|_| ())
 }
 
 #[cfg(test)]
 mod tests {
-    use std::path::Path;
+    use std::path::{Path, PathBuf};
     use std::fs;
 
     use super::FileOperations;
-    use test_helpers::filesystem::{set_up, clean_up};
+    use test_helpers::filesystem::set_up;
 
     #[test]
     fn can_link_file() {
         let test_root = set_up("link");
+        let target_root = set_up("link-target");
+
         let mut file_set = FileOperations::rooted_at(&test_root);
+        let target_path = target_root.join("target_file");
+        let link_path = test_root.join("link");
 
-        fs::File::create(test_root.join("file_a")).unwrap();
-        file_set.link("file_a", "file_b");
+        fs::File::create(&target_path).unwrap();
+
+        file_set.link("link", &target_path);
         let results = file_set.commit();
+
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
 
-        match fs::symlink_metadata(test_root.join("file_b")) {
+        match fs::symlink_metadata(&link_path) {
             Ok(val) => assert!(val.file_type().is_symlink()),
-            Err(_err) => panic!("{:?} does not exist", test_root.join("file_b")),
+            Err(_err) => panic!("{:?} does not exist", link_path),
         };
+    }
 
-        clean_up(&test_root);
+    #[test]
+    fn does_not_link_file_without_commit() {
+        let test_root = PathBuf::from("no-link");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let target_path = test_root.join("target_file");
+        let link_path = test_root.join("link");
+
+        assert!(! link_path.exists());
+        file_set.link("link", &target_path);
+        assert!(! link_path.exists());
     }
 
     #[test]
@@ -167,10 +157,21 @@ mod tests {
         let results = file_set.commit();
 
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(!test_root.join("file_a").exists());
+    }
 
-        clean_up(&test_root);
+    #[test]
+    fn does_not_remove_file_without_commit() {
+        let test_root = set_up("no-unlink");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let file_path = test_root.join("file_a");
+        // Create file to remove
+        fs::File::create(&file_path).unwrap();
+
+        assert!(file_path.exists());
+        file_set.remove("file_a");
+        assert!(file_path.exists());
     }
 
     #[test]
@@ -180,30 +181,21 @@ mod tests {
 
         assert!(!test_root.join("test").is_dir());
         file_set.create_dir("test");
-        assert!(!test_root.join("test").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join("test").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
-    fn cannot_create_a_directory_in_a_nonexistent_path() {
-        let test_root = set_up("not-mkdir");
+    fn does_not_create_a_directory_without_commit() {
+        let test_root = set_up("no-mkdir");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         assert!(!test_root.join("test").is_dir());
-        let path = Path::new("test").join("one").join("two").join("three");
-        file_set.create_dir(path);
+        file_set.create_dir("test");
         assert!(!test_root.join("test").is_dir());
-        let results = file_set.commit();
-        assert_eq!(results.len(), 1);
-        assert!(results[0].is_err());
-        assert!(!test_root.join("test").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -211,49 +203,52 @@ mod tests {
         let test_root = set_up("mkdir-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
-        assert!(!test_root.join("test").is_dir());
         let path = Path::new("test").join("one").join("two").join("three");
-        file_set.create_dir_all(path);
-        assert!(!test_root.join("test").is_dir());
+        file_set.create_dir(path);
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join("test").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
     fn can_init_a_git_repo() {
-        let test_root = set_up("git");
+        let test_root = set_up("git-init");
         let mut file_set = FileOperations::rooted_at(&test_root);
 
-        assert!(!test_root.join(".git").is_dir());
         file_set.create_git_repo(".");
-        assert!(!test_root.join(".git").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join(".git").is_dir());
+    }
 
-        clean_up(&test_root);
+    #[test]
+    fn does_not_init_without_commit() {
+        let test_root = set_up("no-git-init");
+        let mut file_set = FileOperations::rooted_at(&test_root);
+        let path = Path::new("test").join("repo");
+        let git_dir_path = path.join(".git");
+
+        assert!(! git_dir_path.is_dir());
+        file_set.create_git_repo(&path);
+        assert!(! git_dir_path.is_dir());
     }
 
     #[test]
     fn can_init_a_git_repo_at_a_nonexistent_path() {
         let test_root = set_up("git-deep");
         let mut file_set = FileOperations::rooted_at(&test_root);
-
         let path = Path::new("test").join("sub").join("repo");
-        assert!(!test_root.join(&path).join(".git").is_dir());
+
         file_set.create_git_repo(&path);
-        assert!(!test_root.join(&path).join(".git").is_dir());
+
         let results = file_set.commit();
         assert_eq!(results.len(), 1);
-        assert!(results[0].is_ok());
+        results[0].as_ref().expect("Op failed");
         assert!(test_root.join(&path).join(".git").is_dir());
-
-        clean_up(&test_root);
     }
 
     #[test]
@@ -266,7 +261,7 @@ mod tests {
 
         let results = file_set.commit();
         assert_eq!(results.len(), 2);
-        assert!(results[0].is_ok());
-        assert!(results[1].is_err());
+        results[0].as_ref().expect("Op failed");
+        results[1].as_ref().expect_err("Op unexpectedly succeeded");
     }
 }

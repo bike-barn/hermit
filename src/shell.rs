@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use std::rc::Rc;
 
 use config::Config;
+use file_operations::FileOperations;
 
 pub struct Shell<T: Config> {
     pub name: String,
@@ -9,13 +10,9 @@ pub struct Shell<T: Config> {
 }
 
 impl<T: Config> Shell<T> {
-    pub fn new<S>(name: S, config: Rc<T>) -> Shell<T>
-        where S: Into<String>
-    {
-        Shell {
-            name: name.into(),
-            config: config,
-        }
+    pub fn new(name: impl Into<String>, config: Rc<T>) -> Shell<T> {
+        let name = name.into();
+        Shell { name, config }
     }
 
     pub fn root_path(&self) -> PathBuf {
@@ -25,57 +22,61 @@ impl<T: Config> Shell<T> {
     pub fn path_for(&self, filename: &str) -> PathBuf {
         self.root_path().join(filename)
     }
+
+    pub fn link(&self, file_operations: &mut FileOperations) {
+        let shell_root = self.root_path();
+        for path in self.config.shell_files(&self.name) {
+            file_operations.link(&path, shell_root.join(&path))
+        }
+    }
+
+    pub fn unlink(&self, file_operations: &mut FileOperations) {
+        for path in self.config.shell_files(&self.name) {
+            file_operations.remove(&path)
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use test_helpers::ops::*;
 
-    use std::path::PathBuf;
+    use std::path::{Path, PathBuf};
     use std::rc::Rc;
 
     use config::mock::MockConfig;
-
-    use super::Shell;
+    use file_operations::Op;
 
     fn root_path(path_str: &str) -> PathBuf {
         PathBuf::from(path_str)
     }
 
-    fn std_mock_config() -> Rc<MockConfig> {
-        let root_path = PathBuf::from("/");
-        mock_config(root_path)
-    }
-
-    fn mock_config(root_path: PathBuf) -> Rc<MockConfig> {
-        Rc::new(MockConfig {
-            root_path: root_path,
-            allowed_shell_names: vec!["default".to_owned()],
-            current_shell: "default".to_owned(),
-        })
+    fn mock_config<P: AsRef<Path>>(root_path: P) -> Rc<MockConfig> {
+        Rc::new(MockConfig::with_root(root_path))
     }
 
     #[test]
     fn has_a_name() {
-        let config = std_mock_config();
+        let config = mock_config("/");
         let s = Shell::new("my_shell", config);
         assert_eq!(s.name, "my_shell");
     }
 
     #[test]
     fn has_a_string_name() {
-        let config = std_mock_config();
+        let config = mock_config("/");
         let s = Shell::new(String::from("my_shell"), config);
         assert_eq!(s.name, "my_shell");
     }
 
     #[test]
     fn can_resolve_its_path() {
-        let root_path = root_path("/Users/geoff/.config/hermit");
+        let root_path = root_path("/some/random/path");
         let config = mock_config(root_path.clone());
         let s = Shell::new("default", config);
 
-        let expected_path = root_path.join("shells")
-            .join("default");
+        let expected_path = root_path.join("shells").join("default");
         assert_eq!(s.root_path(), expected_path);
     }
 
@@ -85,8 +86,7 @@ mod tests {
         let config = mock_config(root_path.clone());
         let s = Shell::new("default", config);
 
-        let expected_path = root_path.join("shells")
-            .join("default");
+        let expected_path = root_path.join("shells").join("default");
         assert_eq!(s.path_for(""), expected_path);
     }
 
@@ -96,9 +96,40 @@ mod tests {
         let config = mock_config(root_path.clone());
         let s = Shell::new("default", config);
 
-        let expected_path = root_path.join("shells")
-            .join("default")
-            .join(".bashrc");
+        let expected_path = root_path.join("shells").join("default").join(".bashrc");
         assert_eq!(s.path_for(".bashrc"), expected_path);
+    }
+
+    #[test]
+    fn can_link_all_paths() {
+        let root_path = root_path("/Users/geoff/.config/hermit");
+        let mut config = MockConfig::with_root(&root_path);
+        config.set_paths(vec![".bashrc", ".boot/profile.boot"]);
+        let s = Shell::new("default", Rc::new(config));
+        let op_root = PathBuf::from("op_root");
+        let mut file_ops = FileOperations::rooted_at(&op_root);
+
+        s.link(&mut file_ops);
+
+        let shell_root = s.root_path();
+        assert_eq!(file_ops.operations(),
+                   &vec![link_op_for(&shell_root, &op_root, ".bashrc"),
+                         link_op_for(&shell_root, &op_root, ".boot/profile.boot")]);
+    }
+
+    #[test]
+    fn can_unlink_all_paths() {
+        let root_path = root_path("/Users/geoff/.config/hermit");
+        let mut config = MockConfig::with_root(&root_path);
+        config.set_paths(vec![".bashrc", ".boot/profile.boot"]);
+        let s = Shell::new("default", Rc::new(config));
+        let op_root = PathBuf::from("op_root");
+        let mut file_ops = FileOperations::rooted_at(&op_root);
+
+        s.unlink(&mut file_ops);
+
+        assert_eq!(file_ops.operations(),
+                   &vec![Op::Remove(op_root.join(".bashrc")),
+                         Op::Remove(op_root.join(".boot/profile.boot"))]);
     }
 }

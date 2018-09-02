@@ -1,7 +1,10 @@
 #![warn(missing_docs)]
 extern crate clap;
+extern crate failure;
+#[macro_use]
+extern crate failure_derive;
 extern crate git2;
-extern crate uuid;
+extern crate walkdir;
 
 #[cfg(test)]
 #[macro_use]
@@ -17,19 +20,32 @@ mod file_operations;
 #[macro_use]
 mod macros;
 
-use std::error::Error;
+use std::process;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
 use config::{Config, FsConfig};
-use hermit::Hermit;
+use hermit::{Error, Hermit, Result};
 use file_operations::FileOperations;
 
 #[cfg(test)]
 mod test_helpers;
 
-#[cfg_attr(rustfmt, rustfmt_skip)]
+
+const SHELL_NAME_ARG: &str = "SHELL_NAME";
+
 fn main() {
+    match run() {
+        Ok(()) => (),
+        Err(err) => {
+            eprintln!("{}: {}", env::get_program_name(), err);
+            process::exit(1)
+        },
+    }
+}
+
+#[cfg_attr(rustfmt, rustfmt_skip)]
+fn run() -> Result {
     let app = make_app_config();
     let app_matches = app.get_matches();
 
@@ -41,29 +57,32 @@ fn main() {
     let mut file_operations = FileOperations::rooted_at(home_dir);
 
     match app_matches.subcommand() {
-        ("add",    Some(matches)) => handle_add    (matches, &mut hermit, &mut file_operations),
-        ("clone",  Some(matches)) => handle_clone  (matches, &mut hermit, &mut file_operations),
-        ("doctor", Some(matches)) => handle_doctor (matches, &mut hermit, &mut file_operations),
-        ("git",    Some(matches)) => handle_git    (matches, &mut hermit, &mut file_operations),
-        ("init",   Some(matches)) => handle_init   (matches, &mut hermit, &mut file_operations),
-        ("nuke",   Some(matches)) => handle_nuke   (matches, &mut hermit, &mut file_operations),
-        ("status", Some(matches)) => handle_status (matches, &mut hermit, &mut file_operations),
-        ("use",    Some(matches)) => handle_use    (matches, &mut hermit, &mut file_operations),
-        _ => unreachable!(message::error("unknown subcommand passed"))
-    };
+        ("add",     Some(matches)) => handle_add     (matches, &mut hermit, &mut file_operations),
+        ("clone",   Some(matches)) => handle_clone   (matches, &mut hermit, &mut file_operations),
+        ("doctor",  Some(matches)) => handle_doctor  (matches, &mut hermit, &mut file_operations),
+        ("git",     Some(matches)) => handle_git     (matches, &mut hermit, &mut file_operations),
+        ("init",    Some(matches)) => handle_init    (matches, &mut hermit, &mut file_operations),
+        ("nuke",    Some(matches)) => handle_nuke    (matches, &mut hermit, &mut file_operations),
+        ("status",  Some(matches)) => handle_status  (matches, &mut hermit, &mut file_operations),
+        ("inhabit", Some(matches)) => handle_inhabit (matches, &mut hermit, &mut file_operations),
+        _ => unreachable!(message::error_str("unknown subcommand passed"))
+    }?;
 
     report_errors(file_operations.commit());
+
+    Ok(())
 }
 
 fn report_errors(results: Vec<file_operations::Result>) {
     for result in results {
         match result {
             Ok(()) => (),
-            Err(e) => println!("{}", message::error(e.description())),
+            Err(e) => println!("{}", message::error(e)),
         }
     }
 }
 
+#[cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
 fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = App::new("hermit")
         .version(env!("CARGO_PKG_VERSION"))
@@ -79,7 +98,7 @@ fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = add_init_subcommand(app);
     let app = add_nuke_subcommand(app);
     let app = add_status_subcommand(app);
-    let app = add_use_subcommand(app);
+    let app = add_inhabit_subcommand(app);
 
     app
 }
@@ -97,8 +116,8 @@ subcommand!{
 
 fn handle_add<C: Config>(_matches: &ArgMatches,
                          _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit add is not yet implemented");
+                         _file_operations: &mut FileOperations) -> Result {
+    not_implemented("add")
 }
 
 
@@ -110,8 +129,8 @@ subcommand!{
 
 fn handle_clone<C: Config>(_matches: &ArgMatches,
                            _hermit: &mut Hermit<C>,
-                           _file_operations: &mut FileOperations) {
-    println!("hermit clone is not implemented yet.")
+                           _file_operations: &mut FileOperations) -> Result {
+    not_implemented("clone")
 }
 
 
@@ -123,8 +142,8 @@ subcommand!{
 
 fn handle_doctor<C: Config>(_matches: &ArgMatches,
                             _hermit: &mut Hermit<C>,
-                            _file_operations: &mut FileOperations) {
-    println!("hermit doctor is not implemented yet.")
+                            _file_operations: &mut FileOperations) -> Result {
+    not_implemented("doctor")
 }
 
 
@@ -137,8 +156,8 @@ subcommand!{
 
 fn handle_git<C: Config>(_matches: &ArgMatches,
                          _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit git is not implemented yet.")
+                         _file_operations: &mut FileOperations) -> Result {
+    not_implemented("git")
 }
 
 
@@ -146,15 +165,16 @@ subcommand!{
   add_init_subcommand("init") {
     about("Create a new hermit shell called SHELL_NAME. If no shell name \
            is given, \"default\" is used.")
-    arg(Arg::with_name("SHELL_NAME").help("The name of the shell to be created."))
+    arg(shell_name_arg("The name of the shell to be created."))
   }
 }
 
 fn handle_init<C: Config>(matches: &ArgMatches,
                           hermit: &mut Hermit<C>,
-                          file_operations: &mut FileOperations) {
-    let shell_name = matches.value_of("SHELL_NAME").unwrap_or("default");
+                          file_operations: &mut FileOperations) -> Result {
+    let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
     hermit.init_shell(file_operations, shell_name);
+    Ok(())
 }
 
 
@@ -166,8 +186,8 @@ subcommand!{
 
 fn handle_nuke<C: Config>(_matches: &ArgMatches,
                           _hermit: &mut Hermit<C>,
-                          _file_operations: &mut FileOperations) {
-    println!("hermit nuke is not implemented yet.")
+                          _file_operations: &mut FileOperations) -> Result {
+    not_implemented("nuke")
 }
 
 
@@ -179,19 +199,36 @@ subcommand!{
 
 fn handle_status<C: Config>(_matches: &ArgMatches,
                             _hermit: &mut Hermit<C>,
-                            _file_operations: &mut FileOperations) {
-    println!("hermit status is not implemented yet.")
+                            _file_operations: &mut FileOperations) -> Result {
+    not_implemented("status")
 }
 
 
 subcommand!{
-  add_use_subcommand("use") {
+  add_inhabit_subcommand("inhabit") {
     about("Switch to using a different hermit shell")
   }
 }
 
-fn handle_use<C: Config>(_matches: &ArgMatches,
-                         _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) {
-    println!("hermit use is not implemented yet.")
+fn handle_inhabit<C: Config>(matches: &ArgMatches,
+                             hermit: &mut Hermit<C>,
+                             file_operations: &mut FileOperations) -> Result {
+    let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
+    hermit.inhabit(file_operations, shell_name)?;
+    Ok(())
+}
+
+
+// **************************************************
+// Utility functions
+// **************************************************
+
+fn shell_name_arg<'a, 'b>(message: &'static str) -> Arg<'a, 'b> {
+    Arg::with_name(SHELL_NAME_ARG)
+        .default_value("default")
+        .help(message)
+}
+
+fn not_implemented(name: &'static str) -> Result {
+    Err(Error::SubcommandNotImplemented(name))
 }

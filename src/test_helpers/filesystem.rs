@@ -2,8 +2,6 @@ use std::{fs, io};
 use std::io::Write;
 use std::path::PathBuf;
 
-use uuid::Uuid;
-
 pub fn clean_up(test_root: &PathBuf) {
     if test_root.exists() && test_root.is_dir() {
         match fs::remove_dir_all(test_root) {
@@ -24,8 +22,7 @@ pub fn clean_up(test_root: &PathBuf) {
 }
 
 pub fn set_up(suffix: &str) -> PathBuf {
-    let random_uuid = Uuid::new_v4();
-    let suffix = format!("{}-{}", suffix, random_uuid);
+    let suffix = format!("fs-tests-{}", suffix);
     let test_root = PathBuf::from("target").join(&suffix);
     clean_up(&test_root);
 
