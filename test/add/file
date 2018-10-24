@@ -2,7 +2,7 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
 
 FILE=.testfile
 
@@ -16,11 +16,11 @@ pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
 culpa qui officia deserunt mollit anim id est laborum."
 EOF
 
-$HOME/.hermit/bin/hermit add $HOME/$FILE
+$HERMIT_ROOT/bin/hermit add $HOME/$FILE
 
 RET=$?
 
-if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE ]
+if [ \! -f $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME/$FILE ]
 then
     echo "There is no actual file $FILE in the profile."
     exit 1

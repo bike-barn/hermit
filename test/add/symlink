@@ -2,16 +2,16 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
 
 FILE=.testfile
 ln -s nowhere $HOME/$FILE
 
-$HOME/.hermit/bin/hermit add $HOME/$FILE
+$HERMIT_ROOT/bin/hermit add $HOME/$FILE
 
 RET=$?
 
-if [ -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$FILE ]
+if [ -f $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME/$FILE ]
 then
     echo "The symlink was erroneously added to the profile."
     exit 1

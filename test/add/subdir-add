@@ -2,7 +2,7 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit init $TEST_PROFILE_NAME
+$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
 
 SUBDIR=.interior-dir
 FILE=.testfile
@@ -21,7 +21,7 @@ EOF
 
 pushd $HOME/$SUBDIR >/dev/null 2>&1
 
-$HOME/.hermit/bin/hermit add $FILE
+$HERMIT_ROOT/bin/hermit add $FILE
 
 RET=$?
 
@@ -31,15 +31,15 @@ echo "Contents of $SUBDIR"
 find $HOME/$SUBDIR
 echo
 echo "Contents of hermit profile"
-find $HOME/.hermit/profiles/$TEST_PROFILE_NAME -type d -name .git -prune -o -print
+find $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME -type d -name .git -prune -o -print
 
-if [ \! -d $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$SUBDIR ]
+if [ \! -d $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME/$SUBDIR ]
 then
     echo "The subdirectory $SUBDIR is missing from the profile."
     exit 1
 fi
 
-if [ \! -f $HOME/.hermit/profiles/$TEST_PROFILE_NAME/$SUBDIR/$FILE ]
+if [ \! -f $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME/$SUBDIR/$FILE ]
 then
     echo "There is no actual file $FILE in the profile."
     exit 1

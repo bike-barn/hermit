@@ -2,4 +2,4 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit doctor
+$HERMIT_ROOT/bin/hermit doctor

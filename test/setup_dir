@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-fixtures=$(ls link/.fixtures)
+fixtures=$(ls link/.fixtures 2> /dev/null)
 
 for fixture in $fixtures
 do

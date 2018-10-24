@@ -3,11 +3,11 @@
 # Run hermit init with appropriate arguments
 if [ -z "$NAMED_PROFILE" ]
 then
-    $HOME/.hermit/bin/hermit init
+    $HERMIT_ROOT/bin/hermit init
     RET=$?
     CHECK_PROFILE=default
 else
-    $HOME/.hermit/bin/hermit init $NAMED_PROFILE
+    $HERMIT_ROOT/bin/hermit init $NAMED_PROFILE
     RET=$?
     CHECK_PROFILE=$NAMED_PROFILE
 fi
@@ -18,21 +18,19 @@ then
     exit 1
 fi
 
-if [ \! -d $HOME/.hermit/profiles/$CHECK_PROFILE ]
+if [ \! -d $HERMIT_ROOT/$PROFILE_DIR_NAME/$CHECK_PROFILE ]
 then
     echo "Profile $CHECK_PROFILE does not exist after running init."
     exit 1
 fi
 
-if [ \! -d $HOME/.hermit/profiles/$CHECK_PROFILE/.git ]
+if [ \! -d $HERMIT_ROOT/$PROFILE_DIR_NAME/$CHECK_PROFILE/.git ]
 then
     echo "Profile $CHECK_PROFILE is not a git repository."
     exit 1
 fi
 
-pushd $HOME/.hermit 2>&1 >/dev/null
-NEW_PROFILE=$(git config "hermit.current")
-popd 2>&1 >/dev/null
+NEW_PROFILE=$($HERMIT_ROOT/bin/hermit ${PROFILE_DIR_NAME%s})
 
 if [ "$CHECK_PROFILE" \!= "$NEW_PROFILE" ]
 then

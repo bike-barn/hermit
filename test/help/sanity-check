@@ -2,4 +2,4 @@
 
 source ../.environment
 
-$HOME/.hermit/bin/hermit help
+$HERMIT_ROOT/bin/hermit help

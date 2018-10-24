@@ -63,6 +63,7 @@ fn run() -> Result {
         ("git",     Some(matches)) => handle_git     (matches, &mut hermit, &mut file_operations),
         ("init",    Some(matches)) => handle_init    (matches, &mut hermit, &mut file_operations),
         ("nuke",    Some(matches)) => handle_nuke    (matches, &mut hermit, &mut file_operations),
+        ("shell",   Some(matches)) => handle_shell   (matches, &mut hermit, &mut file_operations),
         ("status",  Some(matches)) => handle_status  (matches, &mut hermit, &mut file_operations),
         ("inhabit", Some(matches)) => handle_inhabit (matches, &mut hermit, &mut file_operations),
         _ => unreachable!(message::error_str("unknown subcommand passed"))
@@ -97,6 +98,7 @@ fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = add_git_subcommand(app);
     let app = add_init_subcommand(app);
     let app = add_nuke_subcommand(app);
+    let app = add_shell_subcommand(app);
     let app = add_status_subcommand(app);
     let app = add_inhabit_subcommand(app);
 
@@ -173,7 +175,7 @@ fn handle_init<C: Config>(matches: &ArgMatches,
                           hermit: &mut Hermit<C>,
                           file_operations: &mut FileOperations) -> Result {
     let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
-    hermit.init_shell(file_operations, shell_name);
+    hermit.init_shell(file_operations, shell_name)?;
     Ok(())
 }
 
@@ -192,9 +194,27 @@ fn handle_nuke<C: Config>(_matches: &ArgMatches,
 
 
 subcommand!{
-  add_status_subcommand("status") {
-    about("Display the status of your hermit shell")
+  add_shell_subcommand("shell") {
+    about("Display the shell you are currently inhabiting")
   }
+}
+
+fn handle_shell<C: Config>(_matches: &ArgMatches,
+                           hermit: &mut Hermit<C>,
+                           _file_operations: &mut FileOperations) -> Result {
+    if let Some(shell) = hermit.current_shell() {
+        println!("{}", shell.name);
+    } else {
+        eprintln!("{}", message::error_str("no active shell"));
+    }
+    Ok(())
+}
+
+
+subcommand!{
+    add_status_subcommand("status") {
+        about("Display the status of your hermit shell")
+    }
 }
 
 fn handle_status<C: Config>(_matches: &ArgMatches,
