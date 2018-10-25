@@ -12,7 +12,7 @@ Stay tuned, exciting things will be happening soon.
 Bring your home with you
 ------------------------
 
-<img src="http://www.zephyrizing.net/hermit/images/hermit-crab.png"
+<img src="https://raw.githubusercontent.com/bike-barn/hermit/1e362e8c6ad3aec1cfd854ce35f374008bf02884/doc/hoolia-hermit.png"
  alt="Hermit Logo" title="The Crab" align="right" />
 
 Hermit is a home directory configuration management tool that
@@ -48,6 +48,8 @@ number of tests, but there may (will!) be bugs._
 [Briefcase]: https://github.com/jim/briefcase
 [rbenv]: https://github.com/sstephenson/rbenv
 [nvm]: https://github.com/creationix/nvm
+
+<sub>Hermit crab watercolor by <a href="http://hoolia-art.tumblr.com/">hoolia-art</a></sub>
 
 The Problem
 -----------
