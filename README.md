@@ -34,9 +34,9 @@ shell (configurations).
 Hermit was originally inspired by [Briefcase] which solves the same
 problem.  However, Briefcase is written in Ruby.  We wanted something
 more trivially portable. Since your shell configuration is so basic,
-it seemed like having minimal dependencies would be a Good Thing
-&trade;. Currently Hermit is dependent on the bash shell, but we hope
-to make it depend solely on POSIX shell capabilities to maximize
+it seemed like having minimal dependencies would be a Good
+Thing&trade;. Currently Hermit is dependent on the bash shell, but we
+hope to make it depend solely on POSIX shell capabilities to maximize
 portability.
 
 The code infrastructure is heavily borrowed from the awesome shell
