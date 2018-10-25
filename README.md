@@ -173,7 +173,7 @@ project you agree to abide by its terms.
 
 If you believe someone is violating the code of conduct, we ask that
 you report it by emailing hermit@zephyrizing.net. For more details please
-see our [Reporting Guide].
+see our [Reporting Guide][reporting].
 
 First, please take a look at our
 [Contribution Guidelines][contributing].  Next, probably check out
@@ -183,6 +183,7 @@ To-Do column. From there, the standard "[fork], [branch], [code],
 
 [covenant]: https://github.com/bike-barn/hermit/blob/master/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/bike-barn/hermit/blob/master/CONTRIBUTING.md
+[reporting]: https://github.com/bike-barn/hermit/blob/master/doc/conduct/reporting-guide.md
 [fork]: https://help.github.com/articles/fork-a-repo/
 [branch]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
 [code]: http://stackoverflow.com/questions/tagged/rust
