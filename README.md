@@ -34,9 +34,9 @@ shell (configurations).
 Hermit was originally inspired by [Briefcase] which solves the same
 problem.  However, Briefcase is written in Ruby.  We wanted something
 more trivially portable. Since your shell configuration is so basic,
-it seemed like having minimal dependencies would be a good
-thing. Currently Hermit is dependent on the bash shell, but we hope to
-make it depend solely on POSIX shell capabilities to maximize
+it seemed like having minimal dependencies would be a Good Thing
+&trade;. Currently Hermit is dependent on the bash shell, but we hope
+to make it depend solely on POSIX shell capabilities to maximize
 portability.
 
 The code infrastructure is heavily borrowed from the awesome shell
@@ -175,7 +175,7 @@ If you believe someone is violating the code of conduct, we ask that
 you report it by emailing hermit@zephyrizing.net. For more details please
 see our [Reporting Guide][reporting].
 
-First, please take a look at our
+To get started, please take a look at our
 [Contribution Guidelines][contributing].  Next, probably check out
 our [Waffle.io][waffle] board, and look at the size 1 issues in the
 To-Do column. From there, the standard "[fork], [branch], [code],
@@ -198,7 +198,7 @@ it will automatically update our Waffle board.
 License
 -------
 
-Copyright 2014-2016, Geoff Shannon and contributors.
+Copyright 2014-2018, Geoff Shannon and contributors.
 
 This file is part of Hermit.
 
