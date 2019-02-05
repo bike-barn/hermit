@@ -43,7 +43,7 @@ fn main() {
 }
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
-fn run() -> Result {
+fn run() -> Result<()>{
     let app = make_app_config();
     let app_matches = app.get_matches();
 
@@ -117,7 +117,7 @@ fn handle_add<C: Config>(
     _matches: &ArgMatches,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     not_implemented("add")
 }
 
@@ -131,7 +131,7 @@ fn handle_clone<C: Config>(
     _matches: &ArgMatches,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     not_implemented("clone")
 }
 
@@ -145,7 +145,7 @@ fn handle_doctor<C: Config>(
     _matches: &ArgMatches,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     not_implemented("doctor")
 }
 
@@ -159,7 +159,7 @@ fn handle_git<C: Config>(
     _matches: &ArgMatches,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     not_implemented("git")
 }
 
@@ -175,7 +175,7 @@ fn handle_init<C: Config>(
     matches: &ArgMatches,
     hermit: &mut Hermit<C>,
     file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
     hermit.init_shell(file_operations, shell_name)?;
     Ok(())
@@ -191,7 +191,7 @@ fn handle_nuke<C: Config>(
     _matches: &ArgMatches,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     not_implemented("nuke")
 }
 
@@ -205,7 +205,7 @@ fn handle_shell<C: Config>(
     _matches: &ArgMatches,
     hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     if let Some(shell) = hermit.current_shell() {
         println!("{}", shell.name);
     } else {
@@ -224,7 +224,7 @@ fn handle_status<C: Config>(
     _matches: &ArgMatches,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     not_implemented("status")
 }
 
@@ -238,7 +238,7 @@ fn handle_inhabit<C: Config>(
     matches: &ArgMatches,
     hermit: &mut Hermit<C>,
     file_operations: &mut FileOperations,
-) -> Result {
+) -> Result<()> {
     let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
     hermit.inhabit(file_operations, shell_name)?;
     Ok(())
@@ -254,6 +254,6 @@ fn shell_name_arg<'a, 'b>(message: &'static str) -> Arg<'a, 'b> {
         .help(message)
 }
 
-fn not_implemented(name: &'static str) -> Result {
+fn not_implemented(name: &'static str) -> Result<()> {
     Err(Error::SubcommandNotImplemented(name))
 }

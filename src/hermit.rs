@@ -21,7 +21,7 @@ impl From<io::Error> for Error {
     }
 }
 
-pub type Result = result::Result<(), Error>;
+pub type Result<T> = result::Result<T, Error>;
 
 pub struct Hermit<T: Config> {
     config: Rc<T>,
@@ -40,7 +40,7 @@ impl<T: Config> Hermit<T> {
             .map(|shell_name| Shell::new(shell_name, self.config.clone()))
     }
 
-    fn set_current_shell(&mut self, name: &str) -> Result {
+    fn set_current_shell(&mut self, name: &str) -> Result<()> {
         match Rc::get_mut(&mut self.config) {
             Some(config) => config.set_current_shell_name(name).map_err(Error::from),
             None => unreachable!(message::error_str(
@@ -49,7 +49,7 @@ impl<T: Config> Hermit<T> {
         }
     }
 
-    pub fn init_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result {
+    pub fn init_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<()> {
         self.set_current_shell(name)?;
         if let Some(new_shell) = self.current_shell() {
             let path = new_shell.root_path();
@@ -60,7 +60,7 @@ impl<T: Config> Hermit<T> {
         Ok(())
     }
 
-    pub fn inhabit(&mut self, file_ops: &mut FileOperations, name: &str) -> Result {
+    pub fn inhabit(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<()> {
         if self.config.shell_exists(name) {
             if let Some(shell) = self.current_shell() {
                 shell.unlink(file_ops)
