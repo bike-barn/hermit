@@ -206,11 +206,8 @@ fn handle_shell<C: Config>(
     hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
-    if let Some(shell) = hermit.current_shell() {
-        println!("{}", shell.name);
-    } else {
-        eprintln!("{}", message::error_str("no active shell"));
-    }
+    let shell = hermit.current_shell()?;
+    println!("{}", shell.name);
     Ok(())
 }
 

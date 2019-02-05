@@ -13,6 +13,9 @@ pub enum Error {
 
     #[fail(display = "That is not the name of a shell")]
     ShellDoesNotExist,
+
+    #[fail(display = "No shell is active right now")]
+    NoActiveShell,
 }
 
 impl From<io::Error> for Error {
@@ -34,10 +37,11 @@ impl<T: Config> Hermit<T> {
         }
     }
 
-    pub fn current_shell(&self) -> Option<Shell<T>> {
+    pub fn current_shell(&self) -> Result<Shell<T>> {
         self.config
             .current_shell_name()
             .map(|shell_name| Shell::new(shell_name, self.config.clone()))
+            .ok_or(Error::NoActiveShell)
     }
 
     fn set_current_shell(&mut self, name: &str) -> Result<()> {
@@ -51,7 +55,7 @@ impl<T: Config> Hermit<T> {
 
     pub fn init_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<()> {
         self.set_current_shell(name)?;
-        if let Some(new_shell) = self.current_shell() {
+        if let Ok(new_shell) = self.current_shell() {
             let path = new_shell.root_path();
             let parent = path.parent().expect("Shell root path was too short");
             file_ops.create_dir(parent);
@@ -62,13 +66,13 @@ impl<T: Config> Hermit<T> {
 
     pub fn inhabit(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<()> {
         if self.config.shell_exists(name) {
-            if let Some(shell) = self.current_shell() {
+            if let Ok(shell) = self.current_shell() {
                 shell.unlink(file_ops)
             }
 
             self.set_current_shell(name)?;
 
-            if let Some(shell) = self.current_shell() {
+            if let Ok(shell) = self.current_shell() {
                 shell.link(file_ops)
             }
             Ok(())
