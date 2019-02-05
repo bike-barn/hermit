@@ -1,8 +1,8 @@
-use std::{fs, io};
-use std::io::prelude::*;
 use std::borrow::Borrow;
 use std::fs::File;
+use std::io::prelude::*;
 use std::path::{Path, PathBuf};
+use std::{fs, io};
 
 use walkdir::{self, WalkDir};
 
@@ -55,7 +55,10 @@ impl FsConfig {
         let config_path = config_path(&root_path);
         let current_shell = read_shell_from_path(&config_path).ok();
 
-        FsConfig { root_path, current_shell }
+        FsConfig {
+            root_path,
+            current_shell,
+        }
     }
 
     fn config_path(&self) -> PathBuf {
@@ -71,9 +74,7 @@ impl Config for FsConfig {
     }
 
     fn current_shell_name(&self) -> Option<&str> {
-        self.current_shell
-            .as_ref()
-            .map(|s| s.borrow())
+        self.current_shell.as_ref().map(|s| s.borrow())
     }
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {
@@ -105,7 +106,8 @@ impl Config for FsConfig {
 pub struct FilesIter<T>(Option<(T, PathBuf)>);
 
 impl<T> Iterator for FilesIter<T>
-where T: Iterator<Item = Result<walkdir::DirEntry, walkdir::Error>>,
+where
+    T: Iterator<Item = Result<walkdir::DirEntry, walkdir::Error>>,
 {
     type Item = PathBuf;
 
@@ -115,15 +117,17 @@ where T: Iterator<Item = Result<walkdir::DirEntry, walkdir::Error>>,
                 match iter.next() {
                     Some(Ok(entry)) => {
                         let file_type = entry.file_type();
-                        if file_type.is_dir() { continue }
+                        if file_type.is_dir() {
+                            continue;
+                        }
 
                         let file_path = entry.path().to_path_buf();
                         let shell_relative_path = file_path
                             .strip_prefix(prefix_path)
-                            .unwrap()       // this unwrap is safe because
+                            .unwrap() // this unwrap is safe because
                             .to_path_buf(); // of the Files::new constructor
                         return Some(shell_relative_path);
-                    },
+                    }
                     Some(Err(_)) => continue,
                     None => return None,
                 };
@@ -147,13 +151,12 @@ pub struct Files(Option<(WalkDir, PathBuf)>);
 impl Files {
     /// Constructs a new `Files` from a directory path.
     pub fn new(shell_path: Option<impl AsRef<Path>>) -> Files {
-        let walker =
-            shell_path.map(|path| {
-                (WalkDir::new(&path)
-                 .min_depth(1)
-                 .follow_links(false),
-                 PathBuf::from(path.as_ref()))
-            });
+        let walker = shell_path.map(|path| {
+            (
+                WalkDir::new(&path).min_depth(1).follow_links(false),
+                PathBuf::from(path.as_ref()),
+            )
+        });
         Files(walker)
     }
 }
@@ -173,11 +176,11 @@ impl IntoIterator for Files {
 pub mod mock {
     use super::Config;
 
-    use std::io;
     use std::borrow::Borrow;
+    use std::io;
     use std::path::{Path, PathBuf};
 
-    #[derive(Clone,Debug,Eq,PartialEq)]
+    #[derive(Clone, Debug, Eq, PartialEq)]
     pub struct MockConfig {
         root_path: PathBuf,
         current_shell: String,
@@ -205,7 +208,10 @@ pub mod mock {
         }
 
         pub fn set_paths(&mut self, paths: Vec<impl AsRef<Path>>) {
-            self.files = paths.into_iter().map(|p| PathBuf::from(p.as_ref())).collect();
+            self.files = paths
+                .into_iter()
+                .map(|p| PathBuf::from(p.as_ref()))
+                .collect();
         }
     }
 
@@ -240,8 +246,8 @@ mod test {
     use super::{Config, FsConfig};
 
     use std::fs::{self, File};
-    use std::path::{Path, PathBuf};
     use std::io::prelude::*;
+    use std::path::{Path, PathBuf};
 
     fn clean_up(test_root: &PathBuf) {
         if test_root.exists() {
@@ -283,7 +289,7 @@ mod test {
         let test_root = set_up("root-path-create", "default", vec!["default"]);
         let config_root = test_root.join(".hermit");
 
-        assert!(! config_root.exists());
+        assert!(!config_root.exists());
         FsConfig::new(&config_root);
         assert!(config_root.exists());
     }
@@ -313,9 +319,11 @@ mod test {
 
     #[test]
     fn can_confirm_a_shell_exists() {
-        let test_root = set_up("confirm-shell-existence",
-                               "default",
-                               vec!["default", "other"]);
+        let test_root = set_up(
+            "confirm-shell-existence",
+            "default",
+            vec!["default", "other"],
+        );
         let config = FsConfig::new(&test_root);
 
         assert!(config.shell_exists("other"));
@@ -323,9 +331,11 @@ mod test {
 
     #[test]
     fn can_confirm_a_shell_does_not_exist() {
-        let test_root = set_up("confirm-shell-non-existence",
-                               "default",
-                               vec!["default", "other"]);
+        let test_root = set_up(
+            "confirm-shell-non-existence",
+            "default",
+            vec!["default", "other"],
+        );
         let config = FsConfig::new(&test_root);
 
         assert!(!config.shell_exists("another"));
@@ -333,21 +343,23 @@ mod test {
 
     #[test]
     fn can_walk_a_directory() {
-        let test_root = set_up("walk-directory",
-                               "default",
-                               vec!["default"]);
+        let test_root = set_up("walk-directory", "default", vec!["default"]);
         let config = FsConfig::new(&test_root);
         let shell_root = config.shell_root_path().join("default");
         File::create(&shell_root.join("file1")).expect("Failed to create test file");
 
-        let files = config.shell_files("default")
+        let files = config
+            .shell_files("default")
             .into_iter()
             .map(|f| f.to_string_lossy().to_string())
             .collect::<Vec<_>>();
         assert_eq!(files, vec!["file1"]);
     }
 
-    fn create_paths(root_path: impl AsRef<Path>, paths: impl IntoIterator<Item = impl AsRef<Path>>) {
+    fn create_paths(
+        root_path: impl AsRef<Path>,
+        paths: impl IntoIterator<Item = impl AsRef<Path>>,
+    ) {
         let root_path = PathBuf::from(root_path.as_ref());
         for path in paths {
             let full_path = root_path.join(path.as_ref());
@@ -359,19 +371,22 @@ mod test {
 
     #[test]
     fn can_walk_a_directory_skipping_subdirectory_entries() {
-        let test_root = set_up("walk-directory-skipping-subdirs",
-                               "default",
-                               vec!["default"]);
+        let test_root = set_up(
+            "walk-directory-skipping-subdirs",
+            "default",
+            vec!["default"],
+        );
         let config = FsConfig::new(&test_root);
         let shell_root = config.shell_root_path().join("default");
         create_paths(shell_root, vec!["file1", "subdir/file2"]);
 
-        let files = config.shell_files("default")
+        let files = config
+            .shell_files("default")
             .into_iter()
             .map(|f| f.to_string_lossy().to_string())
             .collect::<Vec<_>>();
         assert!(files.contains(&"file1".into()));
         assert!(files.contains(&"subdir/file2".into()));
-        assert!(! files.contains(&"subdir".into()));
+        assert!(!files.contains(&"subdir".into()));
     }
 }

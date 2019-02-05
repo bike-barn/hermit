@@ -1,6 +1,6 @@
-use std::{fs, io, mem, result};
 use std::os::unix;
 use std::path::{Path, PathBuf};
+use std::{fs, io, mem, result};
 
 use git2;
 
@@ -68,7 +68,7 @@ impl FileOperations {
     }
 
     pub fn link(&mut self, path: impl AsRef<Path>, target: impl AsRef<Path>) {
-        self.operations.push(Op::Link{
+        self.operations.push(Op::Link {
             path: self.root.join(path),
             target: target.as_ref().to_path_buf(),
         });
@@ -83,7 +83,8 @@ impl FileOperations {
     }
 
     pub fn commit(mut self) -> Vec<Result> {
-        mem::replace(&mut self.operations, vec![]).into_iter()
+        mem::replace(&mut self.operations, vec![])
+            .into_iter()
             .map(|op| self.do_op(op))
             .collect::<Vec<_>>()
     }
@@ -101,14 +102,17 @@ impl FileOperations {
     }
 }
 
-fn git_init(dir: PathBuf, options: &git2::RepositoryInitOptions) -> result::Result<(), git2::Error> {
+fn git_init(
+    dir: PathBuf,
+    options: &git2::RepositoryInitOptions,
+) -> result::Result<(), git2::Error> {
     git2::Repository::init_opts(dir, options).map(|_| ())
 }
 
 #[cfg(test)]
 mod tests {
-    use std::path::{Path, PathBuf};
     use std::fs;
+    use std::path::{Path, PathBuf};
 
     use super::FileOperations;
     use test_helpers::filesystem::set_up;
@@ -143,9 +147,9 @@ mod tests {
         let target_path = test_root.join("target_file");
         let link_path = test_root.join("link");
 
-        assert!(! link_path.exists());
+        assert!(!link_path.exists());
         file_set.link("link", &target_path);
-        assert!(! link_path.exists());
+        assert!(!link_path.exists());
     }
 
     #[test]
@@ -234,9 +238,9 @@ mod tests {
         let path = Path::new("test").join("repo");
         let git_dir_path = path.join(".git");
 
-        assert!(! git_dir_path.is_dir());
+        assert!(!git_dir_path.is_dir());
         file_set.create_git_repo(&path);
-        assert!(! git_dir_path.is_dir());
+        assert!(!git_dir_path.is_dir());
     }
 
     #[test]

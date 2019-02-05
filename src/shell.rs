@@ -113,9 +113,13 @@ mod tests {
         s.link(&mut file_ops);
 
         let shell_root = s.root_path();
-        assert_eq!(file_ops.operations(),
-                   &vec![link_op_for(&shell_root, &op_root, ".bashrc"),
-                         link_op_for(&shell_root, &op_root, ".boot/profile.boot")]);
+        assert_eq!(
+            file_ops.operations(),
+            &vec![
+                link_op_for(&shell_root, &op_root, ".bashrc"),
+                link_op_for(&shell_root, &op_root, ".boot/profile.boot")
+            ]
+        );
     }
 
     #[test]
@@ -129,8 +133,12 @@ mod tests {
 
         s.unlink(&mut file_ops);
 
-        assert_eq!(file_ops.operations(),
-                   &vec![Op::Remove(op_root.join(".bashrc")),
-                         Op::Remove(op_root.join(".boot/profile.boot"))]);
+        assert_eq!(
+            file_ops.operations(),
+            &vec![
+                Op::Remove(op_root.join(".bashrc")),
+                Op::Remove(op_root.join(".boot/profile.boot"))
+            ]
+        );
     }
 }
