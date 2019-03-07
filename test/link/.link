@@ -20,7 +20,7 @@ recurse () {
     done
 }
 
-$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
+hermit init $TEST_PROFILE_NAME
 
 FIXTURE_NAME="$1"
 
@@ -30,7 +30,7 @@ cp -r .fixtures/"$FIXTURE_NAME"/* $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_N
 CHECK_BASE="$HOME/"
 
 # Attempt the link
-$HERMIT_ROOT/bin/hermit link
+hermit link
 
 # Check the fixture directory recursively
 recurse "$PWD/.fixtures/$FIXTURE_NAME"

@@ -2,8 +2,8 @@
 
 source ../.environment
 
-$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
-$HERMIT_ROOT/bin/hermit git --version
+hermit init $TEST_PROFILE_NAME
+hermit git --version
 
 RET=$?
 

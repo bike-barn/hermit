@@ -28,8 +28,8 @@ mod tests {
     use super::*;
 
     use std::env;
-    use std::sync::Mutex;
     use std::path::PathBuf;
+    use std::sync::Mutex;
 
     lazy_static! {
         // This mutex is solely for preventing these two tests from

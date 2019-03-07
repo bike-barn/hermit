@@ -2,7 +2,7 @@
 
 source ../.environment
 
-$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
+hermit init $TEST_PROFILE_NAME
 
 DIR=the-test-dir
 
@@ -13,7 +13,7 @@ echo other stuff ands > $HOME/$DIR/bar
 echo and stuff things > $HOME/$DIR/baz
 echo and things stuff > $HOME/$DIR/qux
 
-$HERMIT_ROOT/bin/hermit add $HOME/$DIR
+hermit add $HOME/$DIR
 
 RET=$?
 

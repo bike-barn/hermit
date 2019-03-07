@@ -3,13 +3,18 @@
 # Run hermit init with appropriate arguments
 if [ -z "$NAMED_PROFILE" ]
 then
-    $HERMIT_ROOT/bin/hermit init
+    hermit init
     RET=$?
     CHECK_PROFILE=default
 else
-    $HERMIT_ROOT/bin/hermit init $NAMED_PROFILE
+    hermit init $NAMED_PROFILE
     RET=$?
     CHECK_PROFILE=$NAMED_PROFILE
+fi
+
+if [ -z "$HERMIT_ROOT" ]
+then
+    HERMIT_ROOT=$TESTDIR/.config/hermit
 fi
 
 if [ $RET -ne 0 ]
@@ -30,7 +35,7 @@ then
     exit 1
 fi
 
-NEW_PROFILE=$($HERMIT_ROOT/bin/hermit ${PROFILE_DIR_NAME%s})
+NEW_PROFILE=$(hermit ${PROFILE_DIR_NAME%s})
 
 if [ "$CHECK_PROFILE" \!= "$NEW_PROFILE" ]
 then

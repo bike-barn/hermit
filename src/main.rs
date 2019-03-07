@@ -1,4 +1,3 @@
-#![warn(missing_docs)]
 extern crate clap;
 extern crate failure;
 #[macro_use]
@@ -12,10 +11,10 @@ extern crate lazy_static;
 
 mod config;
 mod env;
+mod file_operations;
 mod hermit;
 mod message;
 mod shell;
-mod file_operations;
 
 #[macro_use]
 mod macros;
@@ -25,12 +24,11 @@ use std::process;
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
 use config::{Config, FsConfig};
-use hermit::{Error, Hermit, Result};
 use file_operations::FileOperations;
+use hermit::{Error, Hermit, Result};
 
 #[cfg(test)]
 mod test_helpers;
-
 
 const SHELL_NAME_ARG: &str = "SHELL_NAME";
 
@@ -40,12 +38,12 @@ fn main() {
         Err(err) => {
             eprintln!("{}: {}", env::get_program_name(), err);
             process::exit(1)
-        },
+        }
     }
 }
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
-fn run() -> Result {
+fn run() -> Result<()>{
     let app = make_app_config();
     let app_matches = app.get_matches();
 
@@ -105,65 +103,67 @@ fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     app
 }
 
-
 // **************************************************
 // Subcommand configuration and implementation
 // **************************************************
 
-subcommand!{
+subcommand! {
   add_add_subcommand("add") {
     about("Add files to your hermit shell")
   }
 }
 
-fn handle_add<C: Config>(_matches: &ArgMatches,
-                         _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) -> Result {
+fn handle_add<C: Config>(
+    _matches: &ArgMatches,
+    _hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
     not_implemented("add")
 }
 
-
-subcommand!{
+subcommand! {
   add_clone_subcommand("clone") {
     about("Create a local shell from an existing remote shell")
   }
 }
 
-fn handle_clone<C: Config>(_matches: &ArgMatches,
-                           _hermit: &mut Hermit<C>,
-                           _file_operations: &mut FileOperations) -> Result {
+fn handle_clone<C: Config>(
+    _matches: &ArgMatches,
+    _hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
     not_implemented("clone")
 }
 
-
-subcommand!{
+subcommand! {
   add_doctor_subcommand("doctor") {
     about("Make sure your hermit setup is sane")
   }
 }
 
-fn handle_doctor<C: Config>(_matches: &ArgMatches,
-                            _hermit: &mut Hermit<C>,
-                            _file_operations: &mut FileOperations) -> Result {
+fn handle_doctor<C: Config>(
+    _matches: &ArgMatches,
+    _hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
     not_implemented("doctor")
 }
 
-
-
-subcommand!{
+subcommand! {
   add_git_subcommand("git") {
     about("Run git operations on the current shell")
   }
 }
 
-fn handle_git<C: Config>(_matches: &ArgMatches,
-                         _hermit: &mut Hermit<C>,
-                         _file_operations: &mut FileOperations) -> Result {
+fn handle_git<C: Config>(
+    _matches: &ArgMatches,
+    _hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
     not_implemented("git")
 }
 
-
-subcommand!{
+subcommand! {
   add_init_subcommand("init") {
     about("Create a new hermit shell called SHELL_NAME. If no shell name \
            is given, \"default\" is used.")
@@ -171,73 +171,75 @@ subcommand!{
   }
 }
 
-fn handle_init<C: Config>(matches: &ArgMatches,
-                          hermit: &mut Hermit<C>,
-                          file_operations: &mut FileOperations) -> Result {
+fn handle_init<C: Config>(
+    matches: &ArgMatches,
+    hermit: &mut Hermit<C>,
+    file_operations: &mut FileOperations,
+) -> Result<()> {
     let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
     hermit.init_shell(file_operations, shell_name)?;
     Ok(())
 }
 
-
-subcommand!{
+subcommand! {
   add_nuke_subcommand("nuke") {
     about("Permanently remove a hermit shell")
   }
 }
 
-fn handle_nuke<C: Config>(_matches: &ArgMatches,
-                          _hermit: &mut Hermit<C>,
-                          _file_operations: &mut FileOperations) -> Result {
+fn handle_nuke<C: Config>(
+    _matches: &ArgMatches,
+    _hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
     not_implemented("nuke")
 }
 
-
-subcommand!{
+subcommand! {
   add_shell_subcommand("shell") {
     about("Display the shell you are currently inhabiting")
   }
 }
 
-fn handle_shell<C: Config>(_matches: &ArgMatches,
-                           hermit: &mut Hermit<C>,
-                           _file_operations: &mut FileOperations) -> Result {
-    if let Some(shell) = hermit.current_shell() {
-        println!("{}", shell.name);
-    } else {
-        eprintln!("{}", message::error_str("no active shell"));
-    }
+fn handle_shell<C: Config>(
+    _matches: &ArgMatches,
+    hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
+    let shell = hermit.current_shell()?;
+    println!("{}", shell.name);
     Ok(())
 }
 
-
-subcommand!{
+subcommand! {
     add_status_subcommand("status") {
         about("Display the status of your hermit shell")
     }
 }
 
-fn handle_status<C: Config>(_matches: &ArgMatches,
-                            _hermit: &mut Hermit<C>,
-                            _file_operations: &mut FileOperations) -> Result {
+fn handle_status<C: Config>(
+    _matches: &ArgMatches,
+    _hermit: &mut Hermit<C>,
+    _file_operations: &mut FileOperations,
+) -> Result<()> {
     not_implemented("status")
 }
 
-
-subcommand!{
+subcommand! {
   add_inhabit_subcommand("inhabit") {
     about("Switch to using a different hermit shell")
   }
 }
 
-fn handle_inhabit<C: Config>(matches: &ArgMatches,
-                             hermit: &mut Hermit<C>,
-                             file_operations: &mut FileOperations) -> Result {
+fn handle_inhabit<C: Config>(
+    matches: &ArgMatches,
+    hermit: &mut Hermit<C>,
+    file_operations: &mut FileOperations,
+) -> Result<()> {
     let shell_name = matches.value_of(SHELL_NAME_ARG).unwrap();
     hermit.inhabit(file_operations, shell_name)?;
     Ok(())
 }
-
 
 // **************************************************
 // Utility functions
@@ -249,6 +251,6 @@ fn shell_name_arg<'a, 'b>(message: &'static str) -> Arg<'a, 'b> {
         .help(message)
 }
 
-fn not_implemented(name: &'static str) -> Result {
+fn not_implemented(name: &'static str) -> Result<()> {
     Err(Error::SubcommandNotImplemented(name))
 }

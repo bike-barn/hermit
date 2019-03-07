@@ -2,3 +2,4 @@ profiles
 /test/.urchin_stdout
 /test/.urchin.log
 target
+/current_shell

@@ -2,9 +2,9 @@
 
 source ../.environment
 
-$HERMIT_ROOT/bin/hermit init $TEST_PROFILE_NAME
+hermit init $TEST_PROFILE_NAME
 
-DIR="$($HERMIT_ROOT/bin/hermit git rev-parse --show-toplevel | tail -n 1)"
+DIR="$(hermit git rev-parse --show-toplevel | tail -n 1)"
 
 if [ "$DIR" = $HERMIT_ROOT/$PROFILE_DIR_NAME/$TEST_PROFILE_NAME ]; then
   exit 0
