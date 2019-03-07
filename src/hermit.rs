@@ -55,12 +55,11 @@ impl<T: Config> Hermit<T> {
 
     pub fn init_shell(&mut self, file_ops: &mut FileOperations, name: &str) -> Result<()> {
         self.set_current_shell(name)?;
-        if let Ok(new_shell) = self.current_shell() {
-            let path = new_shell.root_path();
-            let parent = path.parent().expect("Shell root path was too short");
-            file_ops.create_dir(parent);
-            file_ops.create_git_repo(&path);
-        }
+        let new_shell = self.current_shell()?;
+        let path = new_shell.root_path();
+        let parent = path.parent().expect("Shell root path was too short");
+        file_ops.create_dir(parent);
+        file_ops.create_git_repo(&path);
         Ok(())
     }
 
