@@ -2,7 +2,7 @@ use std::borrow::ToOwned;
 use std::env;
 use std::path::PathBuf;
 
-pub use std::env::home_dir;
+pub use dirs::home_dir;
 
 pub fn get_program_name() -> String {
     env::args()
@@ -21,7 +21,7 @@ pub fn get_hermit_dir() -> Option<PathBuf> {
 }
 
 pub fn default_hermit_dir() -> Option<PathBuf> {
-    env::home_dir().map(|home| home.join(".config/hermit"))
+    home_dir().map(|home| home.join(".config/hermit"))
 }
 
 #[cfg(test)]
