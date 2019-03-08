@@ -43,8 +43,7 @@ main() {
            --tag $tag \
            --target $target
 
-    cargo +nightly clippy --version || ( rustup install nightly && rustup component add clippy-preview --toolchain=nightly )
-    cargo +nightly tarpaulin --version || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo +nightly install cargo-tarpaulin
+    cargo clippy --version || ( rustup component add clippy )
     curl -o /tmp/urchin https://raw.githubusercontent.com/tlevine/urchin/v0.0.6/urchin && chmod +x /tmp/urchin
     git fetch --unshallow
     git config remote.$(git remote | head -n1).fetch "+refs/heads/*:refs/remotes/$(git remote | head -n1)/*"

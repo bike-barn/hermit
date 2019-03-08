@@ -3,7 +3,7 @@
 set -ex
 
 main() {
-    cargo +nightly clippy
+    cargo clippy
 
     cross build --target $TARGET
     cross build --target $TARGET --release
