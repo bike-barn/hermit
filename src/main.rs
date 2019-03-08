@@ -42,7 +42,7 @@ fn main() {
     }
 }
 
-#[cfg_attr(rustfmt, rustfmt_skip)]
+#[rustfmt::skip]
 fn run() -> Result<()>{
     let app = make_app_config();
     let app_matches = app.get_matches();
@@ -81,7 +81,7 @@ fn report_errors(results: Vec<file_operations::Result>) {
     }
 }
 
-#[cfg_attr(feature = "cargo-clippy", allow(let_and_return))]
+#[allow(clippy::let_and_return)]
 fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = App::new("hermit")
         .version(env!("CARGO_PKG_VERSION"))

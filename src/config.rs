@@ -74,7 +74,7 @@ impl Config for FsConfig {
     }
 
     fn current_shell_name(&self) -> Option<&str> {
-        self.current_shell.as_ref().map(|s| s.borrow())
+        self.current_shell.as_ref().map(Borrow::borrow)
     }
 
     fn set_current_shell_name(&mut self, name: &str) -> io::Result<()> {

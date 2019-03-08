@@ -1,3 +1,4 @@
+use std::borrow::ToOwned;
 use std::env;
 use std::path::PathBuf;
 
@@ -7,8 +8,8 @@ pub fn get_program_name() -> String {
     env::args()
         .nth(0)
         .map(PathBuf::from)
-        .and_then(|path| path.file_name().map(|name| name.to_owned()))
-        .and_then(|file_name| file_name.to_str().map(|name| name.to_owned()))
+        .and_then(|path| path.file_name().map(ToOwned::to_owned))
+        .and_then(|file_name| file_name.to_str().map(ToOwned::to_owned))
         .unwrap_or_else(|| "hermit".to_owned())
 }
 
