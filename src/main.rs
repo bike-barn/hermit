@@ -1,6 +1,7 @@
 mod config;
 mod env;
 mod file_operations;
+mod fs;
 mod hermit;
 mod message;
 mod shell;
