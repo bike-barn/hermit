@@ -99,7 +99,7 @@ before_deploy:
 
 after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
-    cargo +nightly tarpaulin --version || ( rustup install nightly && RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo +nightly install cargo-tarpaulin )
+    rustup install nightly
     cargo +nightly tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
   fi
 
