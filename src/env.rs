@@ -21,7 +21,7 @@ pub fn get_hermit_dir() -> Option<PathBuf> {
 }
 
 pub fn default_hermit_dir() -> Option<PathBuf> {
-    home_dir().map(|home| home.join(".config/hermit"))
+    dirs::config_dir().map(|home| home.join("hermit"))
 }
 
 #[cfg(test)]
