@@ -1,6 +1,6 @@
 use failure::{self, Error};
 
-use env;
+use crate::env;
 
 pub fn error_str<T: 'static + Into<String>>(details: T) -> String {
     error(failure::err_msg(details.into()))

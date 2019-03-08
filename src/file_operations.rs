@@ -115,7 +115,7 @@ mod tests {
     use std::path::{Path, PathBuf};
 
     use super::FileOperations;
-    use test_helpers::filesystem::set_up;
+    use crate::test_helpers::filesystem::set_up;
 
     #[test]
     fn can_link_file() {

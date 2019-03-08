@@ -1,10 +1,10 @@
 use std::rc::Rc;
 use std::{io, result};
 
-use config::Config;
-use file_operations::FileOperations;
-use message;
-use shell::Shell;
+use crate::config::Config;
+use crate::file_operations::FileOperations;
+use crate::message;
+use crate::shell::Shell;
 
 #[derive(Clone, Debug, Fail, PartialEq, Eq)]
 pub enum Error {
@@ -84,15 +84,15 @@ impl<T: Config> Hermit<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use test_helpers::ops::*;
+    use crate::test_helpers::ops::*;
 
     use std::path::PathBuf;
     use std::rc::Rc;
 
-    use config::mock::MockConfig;
-    use config::Config;
-    use file_operations::FileOperations;
-    use file_operations::Op;
+    use crate::config::mock::MockConfig;
+    use crate::config::Config;
+    use crate::file_operations::FileOperations;
+    use crate::file_operations::Op;
 
     fn hermit(config: &MockConfig) -> Hermit<MockConfig> {
         Hermit::new(config.clone())

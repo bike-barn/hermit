@@ -1,8 +1,8 @@
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use config::Config;
-use file_operations::FileOperations;
+use crate::config::Config;
+use crate::file_operations::FileOperations;
 
 pub struct Shell<T: Config> {
     pub name: String,
@@ -41,13 +41,13 @@ impl<T: Config> Shell<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use test_helpers::ops::*;
+    use crate::test_helpers::ops::*;
 
     use std::path::{Path, PathBuf};
     use std::rc::Rc;
 
-    use config::mock::MockConfig;
-    use file_operations::Op;
+    use crate::config::mock::MockConfig;
+    use crate::file_operations::Op;
 
     fn root_path(path_str: &str) -> PathBuf {
         PathBuf::from(path_str)

@@ -24,9 +24,9 @@ use std::process;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
-use config::{Config, FsConfig};
-use file_operations::FileOperations;
-use hermit::{Error, Hermit, Result};
+use crate::config::{Config, FsConfig};
+use crate::file_operations::FileOperations;
+use crate::hermit::{Error, Hermit, Result};
 
 #[cfg(test)]
 mod test_helpers;
