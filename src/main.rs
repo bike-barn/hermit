@@ -1,10 +1,5 @@
-extern crate clap;
-extern crate dirs;
-extern crate failure;
 #[macro_use]
 extern crate failure_derive;
-extern crate git2;
-extern crate walkdir;
 
 #[cfg(test)]
 #[macro_use]
@@ -23,6 +18,8 @@ mod macros;
 use std::process;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
+
+use failure;
 
 use crate::config::{Config, FsConfig};
 use crate::file_operations::FileOperations;
@@ -115,7 +112,7 @@ subcommand! {
 }
 
 fn handle_add<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -129,7 +126,7 @@ subcommand! {
 }
 
 fn handle_clone<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -143,7 +140,7 @@ subcommand! {
 }
 
 fn handle_doctor<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -157,7 +154,7 @@ subcommand! {
 }
 
 fn handle_git<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -173,7 +170,7 @@ subcommand! {
 }
 
 fn handle_init<C: Config>(
-    matches: &ArgMatches,
+    matches: &ArgMatches<'_>,
     hermit: &mut Hermit<C>,
     file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -189,7 +186,7 @@ subcommand! {
 }
 
 fn handle_nuke<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -203,7 +200,7 @@ subcommand! {
 }
 
 fn handle_shell<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -219,7 +216,7 @@ subcommand! {
 }
 
 fn handle_status<C: Config>(
-    _matches: &ArgMatches,
+    _matches: &ArgMatches<'_>,
     _hermit: &mut Hermit<C>,
     _file_operations: &mut FileOperations,
 ) -> Result<()> {
@@ -233,7 +230,7 @@ subcommand! {
 }
 
 fn handle_inhabit<C: Config>(
-    matches: &ArgMatches,
+    matches: &ArgMatches<'_>,
     hermit: &mut Hermit<C>,
     file_operations: &mut FileOperations,
 ) -> Result<()> {
