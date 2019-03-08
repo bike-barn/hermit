@@ -3,7 +3,11 @@
 set -ex
 
 main() {
-    cargo clippy
+    # Only run clippy on the basic linux target
+    if [[ "$TARGET" -eq x86_64-unknown-linux-gnu ]]; then
+        cargo clippy --version || ( rustup component add clippy )
+        cargo clippy
+    fi
 
     cross build --target $TARGET
     cross build --target $TARGET --release
