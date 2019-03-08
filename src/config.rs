@@ -251,7 +251,7 @@ mod test {
 
     use tempfile::{tempdir, TempDir};
 
-    fn set_up(suffix: &str, current: &str, shells: Vec<&str>) -> TempDir {
+    fn set_up(current: &str, shells: Vec<&str>) -> TempDir {
         let test_root_dir = tempdir().expect("failed to create tempdir");
         let test_root = test_root_dir.path();
 
@@ -271,7 +271,7 @@ mod test {
 
     #[test]
     fn has_a_root_path() {
-        let test_root_dir = set_up("root-path", "default", vec!["default"]);
+        let test_root_dir = set_up("default", vec!["default"]);
         let test_root = test_root_dir.path();
         let config = FsConfig::new(&test_root);
         assert_eq!(config.root_path(), &test_root);
@@ -279,7 +279,7 @@ mod test {
 
     #[test]
     fn creating_a_config_creates_its_root_dir() {
-        let test_root_dir = set_up("root-path-create", "default", vec!["default"]);
+        let test_root_dir = set_up("default", vec!["default"]);
         let test_root = test_root_dir.path();
         let config_root = test_root.join(".hermit");
 
@@ -290,7 +290,7 @@ mod test {
 
     #[test]
     fn returns_the_current_shell_name() {
-        let test_root = set_up("current-shell-name", "current", vec!["current"]);
+        let test_root = set_up("current", vec!["current"]);
         let config = FsConfig::new(&test_root);
 
         assert_eq!(*config.current_shell_name().unwrap(), "current".to_string());
@@ -298,7 +298,7 @@ mod test {
 
     #[test]
     fn can_set_the_current_shell_name() {
-        let test_root_dir = set_up("set-current-shell-name", "default", vec!["default"]);
+        let test_root_dir = set_up("default", vec!["default"]);
         let test_root = test_root_dir.path();
         let mut config = FsConfig::new(&test_root);
         config.set_current_shell_name("current").unwrap();
@@ -314,11 +314,7 @@ mod test {
 
     #[test]
     fn can_confirm_a_shell_exists() {
-        let test_root = set_up(
-            "confirm-shell-existence",
-            "default",
-            vec!["default", "other"],
-        );
+        let test_root = set_up("default", vec!["default", "other"]);
         let config = FsConfig::new(&test_root);
 
         assert!(config.shell_exists("other"));
@@ -326,11 +322,7 @@ mod test {
 
     #[test]
     fn can_confirm_a_shell_does_not_exist() {
-        let test_root = set_up(
-            "confirm-shell-non-existence",
-            "default",
-            vec!["default", "other"],
-        );
+        let test_root = set_up("default", vec!["default", "other"]);
         let config = FsConfig::new(&test_root);
 
         assert!(!config.shell_exists("another"));
@@ -338,7 +330,7 @@ mod test {
 
     #[test]
     fn can_walk_a_directory() {
-        let test_root = set_up("walk-directory", "default", vec!["default"]);
+        let test_root = set_up("default", vec!["default"]);
         let config = FsConfig::new(&test_root);
         let shell_root = config.shell_root_path().join("default");
         File::create(&shell_root.join("file1")).expect("Failed to create test file");
@@ -366,11 +358,7 @@ mod test {
 
     #[test]
     fn can_walk_a_directory_skipping_subdirectory_entries() {
-        let test_root = set_up(
-            "walk-directory-skipping-subdirs",
-            "default",
-            vec!["default"],
-        );
+        let test_root = set_up("default", vec!["default"]);
         let config = FsConfig::new(&test_root);
         let shell_root = config.shell_root_path().join("default");
         create_paths(shell_root, vec!["file1", "subdir/file2"]);

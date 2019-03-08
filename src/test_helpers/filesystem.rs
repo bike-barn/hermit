@@ -3,8 +3,7 @@ use std::{fs, io};
 
 use tempfile::{tempdir, TempDir};
 
-pub fn set_up(suffix: &str) -> TempDir {
-    let suffix = format!("fs-tests-{}", suffix);
+pub fn set_up() -> TempDir {
     let test_root_dir = tempdir().expect("failed to create tempdir");
     let test_root = test_root_dir.path();
 
