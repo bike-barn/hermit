@@ -195,6 +195,14 @@ it will automatically update our Waffle board.
 
 [waffle-flow]: https://github.com/waffleio/waffle.io/wiki/FAQs#branch-moving
 
+You can get in touch with the developers in (mostly) real-time on the
+[Rust Slack] in the `#hermit` channel. Less urgent communications,
+especially if they regard found bugs or requested features can be
+directed to the [Github Issues].
+
+[Rust Slack]: https://rust-lang.slack.com/
+[Github Issues]: https://github.com/bike-barn/hermit/issues
+
 License
 -------
 
