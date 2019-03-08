@@ -41,6 +41,7 @@ install:
   - set PATH=%PATH%;%USERPROFILE%\.cargo\bin
   - rustc -Vv
   - cargo -Vv
+  - ps: ci\install.ps1
 
 # TODO This is the "test phase", tweak it as you see fit
 test_script:
