@@ -1,30 +1,12 @@
 use std::io::Write;
-use std::path::PathBuf;
 use std::{fs, io};
 
-pub fn clean_up(test_root: &PathBuf) {
-    if test_root.exists() && test_root.is_dir() {
-        match fs::remove_dir_all(test_root) {
-            Err(e) => match e.kind() {
-                io::ErrorKind::NotFound => {
-                    write!(
-                        io::stderr(),
-                        "\nRemove didn't find dir '{}'",
-                        test_root.display()
-                    )
-                    .unwrap();
-                }
-                _ => panic!(e),
-            },
-            Ok(()) => (),
-        }
-    }
-}
+use tempfile::{tempdir, TempDir};
 
-pub fn set_up(suffix: &str) -> PathBuf {
+pub fn set_up(suffix: &str) -> TempDir {
     let suffix = format!("fs-tests-{}", suffix);
-    let test_root = PathBuf::from("target").join(&suffix);
-    clean_up(&test_root);
+    let test_root_dir = tempdir().expect("failed to create tempdir");
+    let test_root = test_root_dir.path();
 
     match fs::create_dir_all(&test_root) {
         Err(e) => match e.kind() {
@@ -41,5 +23,5 @@ pub fn set_up(suffix: &str) -> PathBuf {
         Ok(()) => (),
     }
 
-    test_root
+    test_root_dir
 }

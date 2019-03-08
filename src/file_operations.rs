@@ -119,8 +119,11 @@ mod tests {
 
     #[test]
     fn can_link_file() {
-        let test_root = set_up("link");
-        let target_root = set_up("link-target");
+        let test_root_dir = set_up("link");
+        let test_root = test_root_dir.path();
+
+        let target_root_dir = set_up("link-target");
+        let target_root = target_root_dir.path();
 
         let mut file_set = FileOperations::rooted_at(&test_root);
         let target_path = target_root.join("target_file");
@@ -154,7 +157,8 @@ mod tests {
 
     #[test]
     fn can_remove_file() {
-        let test_root = set_up("unlink");
+        let test_root_dir = set_up("unlink");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         // Create file to remove
@@ -169,7 +173,8 @@ mod tests {
 
     #[test]
     fn does_not_remove_file_without_commit() {
-        let test_root = set_up("no-unlink");
+        let test_root_dir = set_up("no-unlink");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
         let file_path = test_root.join("file_a");
         // Create file to remove
@@ -182,7 +187,8 @@ mod tests {
 
     #[test]
     fn can_create_a_directory() {
-        let test_root = set_up("mkdir");
+        let test_root_dir = set_up("mkdir");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         assert!(!test_root.join("test").is_dir());
@@ -196,7 +202,8 @@ mod tests {
 
     #[test]
     fn does_not_create_a_directory_without_commit() {
-        let test_root = set_up("no-mkdir");
+        let test_root_dir = set_up("no-mkdir");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         assert!(!test_root.join("test").is_dir());
@@ -206,7 +213,8 @@ mod tests {
 
     #[test]
     fn can_create_path_of_needed_directories() {
-        let test_root = set_up("mkdir-deep");
+        let test_root_dir = set_up("mkdir-deep");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         let path = Path::new("test").join("one").join("two").join("three");
@@ -220,7 +228,8 @@ mod tests {
 
     #[test]
     fn can_init_a_git_repo() {
-        let test_root = set_up("git-init");
+        let test_root_dir = set_up("git-init");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         file_set.create_git_repo(".");
@@ -233,7 +242,8 @@ mod tests {
 
     #[test]
     fn does_not_init_without_commit() {
-        let test_root = set_up("no-git-init");
+        let test_root_dir = set_up("no-git-init");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
         let path = Path::new("test").join("repo");
         let git_dir_path = path.join(".git");
@@ -245,7 +255,8 @@ mod tests {
 
     #[test]
     fn can_init_a_git_repo_at_a_nonexistent_path() {
-        let test_root = set_up("git-deep");
+        let test_root_dir = set_up("git-deep");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
         let path = Path::new("test").join("sub").join("repo");
 
@@ -259,7 +270,8 @@ mod tests {
 
     #[test]
     fn wont_re_init_an_already_existing_repository() {
-        let test_root = set_up("git-re-init");
+        let test_root_dir = set_up("git-re-init");
+        let test_root = test_root_dir.path();
         let mut file_set = FileOperations::rooted_at(&test_root);
 
         file_set.create_git_repo(".");

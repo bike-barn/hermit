@@ -249,19 +249,11 @@ mod test {
     use std::io::prelude::*;
     use std::path::{Path, PathBuf};
 
-    fn clean_up(test_root: &PathBuf) {
-        if test_root.exists() {
-            fs::remove_dir_all(test_root).unwrap();
-        }
-        assert!(!test_root.is_dir());
-    }
+    use tempfile::{tempdir, TempDir};
 
-    fn set_up(suffix: &str, current: &str, shells: Vec<&str>) -> PathBuf {
-        let test_root = PathBuf::from("./target/fs-config-tests-".to_owned() + suffix);
-
-        clean_up(&test_root);
-        fs::create_dir(&test_root).unwrap();
-        assert!(test_root.is_dir());
+    fn set_up(suffix: &str, current: &str, shells: Vec<&str>) -> TempDir {
+        let test_root_dir = tempdir().expect("failed to create tempdir");
+        let test_root = test_root_dir.path();
 
         let path = test_root.join("current_shell");
         let mut file = File::create(&path).unwrap();
@@ -274,19 +266,21 @@ mod test {
             fs::create_dir(&new_shell).unwrap();
         }
 
-        test_root
+        test_root_dir
     }
 
     #[test]
     fn has_a_root_path() {
-        let test_root = set_up("root-path", "default", vec!["default"]);
+        let test_root_dir = set_up("root-path", "default", vec!["default"]);
+        let test_root = test_root_dir.path();
         let config = FsConfig::new(&test_root);
         assert_eq!(config.root_path(), &test_root);
     }
 
     #[test]
     fn creating_a_config_creates_its_root_dir() {
-        let test_root = set_up("root-path-create", "default", vec!["default"]);
+        let test_root_dir = set_up("root-path-create", "default", vec!["default"]);
+        let test_root = test_root_dir.path();
         let config_root = test_root.join(".hermit");
 
         assert!(!config_root.exists());
@@ -304,7 +298,8 @@ mod test {
 
     #[test]
     fn can_set_the_current_shell_name() {
-        let test_root = set_up("set-current-shell-name", "default", vec!["default"]);
+        let test_root_dir = set_up("set-current-shell-name", "default", vec!["default"]);
+        let test_root = test_root_dir.path();
         let mut config = FsConfig::new(&test_root);
         config.set_current_shell_name("current").unwrap();
 
