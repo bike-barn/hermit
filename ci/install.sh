@@ -43,7 +43,7 @@ main() {
            --tag $tag \
            --target $target
 
-    curl -LSfs https://github.com/xd009642/tarpaulin/releases/download/0.7.0/cargo-tarpaulin-0.7.0-travis.tar.gz | tar -C ~/.cargo/bin xz
+    curl -LSfs https://github.com/xd009642/tarpaulin/releases/download/0.7.0/cargo-tarpaulin-0.7.0-travis.tar.gz | tar xz -C ~/.cargo/bin
     curl -o /tmp/urchin https://raw.githubusercontent.com/tlevine/urchin/v0.0.6/urchin && chmod +x /tmp/urchin
     git fetch --unshallow
     git config remote.$(git remote | head -n1).fetch "+refs/heads/*:refs/remotes/$(git remote | head -n1)/*"
