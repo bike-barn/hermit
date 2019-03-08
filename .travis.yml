@@ -37,34 +37,53 @@ matrix:
 
     # Linux
     - env: TARGET=aarch64-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=arm-unknown-linux-gnueabi
+      if: branch = master
     - env: TARGET=armv7-unknown-linux-gnueabihf
+      if: branch = master
     - env: TARGET=i686-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=i686-unknown-linux-musl
+      if: branch = master
     - env: TARGET=mips-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=mips64-unknown-linux-gnuabi64
+      if: branch = master
     - env: TARGET=mips64el-unknown-linux-gnuabi64
+      if: branch = master
     - env: TARGET=mipsel-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=powerpc-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=powerpc64-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=powerpc64le-unknown-linux-gnu
+      if: branch = master
     - env: TARGET=s390x-unknown-linux-gnu
+      if: branch = master
+
     - env: TARGET=x86_64-unknown-linux-gnu
     - env: TARGET=x86_64-unknown-linux-musl
 
     # OSX
     - env: TARGET=i686-apple-darwin
       os: osx
+      if: branch = master
     - env: TARGET=x86_64-apple-darwin
       os: osx
 
     # *BSD
     - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
+      if: branch = master
     - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+      if: branch = master
     - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
+      if: branch = master
 
     # Windows
     - env: TARGET=x86_64-pc-windows-gnu
+      if: branch = master
 
     # Bare metal
     # These targets don't support std and as such are likely not suitable for
@@ -75,6 +94,11 @@ matrix:
     # - env: TARGET=thumbv7m-none-eabi
 
     # Testing other channels
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: beta
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      rust: beta
     - env: TARGET=x86_64-unknown-linux-gnu
       rust: nightly
     - env: TARGET=x86_64-apple-darwin
