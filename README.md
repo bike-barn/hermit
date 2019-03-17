@@ -15,13 +15,11 @@ Bring your home with you
 [![Build Status][badge-build]](https://travis-ci.org/bike-barn/hermit)
 [![Coverage Status][badge-coverage]](https://coveralls.io/github/bike-barn/hermit)
 [![License GPL 3][badge-license]](http://www.gnu.org/licenses/gpl-3.0.txt)
-[![Stories Ready to Work On][badge-todo]](https://waffle.io/bike-barn/hermit)
 [![Crabs harmed][badge-crabs]](http://shields.io/)
 
 [badge-license]: https://img.shields.io/badge/license-GPL_3-green.svg
 [badge-build]: https://travis-ci.org/bike-barn/hermit.svg?branch=master
 [badge-coverage]: https://coveralls.io/repos/github/bike-barn/hermit/badge.svg
-[badge-todo]: https://badge.waffle.io/bike-barn/hermit.svg?label=to-do&title=To-Do
 [badge-crabs]: http://img.shields.io/badge/crabs_harmed-0-blue.svg
 
 <img src="https://raw.githubusercontent.com/bike-barn/hermit/1e362e8c6ad3aec1cfd854ce35f374008bf02884/doc/hoolia-hermit.png"
@@ -159,10 +157,10 @@ Hermit now has a test suite! You can run it with `./runtests.sh`.
 Where We're Headed
 ------------------
 
-Checkout our [Waffle.io][waffle] board for a more organized view of
+Checkout our [project][project] board for a more organized view of
 what's going on in the project.
 
-[waffle]: https://waffle.io/bike-barn/hermit
+[project]: https://github.com/bike-barn/projects/1
 
 Contributing
 ------------
@@ -175,11 +173,15 @@ If you believe someone is violating the code of conduct, we ask that
 you report it by emailing hermit@zephyrizing.net. For more details please
 see our [Reporting Guide][reporting].
 
-To get started, please take a look at our
-[Contribution Guidelines][contributing].  Next, probably check out
-our [Waffle.io][waffle] board, and look at the size 1 issues in the
-To-Do column. From there, the standard "[fork], [branch], [code],
-[pull request]" workflow works well.
+To get started, please take a look at our [Contribution
+Guidelines][contributing].  Next, probably check out our
+[project][project] board, and look at the issues in the To-Do
+column. From there, the standard "[fork], [branch], [code], [pull
+request]" workflow works well.
+
+Another great way to contribute is code review of any open PRs, trying
+to reproduce open issues, and giving feedback on how you use Hermit
+and how it could be more helpful.
 
 [covenant]: https://github.com/bike-barn/hermit/blob/master/CODE_OF_CONDUCT.md
 [contributing]: https://github.com/bike-barn/hermit/blob/master/CONTRIBUTING.md
@@ -188,12 +190,6 @@ To-Do column. From there, the standard "[fork], [branch], [code],
 [branch]: https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/
 [code]: http://stackoverflow.com/questions/tagged/rust
 [pull request]: https://help.github.com/articles/creating-a-pull-request/
-
-As a bonus, if you use the waffle.io
-[branch naming scheme][waffle-flow] for the issue you're working on,
-it will automatically update our Waffle board.
-
-[waffle-flow]: https://github.com/waffleio/waffle.io/wiki/FAQs#branch-moving
 
 You can get in touch with the developers in (mostly) real-time on the
 [Rust Slack] in the `#hermit` channel. Less urgent communications,
