@@ -202,7 +202,7 @@ directed to the [Github Issues].
 License
 -------
 
-Copyright 2014-2018, Geoff Shannon and contributors.
+Copyright 2014-2018, 2020 Zephyr Shannon and contributors.
 
 This file is part of Hermit.
 
