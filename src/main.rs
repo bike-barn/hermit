@@ -93,7 +93,7 @@ fn make_app_config<'a, 'b>() -> App<'a, 'b> {
 
 macro_rules! subcommand {
     {
-        $fn_name:ident ( $name:expr ) {
+        fn $fn_name:ident ( $name:expr ) {
             $(
                 $method:ident ( $($args:expr),* )
             )*
@@ -114,8 +114,8 @@ macro_rules! subcommand {
 // **************************************************
 
 subcommand! {
-  add_add_subcommand("add") {
-    about("Add files to your hermit shell")
+  fn add_add_subcommand("add") {
+      about("Add files to your hermit shell")
   }
 }
 
@@ -128,7 +128,7 @@ fn handle_add<C: Config>(
 }
 
 subcommand! {
-  add_clone_subcommand("clone") {
+  fn add_clone_subcommand("clone") {
     about("Create a local shell from an existing remote shell")
   }
 }
@@ -142,7 +142,7 @@ fn handle_clone<C: Config>(
 }
 
 subcommand! {
-  add_doctor_subcommand("doctor") {
+  fn add_doctor_subcommand("doctor") {
     about("Make sure your hermit setup is sane")
   }
 }
@@ -156,7 +156,7 @@ fn handle_doctor<C: Config>(
 }
 
 subcommand! {
-  add_git_subcommand("git") {
+  fn add_git_subcommand("git") {
     about("Run git operations on the current shell")
   }
 }
@@ -170,7 +170,7 @@ fn handle_git<C: Config>(
 }
 
 subcommand! {
-  add_init_subcommand("init") {
+  fn add_init_subcommand("init") {
     about("Create a new hermit shell called SHELL_NAME. If no shell name \
            is given, \"default\" is used.")
     arg(shell_name_arg("The name of the shell to be created."))
@@ -188,7 +188,7 @@ fn handle_init<C: Config>(
 }
 
 subcommand! {
-  add_nuke_subcommand("nuke") {
+  fn add_nuke_subcommand("nuke") {
     about("Permanently remove a hermit shell")
   }
 }
@@ -202,7 +202,7 @@ fn handle_nuke<C: Config>(
 }
 
 subcommand! {
-  add_shell_subcommand("shell") {
+  fn add_shell_subcommand("shell") {
     about("Display the shell you are currently inhabiting")
   }
 }
@@ -218,9 +218,9 @@ fn handle_shell<C: Config>(
 }
 
 subcommand! {
-    add_status_subcommand("status") {
-        about("Display the status of your hermit shell")
-    }
+  fn add_status_subcommand("status") {
+      about("Display the status of your hermit shell")
+  }
 }
 
 fn handle_status<C: Config>(
@@ -232,7 +232,7 @@ fn handle_status<C: Config>(
 }
 
 subcommand! {
-  add_inhabit_subcommand("inhabit") {
+  fn add_inhabit_subcommand("inhabit") {
     about("Switch to using a different hermit shell")
   }
 }
