@@ -1,6 +1,9 @@
-use std::os::unix;
-use std::path::{Path, PathBuf};
-use std::{fs, io, mem, result};
+use std::{
+    fs, io, mem,
+    os::unix,
+    path::{Path, PathBuf},
+    result,
+};
 
 use git2;
 

@@ -1,10 +1,6 @@
-use std::rc::Rc;
-use std::{io, result};
+use std::{io, rc::Rc, result};
 
-use crate::config::Config;
-use crate::file_operations::FileOperations;
-use crate::message;
-use crate::shell::Shell;
+use crate::{config::Config, file_operations::FileOperations, message, shell::Shell};
 
 #[derive(Clone, Debug, Fail, PartialEq, Eq)]
 pub enum Error {

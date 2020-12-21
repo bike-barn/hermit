@@ -1,7 +1,9 @@
-use std::borrow::Borrow;
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::{Path, PathBuf};
+use std::{
+    borrow::Borrow,
+    fs::File,
+    io::prelude::*,
+    path::{Path, PathBuf},
+};
 use std::{fs, io};
 
 use walkdir::{self, WalkDir};

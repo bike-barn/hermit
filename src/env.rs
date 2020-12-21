@@ -1,6 +1,4 @@
-use std::borrow::ToOwned;
-use std::env;
-use std::path::PathBuf;
+use std::{borrow::ToOwned, env, path::PathBuf};
 
 pub use dirs::home_dir;
 

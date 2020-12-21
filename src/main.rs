@@ -21,9 +21,11 @@ use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
 use failure;
 
-use crate::config::{Config, FsConfig};
-use crate::file_operations::FileOperations;
-use crate::hermit::{Error, Hermit, Result};
+use crate::{
+    config::{Config, FsConfig},
+    file_operations::FileOperations,
+    hermit::{Error, Hermit, Result},
+};
 
 #[cfg(test)]
 mod test_helpers;
