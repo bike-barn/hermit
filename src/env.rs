@@ -4,7 +4,7 @@ pub use dirs::home_dir;
 
 pub fn get_program_name() -> String {
     env::args()
-        .nth(0)
+        .next()
         .map(PathBuf::from)
         .and_then(|path| path.file_name().map(ToOwned::to_owned))
         .and_then(|file_name| file_name.to_str().map(ToOwned::to_owned))

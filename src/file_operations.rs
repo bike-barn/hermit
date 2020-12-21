@@ -5,8 +5,6 @@ use std::{
     result,
 };
 
-use git2;
-
 #[derive(Debug, PartialEq, Eq)]
 pub enum Op {
     MkDir(PathBuf),

@@ -19,8 +19,6 @@ use std::process;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
 
-use failure;
-
 use crate::{
     config::{Config, FsConfig},
     file_operations::FileOperations,

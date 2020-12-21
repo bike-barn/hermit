@@ -53,7 +53,7 @@ fn config_path(root_path: &PathBuf) -> PathBuf {
 impl FsConfig {
     pub fn new(root_path: impl AsRef<Path>) -> FsConfig {
         let root_path = PathBuf::from(root_path.as_ref());
-        fs::create_dir_all(&root_path);
+        fs::create_dir_all(&root_path); // TODO: what do I do with this error?
         let config_path = config_path(&root_path);
         let current_shell = read_shell_from_path(&config_path).ok();
 
