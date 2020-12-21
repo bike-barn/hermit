@@ -1,8 +1,4 @@
-use std::{io, rc::Rc, result};
-
-use thiserror::Error;
-
-use crate::{config::Config, file_operations::FileOperations, message, shell::Shell};
+use crate::common::*;
 
 #[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum Error {

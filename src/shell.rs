@@ -1,6 +1,4 @@
-use std::{path::PathBuf, rc::Rc};
-
-use crate::{config::Config, file_operations::FileOperations};
+use crate::common::*;
 
 pub struct Shell<T: Config> {
     pub name: String,

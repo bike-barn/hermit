@@ -1,6 +1,4 @@
-use std::fmt::Display;
-
-use crate::env;
+use crate::common::*;
 
 pub fn error_str<T: 'static + Into<String>>(details: T) -> String {
     error(anyhow::Error::msg(details.into()))
