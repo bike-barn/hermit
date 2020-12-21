@@ -51,16 +51,16 @@ fn config_path(root_path: &PathBuf) -> PathBuf {
 }
 
 impl FsConfig {
-    pub fn new(root_path: impl AsRef<Path>) -> FsConfig {
+    pub fn new(root_path: impl AsRef<Path>) -> anyhow::Result<FsConfig> {
         let root_path = PathBuf::from(root_path.as_ref());
-        fs::create_dir_all(&root_path); // TODO: what do I do with this error?
+        fs::create_dir_all(&root_path)?; // TODO: what do I do with this error?
         let config_path = config_path(&root_path);
         let current_shell = read_shell_from_path(&config_path).ok();
 
-        FsConfig {
+        Ok(FsConfig {
             root_path,
             current_shell,
-        }
+        })
     }
 
     fn config_path(&self) -> PathBuf {
@@ -275,7 +275,7 @@ mod test {
     fn has_a_root_path() {
         let test_root_dir = set_up("default", vec!["default"]);
         let test_root = test_root_dir.path();
-        let config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root).expect("failed to create FSConfig");
         assert_eq!(config.root_path(), &test_root);
     }
 
@@ -286,14 +286,14 @@ mod test {
         let config_root = test_root.join(".hermit");
 
         assert!(!config_root.exists());
-        FsConfig::new(&config_root);
+        FsConfig::new(&config_root).expect("failed to create FSConfig");
         assert!(config_root.exists());
     }
 
     #[test]
     fn returns_the_current_shell_name() {
         let test_root = set_up("current", vec!["current"]);
-        let config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root).expect("failed to create FSConfig");
 
         assert_eq!(*config.current_shell_name().unwrap(), "current".to_string());
     }
@@ -302,7 +302,7 @@ mod test {
     fn can_set_the_current_shell_name() {
         let test_root_dir = set_up("default", vec!["default"]);
         let test_root = test_root_dir.path();
-        let mut config = FsConfig::new(&test_root);
+        let mut config = FsConfig::new(&test_root).expect("failed to create FSConfig");
         config.set_current_shell_name("current").unwrap();
 
         let mut config_file = File::open(&test_root.join("current_shell")).unwrap();
@@ -317,7 +317,7 @@ mod test {
     #[test]
     fn can_confirm_a_shell_exists() {
         let test_root = set_up("default", vec!["default", "other"]);
-        let config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root).expect("failed to create FSConfig");
 
         assert!(config.shell_exists("other"));
     }
@@ -325,7 +325,7 @@ mod test {
     #[test]
     fn can_confirm_a_shell_does_not_exist() {
         let test_root = set_up("default", vec!["default", "other"]);
-        let config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root).expect("failed to create FSConfig");
 
         assert!(!config.shell_exists("another"));
     }
@@ -333,7 +333,7 @@ mod test {
     #[test]
     fn can_walk_a_directory() {
         let test_root = set_up("default", vec!["default"]);
-        let config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root).expect("failed to create FSConfig");
         let shell_root = config.shell_root_path().join("default");
         File::create(&shell_root.join("file1")).expect("Failed to create test file");
 
@@ -361,7 +361,7 @@ mod test {
     #[test]
     fn can_walk_a_directory_skipping_subdirectory_entries() {
         let test_root = set_up("default", vec!["default"]);
-        let config = FsConfig::new(&test_root);
+        let config = FsConfig::new(&test_root).expect("failed to create FSConfig");
         let shell_root = config.shell_root_path().join("default");
         create_paths(shell_root, vec!["file1", "subdir/file2"]);
 
