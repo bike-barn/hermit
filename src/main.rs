@@ -1,10 +1,6 @@
 #[macro_use]
 extern crate failure_derive;
 
-#[cfg(test)]
-#[macro_use]
-extern crate lazy_static;
-
 mod config;
 mod env;
 mod file_operations;

@@ -236,7 +236,7 @@ dependencies = [
  "failure",
  "failure_derive",
  "git2",
- "lazy_static",
+ "once_cell",
  "tempfile",
  "walkdir",
 ]
@@ -352,6 +352,12 @@ name = "object"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8d3b63360ec3cb337817c2dbd47ab4a0f170d285d8e5a2064600f3def1402397"
+
+[[package]]
+name = "once_cell"
+version = "1.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "13bd41f508810a131401606d54ac32a467c97172d74ba7662562ebba5ad07fa0"
 
 [[package]]
 name = "openssl-probe"

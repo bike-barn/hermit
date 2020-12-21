@@ -30,13 +30,13 @@ mod tests {
     use std::path::PathBuf;
     use std::sync::Mutex;
 
-    lazy_static! {
-        // This mutex is solely for preventing these two tests from
-        // stomping on each other. While it doesn't happen often, it's
-        // still an issue we want to avoid for CI builds (spurious
-        // build failures are the worst).
-        static ref ROOT_ENV_LOCK: Mutex<()> = Mutex::new(());
-    }
+    use once_cell::sync::Lazy;
+
+    // This mutex is solely for preventing these two tests from
+    // stomping on each other. While it doesn't happen often, it's
+    // still an issue we want to avoid for CI builds (spurious
+    // build failures are the worst).
+    static ROOT_ENV_LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
 
     #[test]
     fn hermit_dir_defaults_to_dot_config() {
