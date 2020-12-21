@@ -1,19 +1,12 @@
-mod config;
-mod env;
-mod file_operations;
-mod hermit;
-mod message;
-mod shell;
+use crate::common::*;
 
-use std::process;
-
-use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
-
-use crate::{
-    config::{Config, FsConfig},
-    file_operations::FileOperations,
-    hermit::{Error, Hermit, Result},
-};
+pub mod common;
+pub mod config;
+pub mod env;
+pub mod file_operations;
+pub mod hermit;
+pub mod message;
+pub mod shell;
 
 #[cfg(test)]
 mod test_helpers;

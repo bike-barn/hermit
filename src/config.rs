@@ -1,11 +1,4 @@
-use std::{
-    borrow::Borrow,
-    fs::{self, File},
-    io::{self, prelude::*},
-    path::{Path, PathBuf},
-};
-
-use walkdir::{self, WalkDir};
+use crate::common::*;
 
 pub trait Config {
     type IntoIterator: IntoIterator<Item = PathBuf>;
@@ -108,7 +101,7 @@ pub struct FilesIter<T>(Option<(T, PathBuf)>);
 
 impl<T> Iterator for FilesIter<T>
 where
-    T: Iterator<Item = Result<walkdir::DirEntry, walkdir::Error>>,
+    T: Iterator<Item = StdResult<walkdir::DirEntry, walkdir::Error>>,
 {
     type Item = PathBuf;
 
