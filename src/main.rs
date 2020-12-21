@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate failure_derive;
-
 mod config;
 mod env;
 mod file_operations;
@@ -37,7 +34,7 @@ fn main() {
 }
 
 #[rustfmt::skip]
-fn run() -> Result<()>{
+fn run() -> anyhow::Result<()>{
     let app = make_app_config();
     let app_matches = app.get_matches();
 

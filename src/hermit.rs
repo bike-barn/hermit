@@ -1,16 +1,18 @@
 use std::{io, rc::Rc, result};
 
+use thiserror::Error;
+
 use crate::{config::Config, file_operations::FileOperations, message, shell::Shell};
 
-#[derive(Clone, Debug, Fail, PartialEq, Eq)]
+#[derive(Clone, Debug, Error, PartialEq, Eq)]
 pub enum Error {
-    #[fail(display = "{} subcommand has not been implemented yet", _0)]
+    #[error("{0} subcommand has not been implemented yet")]
     SubcommandNotImplemented(&'static str),
 
-    #[fail(display = "That is not the name of a shell")]
+    #[error("That is not the name of a shell")]
     ShellDoesNotExist,
 
-    #[fail(display = "No shell is active right now")]
+    #[error("No shell is active right now")]
     NoActiveShell,
 }
 

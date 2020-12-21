@@ -14,11 +14,11 @@ license = "GPL-3.0"
 edition = "2018"
 
 [dependencies]
+anyhow = "1.0.36"
 clap = "2.33.3"
 dirs = "3.0.1"
-failure = "0.1.8"
-failure_derive = "0.1.8"
 git2 = "0.13.13"
+thiserror = "1.0.22"
 walkdir = "2.3.1"
 
 [dev-dependencies]

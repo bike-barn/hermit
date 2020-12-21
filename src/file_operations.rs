@@ -5,6 +5,8 @@ use std::{
     result,
 };
 
+use thiserror::Error;
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum Op {
     MkDir(PathBuf),
@@ -13,25 +15,13 @@ pub enum Op {
     Remove(PathBuf),
 }
 
-#[derive(Debug, Fail)]
+#[derive(Debug, Error)]
 pub enum Error {
-    #[fail(display = "IO error: {}", _0)]
-    IoError(#[cause] io::Error),
+    #[error("IO error: {0}")]
+    IoError(#[from] io::Error),
 
-    #[fail(display = "Git2 error: {}", _0)]
-    Git2Error(#[cause] git2::Error),
-}
-
-impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Error {
-        Error::IoError(err)
-    }
-}
-
-impl From<git2::Error> for Error {
-    fn from(err: git2::Error) -> Error {
-        Error::Git2Error(err)
-    }
+    #[error("Git2 error: {0}")]
+    Git2Error(#[from] git2::Error),
 }
 
 pub type Result = result::Result<(), Error>;
