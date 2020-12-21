@@ -5,9 +5,6 @@ mod hermit;
 mod message;
 mod shell;
 
-#[macro_use]
-mod macros;
-
 use std::process;
 
 use clap::{App, AppSettings, Arg, ArgMatches, SubCommand};
@@ -92,6 +89,24 @@ fn make_app_config<'a, 'b>() -> App<'a, 'b> {
     let app = add_inhabit_subcommand(app);
 
     app
+}
+
+macro_rules! subcommand {
+    {
+        $fn_name:ident ( $name:expr ) {
+            $(
+                $method:ident ( $($args:expr),* )
+            )*
+        }
+    } => {
+        fn $fn_name<'a, 'b>(app: App<'a, 'b>) -> App<'a, 'b> {
+            let subcommand = SubCommand::with_name($name)
+                $(
+                    .$method($($args),*)
+                )*;
+            app.subcommand(subcommand)
+        }
+    }
 }
 
 // **************************************************
