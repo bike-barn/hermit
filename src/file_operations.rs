@@ -1,11 +1,8 @@
 use std::{
-    fs, io, mem,
+    fs, mem,
     os::unix,
     path::{Path, PathBuf},
-    result,
 };
-
-use thiserror::Error;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Op {
@@ -15,16 +12,7 @@ pub enum Op {
     Remove(PathBuf),
 }
 
-#[derive(Debug, Error)]
-pub enum Error {
-    #[error("IO error: {0}")]
-    IoError(#[from] io::Error),
-
-    #[error("Git2 error: {0}")]
-    Git2Error(#[from] git2::Error),
-}
-
-pub type Result = result::Result<(), Error>;
+pub type Result = anyhow::Result<()>;
 
 pub struct FileOperations {
     root: PathBuf,
@@ -93,11 +81,10 @@ impl FileOperations {
     }
 }
 
-fn git_init(
-    dir: PathBuf,
-    options: &git2::RepositoryInitOptions,
-) -> result::Result<(), git2::Error> {
-    git2::Repository::init_opts(dir, options).map(|_| ())
+fn git_init(dir: PathBuf, options: &git2::RepositoryInitOptions) -> Result {
+    git2::Repository::init_opts(dir, options)
+        .map(|_| ())
+        .map_err(anyhow::Error::from)
 }
 
 #[cfg(test)]
