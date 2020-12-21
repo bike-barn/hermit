@@ -26,9 +26,7 @@ pub fn default_hermit_dir() -> Option<PathBuf> {
 mod tests {
     use super::*;
 
-    use std::env;
-    use std::path::PathBuf;
-    use std::sync::Mutex;
+    use std::{env, path::PathBuf, sync::Mutex};
 
     use once_cell::sync::Lazy;
 

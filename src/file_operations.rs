@@ -89,8 +89,10 @@ fn git_init(dir: PathBuf, options: &git2::RepositoryInitOptions) -> Result {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::path::{Path, PathBuf};
+    use std::{
+        fs,
+        path::{Path, PathBuf},
+    };
 
     use super::FileOperations;
     use crate::test_helpers::filesystem::set_up;
