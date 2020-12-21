@@ -82,15 +82,13 @@ impl<T: Config> Hermit<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_helpers::ops::*;
 
-    use std::path::PathBuf;
-    use std::rc::Rc;
+    use std::{path::PathBuf, rc::Rc};
 
-    use crate::config::mock::MockConfig;
-    use crate::config::Config;
-    use crate::file_operations::FileOperations;
-    use crate::file_operations::Op;
+    use crate::{
+        config::mock::MockConfig, config::Config, file_operations::FileOperations,
+        file_operations::Op, test_helpers::ops::*,
+    };
 
     fn hermit(config: &MockConfig) -> Hermit<MockConfig> {
         Hermit::new(config.clone())

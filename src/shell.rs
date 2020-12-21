@@ -39,13 +39,13 @@ impl<T: Config> Shell<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_helpers::ops::*;
 
-    use std::path::{Path, PathBuf};
-    use std::rc::Rc;
+    use std::{
+        path::{Path, PathBuf},
+        rc::Rc,
+    };
 
-    use crate::config::mock::MockConfig;
-    use crate::file_operations::Op;
+    use crate::{config::mock::MockConfig, file_operations::Op, test_helpers::ops::*};
 
     fn root_path(path_str: &str) -> PathBuf {
         PathBuf::from(path_str)
