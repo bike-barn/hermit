@@ -1,46 +1,159 @@
-sudo: required
+# Based on the "trust" template v0.1.2
+# https://github.com/japaric/trust/tree/v0.1.2
+
+dist: trusty
 language: rust
-rust:
-  - stable
-  - beta
-  - nightly
+services: docker
+sudo: required
+
+env:
+  global:
+    - CRATE_NAME=hermit
 
 matrix:
   allow_failures:
     - rust: nightly
+  # TODO These are all the build jobs. Adjust as necessary. Comment out what you
+  # don't need
+  include:
+    # Android
+    # - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
+    # - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
+    # - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
+    # - env: TARGET=i686-linux-android DISABLE_TESTS=1
+    # - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
 
-cache: cargo
+    # iOS
+    # - env: TARGET=aarch64-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=armv7-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=armv7s-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=i386-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
+    #   os: osx
 
-before_script:
-  - cargo +nightly clippy --version || ( rustup install nightly && rustup component add clippy-preview --toolchain=nightly )
-  - cargo +nightly tarpaulin --version || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo +nightly install cargo-tarpaulin
-  - curl -o /tmp/urchin https://raw.githubusercontent.com/tlevine/urchin/v0.0.6/urchin && chmod +x /tmp/urchin
-  - git fetch --unshallow
-  - git config remote.$(git remote | head -n1).fetch "+refs/heads/*:refs/remotes/$(git remote | head -n1)/*"
-  - git fetch $(git remote | head -n1) master
-  - git checkout master
-  - git checkout -
+    # Linux
+    - env: TARGET=aarch64-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=arm-unknown-linux-gnueabi
+      if: branch = master
+    - env: TARGET=armv7-unknown-linux-gnueabihf
+      if: branch = master
+    - env: TARGET=i686-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=i686-unknown-linux-musl
+      if: branch = master
+    - env: TARGET=mips-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=mips64-unknown-linux-gnuabi64
+      if: branch = master
+    - env: TARGET=mips64el-unknown-linux-gnuabi64
+      if: branch = master
+    - env: TARGET=mipsel-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=powerpc-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=powerpc64-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=powerpc64le-unknown-linux-gnu
+      if: branch = master
+    - env: TARGET=s390x-unknown-linux-gnu
+      if: branch = master
+
+    - env: TARGET=x86_64-unknown-linux-gnu
+    - env: TARGET=x86_64-unknown-linux-musl
+
+    # OSX
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+
+    # *BSD
+    - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
+      if: branch = master
+    - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+      if: branch = master
+    - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
+      if: branch = master
+
+    # Windows
+    - env: TARGET=x86_64-pc-windows-gnu
+      if: branch = master
+
+    # Bare metal
+    # These targets don't support std and as such are likely not suitable for
+    # most crates.
+    # - env: TARGET=thumbv6m-none-eabi
+    # - env: TARGET=thumbv7em-none-eabi
+    # - env: TARGET=thumbv7em-none-eabihf
+    # - env: TARGET=thumbv7m-none-eabi
+
+    # Testing other channels
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: beta
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      rust: beta
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: nightly
+    - env: TARGET=x86_64-apple-darwin
+      os: osx
+      rust: nightly
+
+before_install:
+  - set -e
+  - rustup self update
+
+install:
+  - sh ci/install.sh
+  - source ~/.cargo/env || true
+
 script:
-  - cargo +nightly clippy
-  - ./runtests.sh
+  - bash ci/script.sh
+
+after_script: set +e
+
+before_deploy:
+  - sh ci/before_deploy.sh
 
 after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
+    rustup install nightly
     cargo +nightly tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
   fi
 
+deploy:
+  api_key:
+    secure: "Sz3ZolD+gLnRA/MGIW7C1jnKWbdVuaGqxNWNVS9mlLdZAydnrl+gBBMLhc2I20Kl44fEpOXVfC0HlmGN7M2sYeI7Q7jufuQSQzNFbgeb4VXoFvGNvO+dz1XyoUFi/CXFGS4kcafbA7CjFtLXEgdd0Z9rQP/dLB3y6gZZXBMAXy8="
+  file_glob: true
+  file: $CRATE_NAME-$TRAVIS_TAG-$TARGET.*
+  on:
+    condition: $TRAVIS_RUST_VERSION = stable
+    tags: true
+  provider: releases
+  skip_cleanup: true
+
 addons:
-  apt:
-    sources:
-      - kalakris-cmake
+  homebrew:
     packages:
-      - cmake
-      - libcurl4-openssl-dev
-      - libelf-dev
-      - libdw-dev
-      - libssl-dev
+      - openssl@1.1
+
+cache: cargo
+before_cache:
+  # Travis can't cache files that are not readable by "others"
+  - chmod -R a+r $HOME/.cargo
+
+branches:
+  only:
+    # release tags
+    - /^v\d+\.\d+\.\d+.*$/
+    - master
 
 notifications:
+  email:
+    on_success: never
   slack:
     on_success: always
     on_failure: always

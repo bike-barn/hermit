@@ -1,8 +1,9 @@
 use std::{
-    fs, mem,
-    os::unix,
+    mem,
     path::{Path, PathBuf},
 };
+
+use crate::fs;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Op {
@@ -74,7 +75,7 @@ impl FileOperations {
         match op {
             Op::MkDir(dir) => fs::create_dir_all(dir)?,
             Op::GitInit(dir) => git_init(dir, &self.git_init_opts)?,
-            Op::Link { path, target } => unix::fs::symlink(target, path)?,
+            Op::Link { path, target } => fs::symlink_file(target, path)?,
             Op::Remove(file) => fs::remove_file(file)?,
         };
         Ok(())
